@@ -76,8 +76,21 @@ mark{background:var(--ac2);color:#2a1d00;border-radius:4px;padding:0 3px}
 .ov .card{min-width:min(420px,90vw)}.ov p{display:flex;justify-content:space-between;gap:20px;margin:6px 0}
 kbd{background:var(--card2);border:1px solid #433a5e;border-radius:6px;padding:1px 8px;font:600 13px monospace}
 .cf{position:fixed;top:-14px;width:8px;height:14px;z-index:40;animation:fall 2.2s ease-in forwards}
+
+.cloudbar{max-width:860px;margin:12px auto 0;padding:12px 16px;background:var(--card);border:1px solid #433a5e;border-radius:14px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.cloudinfo{display:grid;gap:2px;min-width:220px}.cloudinfo span{font-size:12px;color:var(--mut)}
+.cloudform{display:flex;gap:6px;align-items:center;flex-wrap:wrap;flex:1;justify-content:flex-end}
+.cloudform input{width:160px;max-width:100%;margin:0;padding:8px;font-size:13px}
+.cloudform button{padding:8px 12px;font-size:13px}
+.cloudform button[hidden]{display:none}
+@media(max-width:650px){.cloudbar{margin:8px 10px}.cloudform{justify-content:flex-start}.cloudform input{flex:1 1 130px}}
 </style></head><body>
+<div id="cloudbar" class="cloudbar">
+  <div class="cloudinfo"><b>☁ Sincronização na nuvem</b><span id="cloud-status">Entre na sua conta para sincronizar suas músicas e seu progresso.</span></div>
+  <div class="cloudform"><input id="cloud-email" type="email" placeholder="Seu e-mail" autocomplete="email"><input id="cloud-pass" type="password" placeholder="Senha" autocomplete="current-password"><button id="cloud-login" class="pri">Entrar</button><button id="cloud-signup">Criar conta</button><button id="cloud-logout" hidden>Sair</button></div>
+</div>
 <nav id="nav"></nav><main id="view"></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const $=s=>document.querySelector(s);
 const LV=["Beginner","Elementary","Pre-Intermediate","Intermediate","Upper-Intermediate","Advanced"],TH=[0,100,250,500,900,1500];
@@ -166,7 +179,10 @@ try{S=Object.assign(S,JSON.parse(localStorage.getItem("eih")||"{}"))}catch(e){}
 S.custom=S.custom||[];S.lyrics=S.lyrics||{};SONGS.push(...S.custom);
 const esc=t=>String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;");
 const today=()=>new Date().toISOString().slice(0,10);
-function save(){try{localStorage.setItem("eih",JSON.stringify(S))}catch(e){}}
+function save(){
+ try{localStorage.setItem("eih",JSON.stringify(S))}catch(e){}
+ if(cloudUser&&!cloudLoading)queueCloudSave();
+}
 function lvl(){let i=0;TH.forEach((t,k)=>{if(S.xp>=t)i=k});return i}
 const sh=a=>[...a].sort(()=>Math.random()-.5);
 const pick=(a,n)=>sh(a).slice(0,n);
@@ -329,4 +345,99 @@ review(){
  if(w.length)$("#pr").onclick=()=>quiz(w.slice(0,8).map(x=>x.item),"Revisão",()=>go("review"))}
 };
 go("home");
+
+/* ===== CLOUD SYNC: SUPABASE ===== */
+const SUPABASE_URL="https://cbtqaqmccqxoogknztjk.supabase.co";
+const SUPABASE_KEY="sb_publishable_5lODdV0mocsPIfV9dqAtZA_WiP-wu4G";
+const cloudClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let cloudUser=null,cloudLoading=false,cloudTimer=null,cloudBusy=false;
+const cloudStatus=t=>{const e=$("#cloud-status");if(e)e.textContent=t};
+function mergeCloudState(remote,local){
+ const out={...remote};
+ for(const [k,v] of Object.entries(local||{})){
+  const r=out[k];
+  if(v&&r&&typeof v==="object"&&typeof r==="object"&&!Array.isArray(v)&&!Array.isArray(r))out[k]=mergeCloudState(r,v);
+  else if(Array.isArray(v)&&Array.isArray(r)&&v.every(x=>x&&typeof x==="object"&&x.id)){
+   const m=new Map(r.map(x=>[x.id,x]));v.forEach(x=>m.set(x.id,{...(m.get(x.id)||{}),...x}));out[k]=[...m.values()];
+  }else if(v!==undefined)out[k]=v;
+ }
+ return out;
+}
+function queueCloudSave(){
+ clearTimeout(cloudTimer);
+ cloudTimer=setTimeout(pushCloudState,900);
+}
+async function pushCloudState(){
+ if(!cloudUser||cloudLoading||cloudBusy)return;
+ cloudBusy=true;cloudStatus("Salvando alterações na nuvem…");
+ try{
+  const {error}=await cloudClient.from("user_state").upsert({user_id:cloudUser.id,state:S,updated_at:new Date().toISOString()},{onConflict:"user_id"});
+  if(error)throw error;
+  cloudStatus("Sincronizado. Seus dados estão salvos na nuvem.");
+ }catch(e){console.error("Supabase sync:",e);cloudStatus("Falha ao sincronizar: "+(e.message||"verifique a configuração da tabela user_state."));}
+ finally{cloudBusy=false;}
+}
+async function loadCloudState(user){
+ cloudUser=user;cloudLoading=true;cloudStatus("Buscando seus dados na nuvem…");
+ try{
+  const {data,error}=await cloudClient.from("user_state").select("state").eq("user_id",user.id).maybeSingle();
+  if(error)throw error;
+  if(data&&data.state){
+   const local=JSON.parse(localStorage.getItem("eih")||"{}");
+   S=mergeCloudState(data.state,local);
+   S.custom=S.custom||[];S.lyrics=S.lyrics||{};S.fav=S.fav||{};S.vid=S.vid||{};S.sync=S.sync||{};
+   localStorage.setItem("eih",JSON.stringify(S));
+   cloudStatus("Dados da nuvem carregados. Sincronização ativa.");
+  }else{
+   cloudStatus("Primeiro acesso neste perfil. Enviando seus dados locais para a nuvem…");
+  }
+  cloudLoading=false;
+  await pushCloudState();
+  go("home");
+ }catch(e){
+  cloudLoading=false;
+  console.error("Supabase load:",e);
+  cloudStatus("Não foi possível acessar user_state. Confira se executou o SQL de configuração no Supabase.");
+ }
+}
+function renderCloudAuth(session){
+ const user=session?.user||null;
+ cloudUser=user;
+ $("#cloud-email").value=user?.email||"";
+ $("#cloud-pass").value="";
+ $("#cloud-login").hidden=!!user;
+ $("#cloud-signup").hidden=!!user;
+ $("#cloud-logout").hidden=!user;
+ cloudStatus(user?"Conectado como "+user.email+". Verificando sincronização…":"Entre na sua conta para sincronizar suas músicas e seu progresso.");
+}
+$("#cloud-login").onclick=async()=>{
+ const email=$("#cloud-email").value.trim(),password=$("#cloud-pass").value;
+ if(!email||!password){cloudStatus("Informe seu e-mail e sua senha.");return}
+ cloudStatus("Entrando…");
+ const {data,error}=await cloudClient.auth.signInWithPassword({email,password});
+ if(error){cloudStatus("Erro ao entrar: "+error.message);return}
+ renderCloudAuth(data.session);await loadCloudState(data.user);
+};
+$("#cloud-signup").onclick=async()=>{
+ const email=$("#cloud-email").value.trim(),password=$("#cloud-pass").value;
+ if(!email||password.length<6){cloudStatus("Informe um e-mail válido e uma senha com pelo menos seis caracteres.");return}
+ cloudStatus("Criando sua conta…");
+ const {data,error}=await cloudClient.auth.signUp({email,password,options:{emailRedirectTo:window.location.origin+window.location.pathname}});
+ if(error){cloudStatus("Erro ao criar conta: "+error.message);return}
+ if(data.session){renderCloudAuth(data.session);await loadCloudState(data.user)}
+ else cloudStatus("Conta criada. Confirme o e-mail enviado pelo Supabase e depois entre aqui.");
+};
+$("#cloud-logout").onclick=async()=>{
+ await cloudClient.auth.signOut();cloudUser=null;renderCloudAuth(null);cloudStatus("Você saiu. Os dados locais continuam neste navegador.");
+};
+(async()=>{
+ const {data,error}=await cloudClient.auth.getSession();
+ if(error){cloudStatus("Erro ao verificar sessão: "+error.message);return}
+ renderCloudAuth(data.session);
+ if(data.session)await loadCloudState(data.session.user);
+})();
+cloudClient.auth.onAuthStateChange((event,session)=>{
+ if(event==="SIGNED_OUT"){cloudUser=null;renderCloudAuth(null)}
+});
+
 </script></body></html>
