@@ -384,7 +384,7 @@ async function loadCloudState(user){
   if(error)throw error;
   if(data&&data.state){
    const local=JSON.parse(localStorage.getItem("eih")||"{}");
-   S=mergeCloudState(data.state,local);
+   S=mergeCloudState(local,data.state);
    S.custom=S.custom||[];S.lyrics=S.lyrics||{};S.fav=S.fav||{};S.vid=S.vid||{};S.sync=S.sync||{};
    localStorage.setItem("eih",JSON.stringify(S));
    cloudStatus("Dados da nuvem carregados. Sincronização ativa.");
