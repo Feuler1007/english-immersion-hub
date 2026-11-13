@@ -837,7 +837,7 @@ try{S=Object.assign(S,JSON.parse(localStorage.getItem("eih")||"{}"))}catch(e){}
 const cleanCustomSong=s=>{
  if(!s||typeof s!=="object"||Array.isArray(s))return null;
  const id=String(s.id||""),t=String(s.t||"").trim().slice(0,120),y=String(s.y||"");
- if(!/^u\\d{10,16}$/.test(id)||!t||!/^[\\w-]{11}$/.test(y))return null;
+ if(!/^u\d{10,16}$/.test(id)||!t||!/^[\w-]{11}$/.test(y))return null;
  const pairs=v=>Array.isArray(v)?v.filter(x=>Array.isArray(x)&&typeof x[0]==="string"&&typeof x[1]==="string").slice(0,100).map(x=>[x[0].slice(0,80),x[1].slice(0,180)]):[];
  const hue=Number(s.h);
  return{id,t,a:String(s.a||"Desconhecido").slice(0,100),c:"Minhas músicas",y,l:"Personalizada",h:Number.isFinite(hue)?((hue%360)+360)%360:0,m:"Música adicionada por você. Cole a letra para gerar exercícios.",v:pairs(s.v),e:pairs(s.e),f:null};
