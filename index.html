@@ -551,6 +551,16 @@ button:hover,.btn:hover{filter:saturate(1.25) brightness(1.06);box-shadow:0 0 0 
 @media(max-width:860px){#rail .wk{max-width:420px;margin-left:auto;margin-right:auto}#cv{height:320px}}
 @media(prefers-reduced-motion:reduce){.hero,.lv,.rk{animation:none}}
 
+
+/* Prévia diária variável e cascata reversível de conteúdo */
+.cascade-item{opacity:0;transform:translateY(28px) scale(.985);filter:blur(3px);transition:opacity .55s ease,transform .65s cubic-bezier(.2,.75,.2,1),filter .55s ease;transition-delay:calc(var(--cascade-order,0)*38ms);will-change:opacity,transform}
+.cascade-item.cascade-visible{opacity:1;transform:translateY(0) scale(1);filter:blur(0);transition-delay:calc(var(--cascade-order,0)*38ms)}
+.daily-feature,.daily-challenge{position:relative;overflow:hidden;border:1px solid rgba(77,124,255,.24);background:linear-gradient(125deg,var(--card),rgba(77,124,255,.07),var(--card));}
+.daily-feature:before,.daily-challenge:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(180deg,#c8ff3a,#4d7cff,#ff4fa3)}
+.daily-feature h3,.daily-challenge h3{background:linear-gradient(90deg,#4d7cff,#9a68ff,#ff4fa3);-webkit-background-clip:text;background-clip:text;color:transparent}
+.daily-challenge{box-shadow:0 8px 28px rgba(77,124,255,.08)}
+@media(prefers-reduced-motion:reduce){.cascade-item,.cascade-item.cascade-visible{opacity:1;transform:none;filter:none;transition:none;will-change:auto}}
+
 </style></head><body>
 <div class="app"><aside id="side"><div class="logo"><svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4d7cff"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><path d="M8 10a6 6 0 0 1 6-6h20a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6H22l-9 9v-9h-1a4 4 0 0 1-4-4z" fill="url(#lg1)" stroke="#050a24" stroke-width="2.5" stroke-linejoin="round"/><text x="24" y="25" text-anchor="middle" font-family="Bricolage Grotesque,sans-serif" font-weight="800" font-size="15" fill="#fff">EN</text><path d="M38 1l-6 11h5l-4 9 10-12h-5z" fill="#c8ff3a" stroke="#050a24" stroke-width="1.6" stroke-linejoin="round"/></svg><span>English<b>Hub</b><small>Seu espaço de imersão em inglês</small></span></div><div class="sl">VISÃO GERAL</div><nav id="nav"></nav><div class="sl">FAVORITAS</div><div id="fav"></div><div style="flex:1"></div><div class="sl setg">TEMA</div><div class="seg setg" id="seg"><button data-th="light">☀ Claro</button><button data-th="dark">☾ Escuro</button></div></aside><div class="mid"><div class="top"><input id="gs" placeholder="Buscar música ou artista… (/)" aria-label="Buscar"><a class="yt-account" href="https://accounts.google.com/ServiceLogin?service=youtube&amp;continue=https%3A%2F%2Fwww.youtube.com%2F" target="_blank" rel="noopener noreferrer" title="Entrar na sua conta Google no YouTube">▶ Entrar no YouTube</a><button class="rnd" id="th" aria-label="Alternar tema"></button></div><main id="view"></main></div><aside id="rail"></aside></div>
 <script>
@@ -843,16 +853,34 @@ function bkp(){const el=$("#bkp");if(!el)return;
  $("#bx").onclick=()=>{try{S.lbk=Date.now();save();const o={app:"English Immersion Hub",v:1,date:new Date().toISOString(),eih:S,eih_c:localStorage.getItem("eih_c")},a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(o)],{type:"application/json"}));a.download="english-hub-backup-"+today()+".json";document.body.appendChild(a);a.click();a.remove();$("#bm").textContent="Backup baixado. Guarde o arquivo em um lugar seguro (nuvem, e-mail, pendrive).";bkp()}catch(e){$("#bm").textContent="Não consegui gerar o backup neste navegador."}};
  $("#bi").onclick=()=>$("#bf").click();
  $("#bf").onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>10*1024*1024){$("#bm").textContent="Arquivo muito grande. O limite de backup é 10 MB.";e.target.value="";return}const r=new FileReader();r.onerror=()=>{$("#bm").textContent="Não foi possível ler o arquivo selecionado."};r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||o.app!=="English Immersion Hub"||!o.eih||!Number.isFinite(o.eih.xp)||o.eih.xp<0||typeof o.eih!=="object")throw 0;if(!confirm("Importar este backup? Ele vai SUBSTITUIR o progresso atual ("+S.xp+" XP) pelo do arquivo ("+o.eih.xp+" XP)."))return;localStorage.setItem("eih_prev",localStorage.getItem("eih")||"");localStorage.setItem("eih",JSON.stringify(o.eih));if(o.eih_c)localStorage.setItem("eih_c",o.eih_c);$("#bm").textContent="Backup restaurado! Recarregando…";setTimeout(()=>location.reload(),700)}catch(x){$("#bm").textContent="Esse arquivo não parece ser um backup válido do English Hub."}};r.readAsText(f)}}
+
+/* Cascata de rolagem: revela ao entrar na tela e recolhe ao sair do campo visível. */
+let cascadeObserver=null;
+function setupScrollCascade(){
+ if(cascadeObserver)cascadeObserver.disconnect();
+ const root=document.querySelector(".app");
+ const nodes=[...document.querySelectorAll("#view > *,#view .sc,#view .cc,#view .card,#view .sh2,#view .rb,#view .tl > div")];
+ const unique=[...new Set(nodes)].filter(el=>!el.closest(".daily-feature")||el.classList.contains("daily-feature"));
+ if(!("IntersectionObserver" in window)){unique.forEach(el=>el.classList.add("cascade-visible"));return}
+ cascadeObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
+  if(entry.isIntersecting)entry.target.classList.add("cascade-visible");
+  else entry.target.classList.remove("cascade-visible");
+ }),{root:null,threshold:.06,rootMargin:"0px 0px -35px 0px"});
+ unique.forEach((el,i)=>{el.classList.add("cascade-item");el.style.setProperty("--cascade-order",Math.min(i%12,11));cascadeObserver.observe(el)});
+}
+
 /* views */
 const TABS=[["home","Início"],["music","Músicas"],["real","Inglês real"],["basic","Básico do Inglês"],["scientific","Artigo científico"],["daily","Dia a dia"],["review","Meus erros"]];function go(v,arg){touch();save();stopP();KH=navKH;$("main").className="";document.body.classList.remove("wide");shell();
  $("#nav").innerHTML=TABS.map(t=>`<button class="${t[0]===v?"on":""}" data-v="${t[0]}">${t[1]}</button>`).join("");
  document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>go(b.dataset.v));
- (scrollTo(0,0),($(".app")||{}).scrollTop=0);V[v](arg)}
+ (scrollTo(0,0),($(".app")||{}).scrollTop=0);V[v](arg);requestAnimationFrame(()=>setupScrollCascade())}
 const disc=s=>`<div class="disc" style="background:conic-gradient(hsl(${s.h} 70% 50%),hsl(${s.h+60} 70% 35%),hsl(${s.h} 70% 50%))" aria-hidden="true"></div>`;
+let lastHomePhrase=null,lastHomeSong=null,lastHomeTask=null;
+function freshHomePick(list,kind){if(!list||!list.length)return null;const key=kind==="phrase"?"lastHomePhrase":kind==="song"?"lastHomeSong":"lastHomeTask";let item=pick(list,1)[0];if(list.length>1&&item===({phrase:lastHomePhrase,song:lastHomeSong,task:lastHomeTask}[kind]))item=pick(list.filter(x=>x!==item),1)[0];if(kind==="phrase")lastHomePhrase=item;else if(kind==="song")lastHomeSong=item;else lastHomeTask=item;return item}
 const V={
 home(){
  const LI=lvInfo(),L=LI.n,pct=LI.pct;
- const day=Math.floor(Date.now()/864e5),ph=REAL[day%REAL.length],sg=SONGS[day%SONGS.length];
+ const ph=freshHomePick(REAL,"phrase"),sg=freshHomePick(SONGS,"song"),activity=freshHomePick(dailyItems(),"task");
  const REVN=Object.values(S.weak).filter(x=>x&&x.item).length,REVP=Math.min(8,REVN||8)*10+25;const wk=Object.keys(S.weak).length,ln=Object.keys(S.done).length;
  const ach=[["Primeira resposta certa","Estudo",ln>=1],["100 XP","XP",S.xp>=100],["3 dias seguidos","Sequência",S.streak>=3],["20 itens aprendidos","Estudo",ln>=20],["Meta diária batida","Meta",S.dxp>=GOAL]];
  const prog=s=>{const n=(S.lyrics[s.id]||"").split("\n").filter(x=>x.trim()).length,k=Object.keys(S.sync[s.id]||{}).length;return(S.lyrics[s.id]?40:0)+(n?Math.round(Math.min(k,n)/n*60):0)};
@@ -863,7 +891,7 @@ home(){
  <div class="sc" style="animation-delay:.16s"><i class="ic">✔</i><div><small>${S.streak} dias seguidos</small><b>${ln} itens aprendidos</b></div><div class="bar"><i style="width:${Math.min(100,ln*5)}%"></i></div></div></div>
  <div class="sh2"><h3 style="margin:0">Continue estudando</h3><span><button id="l1">‹</button> <button id="r1">›</button></span></div>
  <div class="cw" id="cw">${cont.map((s,n)=>`<article class="cc" data-s="${s.id}" style="--i:${n}"><div class="thb" style="background:linear-gradient(135deg,hsl(${s.h} 70% 45%),hsl(${s.h+60} 70% 28%))">${disc(s)}${vidOf(s)?`<img alt="" loading="lazy" src="https://img.youtube.com/vi/${vidOf(s)}/hqdefault.jpg" onerror="this.remove()">`:""}</div><span class="tag pill">${esc(s.c)}</span><h4>${esc(s.t)}</h4><div class="bar"><i style="width:${prog(s)}%"></i></div><div class="row mut" style="gap:8px;margin:2px 4px 4px;font-size:13px">${esc(s.a)}<span style="margin-left:auto">${prog(s)}%</span></div></article>`).join("")}</div>
- <div class="card"><h3>Expressão do dia: ${ph[0]}</h3><p>${ph[0]} = ${ph[1]} (${ph[2]})<br><span class="mut">Pronúncia: ${ph[3]}. Exemplo: ${ph[4]}</span></p><button class="pri" id="rv">Revisar erros (${wk})</button></div>
+ <div class="card daily-feature"><div class="row" style="justify-content:space-between;align-items:center"><h3 style="margin:0">✨ Expressão surpresa: ${ph[0]}</h3><span class="tag pill">Hoje</span></div><p>${ph[0]} = ${ph[1]} (${ph[2]})<br><span class="mut">Pronúncia: ${ph[3]}. Exemplo: ${ph[4]}</span></p><button class="pri" id="rv">Revisar erros (${wk})</button></div><div class="card daily-challenge"><div class="row" style="justify-content:space-between;align-items:center"><h3 style="margin:0">🎲 Desafio surpresa</h3><span class="tag pill">Atividade aleatória</span></div><p>${esc(activity.q)}</p><p class="mut">Uma atividade diferente pode aparecer sempre que você abrir a página inicial.</p><button class="pri" id="dailyPreview">Começar desafio ⚡</button></div>
  <details class="card xpg"><summary><b>Como o XP e os níveis funcionam</b></summary><ul><li><b>Base por exercício:</b> A1 = ${Math.round(8*XPM)} · A2 = ${Math.round(10*XPM)} · B1 = ${Math.round(14*XPM)} XP.</li><li><b>Peso por tipo:</b> escolha ×1 · contexto e situação ×1,2 · leitura e resposta curta ×1,5 · transformar frase e corrigir erro ×1,8.</li><li><b>Repetição:</b> primeira vez ×1 · repetir ×0,3 · corrigir um erro antigo ×1,5. Todas as repetições e redenções compartilham o limite de ${Math.round(40*XPM)} XP por dia.</li><li><b>Bônus:</b> combo +10% por acerto seguido (até +50%) · sequência de dias +2% por dia (até +50%).</li><li><b>Sessão</b> com 5+ questões: 80% de acerto +${Math.round(25*XPM)} XP, perfeita +${Math.round(40*XPM)} XP. <b>Meta diária</b> (${GOAL} XP de atividades): +45 XP extras. O bônus aumenta o XP total, mas não infla o contador da meta.</li><li><b>Atividades únicas:</b> letra salva +${Math.round(15*XPM)} · karaokê sincronizado +${Math.round(50*XPM)} · frase falada +${Math.round(4*XPM)} · pronúncia +${Math.round(8*XPM)} · simulação +${Math.round(40*XPM)}. Bônus de sessão: até ${Math.round(40*XPM)} XP por dia.</li><li><b>Trilhas guiadas:</b> Básico do Inglês: +${Math.round(8*XPM)} por acerto e +${Math.round(20*XPM)} ao concluir cada missão. Artigo científico: +${Math.round(12*XPM)} por questão e +${Math.round(20*XPM)} pela escrita.</li><li><b>Erros não tiram XP</b> e vão para “Meus erros”.</li><li><b>Marcos:</b> nível 100 = ${xpTo(100)} XP · semi-fluente 101–200 (nível 200 = ${xpTo(200)}) · avançado 201–300 (nível 300 = ${xpTo(300)}) · nível 301 = Fluente (${xpTo(301)} XP).</li></ul></details>
  <div class="sh2"><h3 style="margin:0">Conquistas</h3></div><div class="card"><table><thead><tr><th>CONQUISTA</th><th>TIPO</th><th>STATUS</th></tr></thead><tbody>${ach.map(a=>`<tr><td>${a[0]}</td><td><span class="tag">${a[1]}</span></td><td><span class="pill" style="${a[2]?"background:var(--ok);color:#06241a":""}">${a[2]?"DESBLOQUEADA":"BLOQUEADA"}</span></td></tr>`).join("")}</tbody></table></div><section class="card brz" id="brz"></section><section class="card" id="bkp"></section>`;
 
@@ -873,7 +901,7 @@ home(){
  {const w=e("#rkw");if(w)w.scrollLeft=Math.max(0,rankOf(L)*92-w.clientWidth/2+46)}
  }
 
- $("#rv").onclick=()=>go("review");$("#l1").onclick=()=>$("#cw").scrollBy({left:-300,behavior:"smooth"});$("#r1").onclick=()=>$("#cw").scrollBy({left:300,behavior:"smooth"});
+ $("#rv").onclick=()=>go("review");$("#dailyPreview").onclick=()=>quiz([activity,...pick(dailyItems().filter(x=>x.id!==activity.id),4)],"Desafio surpresa",()=>go("home"));$("#l1").onclick=()=>$("#cw").scrollBy({left:-300,behavior:"smooth"});$("#r1").onclick=()=>$("#cw").scrollBy({left:300,behavior:"smooth"});
  document.querySelectorAll(".cc").forEach(c=>c.onclick=()=>go("music",c.dataset.s))},
 music(id){
  $("main").classList.add("wide");document.body.classList.add("wide");
