@@ -49,7 +49,11 @@ The Worker deduplicates headlines, ranks relevant stories, filters a list of gra
 - Informal expressions and internet slang glossary
 - Common grammar error patterns with short explanations
 - Current headline vocabulary and recent conversational intent
-- Six recurring character voices and category-based opening reactions
+- Six recurring character voices with distinct sarcastic, chaotic, wholesome and conspiracy-leaning personalities
+- 144 contextual scene seeds across technology, gaming, aviation, weird news, animals, science, internet memes, transport, food, wholesome stories, school and everyday life
+- 12 reaction styles, producing more than 1,700 contextual line combinations, plus intent-specific replies
+- Expanded Gen Z / brainrot slang recognition, including aura, rizz, sigma, cooked, mog, fanum tax, crash out and locked in
+- Recent-line memory to reduce immediate repetition, including varied opening reactions
 
 No generative AI service or paid token API is used. The interpreter is intentionally bounded: it recognizes known patterns and context, but it cannot understand every novel sentence like a human or an LLM.
 
