@@ -1,4 +1,4 @@
-[English_Immersion_Hub (1).html](https://github.com/user-attachments/files/34778197/English_Immersion_Hub.1.html)
+[English_Immersion_Hub (2).html](https://github.com/user-attachments/files/34778238/English_Immersion_Hub.2.html)
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -559,7 +559,7 @@ music(id){
   const undo=()=>{const st=stamps();let k=lines().length;while(--k>=0)if(st[k]!=null){delete st[k];save();const e=lineEl(k);if(e)e.querySelector("small").textContent="";const h=$("#hn");if(h)h.textContent=lines()[nxt()]??"fim";return}};
   const jump=d=>{const st=stamps(),L=lines();let k=CUR+d;k=Math.max(0,Math.min(L.length-1,k));if(st[k]!=null&&ok)P.seekTo(st[k],true)};
   const kb=()=>{const o=document.querySelector(".ov");if(o){o.remove();return}const d=document.createElement("div");d.className="ov";d.innerHTML=`<div class="card"><h3>Atalhos de teclado</h3>${KEYS.map(k=>`<p><span class="mut">${k[1]}</span><kbd>${k[0]}</kbd></p>`).join("")}<button class="pri" id="kc">Fechar</button></div>`;document.body.appendChild(d);d.onclick=e=>{if(e.target===d||e.target.id==="kc")d.remove()}};
-  const drawR=()=>{{const mc=$("#mean");if(mc)mc.innerHTML=meaning(s)}CUR=-2;
+  const drawR=()=>{var _mc=$("#mean");if(_mc)_mc.innerHTML=meaning(s);CUR=-2;
    $("#tb").innerHTML=[["lyr","Letra"],["voc","Vocabulário"],["pr","Prática"]].map(x=>`<button class="${x[0]===tab?"on":""}" data-t="${x[0]}">${x[1]}</button>`).join("");
    document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{tab=b.dataset.t;drawR()});const r=$("#rp");
    if(tab==="voc"){r.innerHTML=AV.length?`<div class="vgrid">${AV.map((x,n)=>`<div class="vc" style="--i:${n}"><span class="tag">${n<s.v.length?"Palavra":"Expressão"}</span><h3>${x[0]}</h3><p class="mut">${x[1]}</p><button data-vi="${n}">♪ Ouvir</button></div>`).join("")}</div>`:`<div class="card"><p>Esta música ainda não tem vocabulário pronto. Cole a letra na aba Letra e treine com as lacunas.</p></div>`;
