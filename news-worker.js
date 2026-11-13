@@ -18,7 +18,8 @@ const FEEDS = [
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Headers": "Content-Type, Cache-Control",
+  "Access-Control-Max-Age": "86400",
   "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0"
 };
 function decode(s = "") {
