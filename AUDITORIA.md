@@ -116,3 +116,29 @@ O funcionamento de recursos específicos depende de serviços externos, incluind
 **Limitação de validação:** não foi executada uma bateria de testes interativos em navegadores reais, nem testes automatizados de ponta a ponta. A revisão final desta rodada foi estática, baseada no conteúdo publicado no GitHub. Recomenda-se abrir o site em desktop e celular e testar login opcional, player, backup/restauração, letras, missões e XP antes de considerar a validação operacional completa.
 
 **Observação de escopo:** as etapas 4 a 8 foram concluídas em uma publicação consolidada para reduzir o número de ciclos da conversa. As alterações foram focadas em robustez, clareza, responsividade e preservação das funcionalidades existentes; não houve reescrita integral do curso nem migração para backend.
+
+
+## Auditoria de segurança — 13/11/2026
+
+**Escopo:** leitura estática do repositório público, do HTML principal, do motor de conversas, do agregador RSS e da configuração do Worker. Não foram executados testes de intrusão nem testes em navegador real.
+
+### Correções aplicadas nesta revisão
+- Sanitização estrutural das músicas personalizadas carregadas do armazenamento local ou de backups: somente IDs e IDs de vídeo no formato esperado são aceitos; título, artista, pares de vocabulário e matiz são limitados/normalizados; campos de apresentação são fixados pelo aplicativo.
+- Escape HTML dos campos `level` provenientes dos bancos de conteúdo importados nas telas de diálogos, simulações e listening.
+- Limite de 10 MB também aplicado à importação do banco de conteúdo, além do limite já existente para backups.
+- Worker agora aceita apenas GET e OPTIONS, responde 405 para outros métodos e envia `X-Content-Type-Options: nosniff` e `Referrer-Policy: no-referrer`.
+
+### Resultado da inspeção
+- Não foram encontrados tokens privados, chaves de API ou credenciais embutidos nos arquivos de código revisados.
+- O Worker consulta apenas uma lista fixa de feeds RSS; a URL de destino não é fornecida pelo visitante. Isso reduz o risco de SSRF.
+- O Worker publica apenas títulos, descrições curtas e links HTTP/HTTPS; não executa HTML dos feeds.
+- O CORS do Worker usa origem curinga porque o endpoint entrega notícias públicas e precisa ser consumido por visitantes anônimos. Isso não é autenticação e não protege contra abuso automatizado.
+- O site guarda progresso, letras, músicas personalizadas e histórico de conversa no localStorage do navegador. Esses dados não são contas/sessões autenticadas e não são sincronizados entre usuários.
+- O recurso de tradução envia o texto da mensagem selecionada ao serviço de tradução do Google. Não inserir dados pessoais ou confidenciais nas mensagens.
+- O HTML principal contém JavaScript inline e integrações de terceiros (YouTube, Google Fonts e tradução). Não há uma Content Security Policy (CSP) estrita configurada. Como o site é publicado estaticamente no GitHub Pages, cabeçalhos HTTP de segurança completos exigem configuração adicional de hospedagem ou uma camada de proxy.
+- O endpoint de notícias é público e não possui autenticação nem limite de requisições por IP configurado nesta revisão. Os feeds externos são fixos, mas convém acompanhar uso e consumo no Cloudflare.
+
+### Limitações
+- A integração GitHub usada nesta revisão não permitiu ler as configurações de proteção de branch nem os alertas privados de segurança do repositório. Não é possível confirmar por esta auditoria se branch protection, secret scanning e Dependabot estão habilitados.
+- Não foram testados fluxos reais de navegador, importações com payloads maliciosos, limites de taxa, nem configurações de segurança do painel Cloudflare.
+- Esta revisão estática reduz riscos identificados, mas não equivale a um pentest ou a uma certificação de segurança.
