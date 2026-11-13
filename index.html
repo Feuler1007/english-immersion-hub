@@ -833,7 +833,7 @@ const REAL=[["gonna","going to","vou, vai (futuro)","GÓ-na","I’m gonna call y
 const DAILY=[["Restaurante: o garçom pergunta “Ready to order?”. Qual resposta é mais natural?",["Yeah, I’ll have the burger, please.","I want eat burger.","Yes, I am ready for order.","Give burger."],0,"“I’ll have…” é o jeito natural de pedir comida."],["Um amigo chama: “Wanna hang out later?” e você quer ir.",["Sure, sounds good!","I am wanting go.","Yes, I hang out.","No problem, I wanna."],0,"“Sounds good” aceita um convite de forma leve."],["Na loja, a vendedora pergunta “Need any help?” e você só quer olhar.",["I’m just looking, thanks.","I look only.","No help me.","Just see."],0,"“I’m just looking” é a resposta padrão."],["Num jogo online, um colega erra e pede desculpa. Resposta amigável:",["No worries, it happens!","You are bad.","I don’t forgive.","Is okay for me yes."],0,"“No worries” significa sem problema."],["No aeroporto, você não entendeu o que a pessoa disse.",["Sorry, could you say that again?","What?","I no understand.","Repeat."],0,"É educado e natural para pedir repetição."]];
 
 let S={xp:0,streak:0,last:"",day:"",dxp:0,done:{},weak:{}};
-try{S=Object.assign(S,JSON.parse(localStorage.getItem("eih")||"{}"))}catch(e){}
+try{const saved=JSON.parse(localStorage.getItem("eih")||"{}");if(saved&&typeof saved==="object"&&!Array.isArray(saved))Object.keys(saved).forEach(k=>{if(k!=="__proto__"&&k!=="constructor"&&k!=="prototype")S[k]=saved[k]})}catch(e){}
 const cleanCustomSong=s=>{
  if(!s||typeof s!=="object"||Array.isArray(s))return null;
  const id=String(s.id||""),t=String(s.t||"").trim().slice(0,120),y=String(s.y||"");
@@ -843,7 +843,10 @@ const cleanCustomSong=s=>{
  return{id,t,a:String(s.a||"Desconhecido").slice(0,100),c:"Minhas músicas",y,l:"Personalizada",h:Number.isFinite(hue)?((hue%360)+360)%360:0,m:"Música adicionada por você. Cole a letra para gerar exercícios.",v:pairs(s.v),e:pairs(s.e),f:null};
 };
 S.custom=(Array.isArray(S.custom)?S.custom:[]).map(cleanCustomSong).filter(Boolean).slice(0,100);
-S.lyrics=S.lyrics&&typeof S.lyrics==="object"&&!Array.isArray(S.lyrics)?S.lyrics:{};
+const safeLyrics={};
+if(S.lyrics&&typeof S.lyrics==="object"&&!Array.isArray(S.lyrics))Object.entries(S.lyrics).slice(0,500).forEach(([k,v])=>{if(k!=="__proto__"&&k!=="constructor"&&k!=="prototype"&&typeof v==="string")safeLyrics[String(k).slice(0,100)]=v.slice(0,100000)});
+S.lyrics=safeLyrics;
+S.weak=S.weak&&typeof S.weak==="object"&&!Array.isArray(S.weak)?S.weak:{};
 SONGS.push(...S.custom);
 const esc=t=>String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/\x27/g,"&#39;");
 const today=()=>{const d=new Date(),p=n=>String(n).padStart(2,"0");return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())};
@@ -1322,7 +1325,7 @@ basic(arg){
 },
 review(){
  const w=Object.values(S.weak).sort((a,b)=>b.n-a.n);
- $("#view").innerHTML=`<h2>Meus erros</h2>${w.length?`<p class="mut">Cada item sai da lista depois de dois acertos seguidos.</p><button class="pri" id="pr">Revisar agora</button><div class="card"><dl>${w.map(x=>`<dt>${x.item.a}</dt><dd>${x.item.q} Errou ${x.n} vez(es).</dd>`).join("")}</dl></div>`:`<div class="card"><p>Nenhum erro por enquanto. Faça um treino rápido na aba Início.</p></div>`}`;
+ $("#view").innerHTML=`<h2>Meus erros</h2>${w.length?`<p class="mut">Cada item sai da lista depois de dois acertos seguidos.</p><button class="pri" id="pr">Revisar agora</button><div class="card"><dl>${w.map(x=>`<dt>${esc(x.item&&x.item.a)}</dt><dd>${esc(x.item&&x.item.q)} Errou ${esc(x.n)} vez(es).</dd>`).join("")}</dl></div>`:`<div class="card"><p>Nenhum erro por enquanto. Faça um treino rápido na aba Início.</p></div>`}`;
  if(w.length)$("#pr").onclick=()=>quiz(w.slice(0,8).map(x=>x.item),"Revisão",()=>go("review"))},
 scientific(){
  const articles=[
