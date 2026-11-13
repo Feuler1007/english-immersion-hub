@@ -258,7 +258,7 @@ const app={
  async fetchNews(forceRefresh=false){
   if(this.state.loading)return;
   this.state.loading=true;
-  this.status(forceRefresh?"Forcing a fresh Google News scan…":"Scanning Google News…");
+  this.status(forceRefresh?"Refreshing independent news sources…":"Loading independent news sources…");
   const previous=this.state.news||[];
   const oldTitles=new Set(previous.map(a=>(a.title||"").toLowerCase()));
   try{
@@ -268,7 +268,7 @@ const app={
     const u=new URL(endpoint);
     u.searchParams.set("limit","70");
     u.searchParams.set("_refresh",String(Date.now()));
-    const r=await fetch(u.toString(),{cache:"no-store",headers:{"Cache-Control":"no-cache"}});
+    const r=await fetch(u.toString(),{cache:"no-store"});
     if(!r.ok)throw Error("News worker returned HTTP "+r.status);
     const data=await r.json();
     if(data.ok===false)throw Error(data.error||"News worker reported a feed error");
@@ -300,7 +300,7 @@ const app={
    }
    this.status(forceRefresh
     ?(newCount?newCount+" new headlines found · "+items.length+" total · "+this.stamp():"No new headlines since the last check · feed checked at "+this.stamp())
-    :items.length+" headlines loaded · Google News RSS · "+this.stamp());
+    :items.length+" headlines loaded · Independent publisher feeds · "+this.stamp());
   }catch(e){
    if(!previous.length){
     this.state.news=D.seeds.slice();
