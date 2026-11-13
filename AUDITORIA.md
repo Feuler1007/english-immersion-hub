@@ -79,3 +79,40 @@ O funcionamento de recursos específicos depende de serviços externos, incluind
 **Validação realizada:** confirmação do conteúdo publicado, presença de uma tag de abertura e fechamento do script, ausência da sequência de escape de quebra de linha que havia sido corrigida antes da verificação, e checagem estática das regras de bônus, repetição e sessão.
 
 **Limitação:** não foi executado teste interativo em navegador real nesta etapa. A validação de interface e fluxos completos permanece para a etapa final de regressão.
+
+## Etapas 4 a 8 de 8 — concluídas na publicação consolidada
+
+**Status:** alterações publicadas no arquivo principal e verificadas por leitura posterior do conteúdo do GitHub.
+
+### Etapa 4 — Sistema de aprendizado
+- Mantidos os percursos existentes de Básico do Inglês, Inglês real, Dia a dia, revisão de erros e leitura científica.
+- Refinada a apresentação responsiva de lições, exemplos, perguntas, feedbacks, textos acadêmicos e campos de escrita.
+- Melhorada a legibilidade de textos longos e a adaptação de cartões e opções em telas estreitas.
+- Não foram inventadas novas lições nem substituídos conteúdos pedagógicos existentes nesta etapa.
+
+### Etapa 5 — Músicas e imersão
+- Mantidos biblioteca musical, favoritos, músicas personalizadas, player do YouTube, letras inseridas pelo usuário, marcação de tempos, karaokê, vocabulário e exercícios.
+- Corrigida uma condição assíncrona: se o carregamento da API do YouTube terminar depois que o usuário sair da tela da música, o player não tenta ser montado em um elemento que já não existe.
+- Refinada a adaptação do player, controles, letras sincronizadas e cartões de vocabulário para telas menores.
+- Letras adicionadas pelo usuário continuam salvas localmente no navegador; esta publicação não cria sincronização em nuvem.
+
+### Etapa 6 — Perfil, dados e salvamento
+- A gravação em `localStorage` agora informa o usuário uma única vez por sessão quando o navegador não consegue salvar, em vez de falhar silenciosamente.
+- Datas de meta diária e sequência passaram a usar o calendário local do dispositivo, evitando a virada de dia baseada em UTC.
+- A importação de backup agora rejeita arquivos acima de dez megabytes, informa falhas de leitura e valida que o XP seja um número finito e não negativo antes de substituir os dados.
+- Mantidos o formato de armazenamento, o backup exportado e a confirmação explícita antes da restauração.
+
+### Etapa 7 — Responsividade e acessibilidade
+- Ajustes de layout para biblioteca musical, player, controles, letras, artigos, vocabulário, formulários e lições em celulares.
+- Melhor tratamento de quebra de palavras e conteúdo extenso, evitando estouro horizontal.
+- Preservados foco visível, controles desabilitados e preferência por movimento reduzido.
+- O tema escolhido pelo aplicativo continua controlando a aparência dos elementos nativos.
+
+### Etapa 8 — Revisão final e publicação
+- Confirmada a publicação do HTML e a existência de um único bloco de script com abertura e fechamento.
+- Confirmada a presença das proteções de escape HTML, datas locais, aviso de falha de armazenamento, limite e validação de backup, proteção do carregamento assíncrono do player e regras responsivas.
+- Confirmada a preservação do documento de auditoria e do código de XP das etapas anteriores.
+
+**Limitação de validação:** não foi executada uma bateria de testes interativos em navegadores reais, nem testes automatizados de ponta a ponta. A revisão final desta rodada foi estática, baseada no conteúdo publicado no GitHub. Recomenda-se abrir o site em desktop e celular e testar login opcional, player, backup/restauração, letras, missões e XP antes de considerar a validação operacional completa.
+
+**Observação de escopo:** as etapas 4 a 8 foram concluídas em uma publicação consolidada para reduzir o número de ciclos da conversa. As alterações foram focadas em robustez, clareza, responsividade e preservação das funcionalidades existentes; não houve reescrita integral do curso nem migração para backend.
