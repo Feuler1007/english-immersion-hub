@@ -553,8 +553,9 @@ button:hover,.btn:hover{filter:saturate(1.25) brightness(1.06);box-shadow:0 0 0 
 
 
 /* Prévia diária variável e cascata reversível de conteúdo */
-.cascade-item{opacity:0;transform:translateY(28px) scale(.985);filter:blur(3px);transition:opacity .55s ease,transform .65s cubic-bezier(.2,.75,.2,1),filter .55s ease;transition-delay:calc(var(--cascade-order,0)*38ms);will-change:opacity,transform}
-.cascade-item.cascade-visible{opacity:1;transform:translateY(0) scale(1);filter:blur(0);transition-delay:calc(var(--cascade-order,0)*38ms)}
+.cascade-item{opacity:0;transform:translate3d(0,24px,0) scale(.99);filter:blur(2px);transition:opacity .48s ease,transform .62s cubic-bezier(.2,.75,.2,1),filter .48s ease;transition-delay:calc(var(--cascade-order,0)*58ms);will-change:opacity,transform}
+.cascade-item.cascade-visible{opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0);transition-delay:calc(var(--cascade-order,0)*58ms)}
+.chart-controls{display:grid;gap:10px;margin:10px 0 12px}.chart-legend{display:flex;gap:7px;flex-wrap:wrap}.chart-legend button{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid var(--bd);background:var(--card);color:var(--mut);font-size:11px;opacity:.58;transition:opacity .2s,transform .2s,border-color .2s,background .2s}.chart-legend button:hover{transform:translateY(-2px)}.chart-legend button.on{opacity:1;border-color:color-mix(in srgb,var(--ac) 42%,var(--bd));background:color-mix(in srgb,var(--ac) 8%,var(--card));color:var(--tx)}.chart-legend i{display:inline-block;width:15px;height:3px;border-radius:5px;background:#a78bfa}.chart-legend i.mid{background:#4f8cff}.chart-legend i.slow{background:#f2b45e}.chart-legend i.personal{background:#c8ff3a}.chart-hint{font-size:11px;color:var(--mut);margin:8px 2px 14px}.rg button{transition:transform .2s,background .2s,color .2s}.rg button:active,.chart-legend button:active{transform:scale(.96)}#cv{cursor:crosshair;outline:none}#cv:focus-visible{box-shadow:0 0 0 3px var(--focus)}
 .daily-feature,.daily-challenge{position:relative;overflow:hidden;border:1px solid rgba(77,124,255,.24);background:linear-gradient(125deg,var(--card),rgba(77,124,255,.07),var(--card));}
 .daily-feature:before,.daily-challenge:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(180deg,#c8ff3a,#4d7cff,#ff4fa3)}
 .daily-feature h3,.daily-challenge h3{background:linear-gradient(90deg,#4d7cff,#9a68ff,#ff4fa3);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -816,27 +817,30 @@ function brz(){const el=$("#brz");if(!el)return;
  const MAX=xpTo(301),left=Math.max(0,MAX-S.xp),eta=r=>Math.ceil(left/r),dt=n=>new Date(now+n*D).toLocaleDateString("pt-BR",{month:"short",year:"numeric"}),yrs=n=>n>730?(n/365).toFixed(1)+" anos":n+" dias";
  const R={fast:GOAL_INTENSE,mid:GOAL,slow:GOAL_SLOW},activeDays=rec.filter(v=>v>0).length,reliability=Math.min(.8,activeDays/14),personalRate=Math.max(30,Math.min(300,hasData?mean*reliability+GOAL*(1-reliability):GOAL)),personalDays=eta(personalRate),LI=lvInfo(),ri=rankOf(LI.n),best=Math.max(0,...Object.values(H)),done=Object.keys(S.done).length;
  el.innerHTML=`<h2>📈 Progresso rumo à fluência</h2><p class="mut">Sua média recente: <b>${hasData?mean.toFixed(0):"sem dados"} XP/dia</b>. A linha personalizada combina seu ritmo observado com uma referência de aproximadamente um ano para a progressão completa.</p>
- <div class="rg" id="rg"><button data-r="30">30 dias</button><button data-r="90">90 dias</button><button data-r="0">Até a fluência</button></div><canvas id="cv" aria-label="Gráfico de evolução de XP e projeção até o nível fluente"></canvas>
+ <div class="chart-controls"><div class="rg" id="rg" aria-label="Período do gráfico"><button data-r="30" aria-pressed="true">30 dias</button><button data-r="90" aria-pressed="false">90 dias</button><button data-r="0" aria-pressed="false">Até a fluência</button></div><div class="chart-legend" id="chartLegend" aria-label="Alternar linhas do gráfico"><button class="on" data-scenario="fast" aria-pressed="true"><i class="fast"></i>Intensivo</button><button class="on" data-scenario="mid" aria-pressed="true"><i class="mid"></i>Normal</button><button class="on" data-scenario="slow" aria-pressed="true"><i class="slow"></i>Mínimo</button><button class="on" data-scenario="personal" aria-pressed="true"><i class="personal"></i>Seu ritmo</button></div></div><canvas id="cv" tabindex="0" role="img" aria-label="Gráfico interativo de evolução de XP e projeção até o nível fluente. Passe o cursor ou toque para consultar os valores."></canvas><p class="chart-hint" id="chartHint">Passe o cursor ou toque no gráfico para consultar o XP projetado. Use as legendas para comparar cenários.</p>
  <div class="tl"><div><small>Nível atual</small><b>${LI.n} / 301</b></div><div><small>Elo</small><b>${ri+1} / 23 · ${RNAMES[ri]}</b></div><div><small>Progresso total</small><b>${(S.xp/MAX*100).toFixed(2)}%</b></div><div><small>XP acumulado</small><b>${S.xp.toLocaleString("pt-BR")}</b></div><div><small>Melhor dia</small><b>${best} XP</b></div><div><small>Itens aprendidos</small><b>${done}</b></div></div>
  <div class="tl aura-scenarios"><div><small>Ritmo intensivo · 180 XP/dia</small><b>${yrs(eta(R.fast))}</b><small>${dt(eta(R.fast))}</small></div><div><small>Ritmo normal · 90 XP/dia</small><b>${yrs(eta(R.mid))}</b><small>${dt(eta(R.mid))}</small></div><div><small>Ritmo mínimo · 60 XP/dia</small><b>${yrs(eta(R.slow))}</b><small>${dt(eta(R.slow))}</small></div><div class="personal-est"><small>✨ Personalizada · ${personalRate.toFixed(0)} XP/dia</small><b>${yrs(personalDays)}</b><small>${dt(personalDays)} · ${activeDays} dias ativos</small></div></div>
  <p class="mut aura-note">Meta de conclusão: nível 301, classificado como fluente dentro da progressão do aplicativo. As estimativas pressupõem estudo consistente e não substituem prática real de conversação, escuta, leitura e escrita. A estimativa personalizada usa os últimos quatorze dias e reduz o peso de históricos curtos, aproximando-os da referência de um ano (90 XP/dia). É uma estimativa de progressão no sistema de XP, não uma promessa de fluência linguística real.</p>`;
- const cv=$("#cv"),c=cv.getContext("2d");let rng=30,mx=-1;
+ const cv=$("#cv"),c=cv.getContext("2d");let rng=30,mx=-1,visibleScenarios=new Set(["fast","mid","slow","personal"]),chartStarted=0;
  const sz=()=>{const r=window.devicePixelRatio||1,w=cv.clientWidth;cv.width=w*r;cv.height=360*r;c.setTransform(r,0,0,r,0,0)};sz();
  const geo=()=>{const pa=rng?Math.min(rng,60):Math.min(90,Math.max(30,Math.ceil((Date.now()-new Date(ks[0]||iso(now)).getTime())/D))),fu=rng||Math.min(3650,Math.max(30,personalDays)),past=[];let acc=S.xp;for(let i=0;i<=pa;i++){past.unshift(acc);acc=Math.max(0,acc-(H[iso(now-i*D)]||0))}
   return{pa,fu,past,n:pa+fu,ym:Math.max(xpTo(301),S.xp+Math.max(R.fast,R.mid,R.slow,personalRate)*fu)*1.04}};
- document.querySelectorAll("#rg button").forEach(b=>{b.classList.toggle("on",+b.dataset.r===rng);b.onclick=()=>{rng=+b.dataset.r;document.querySelectorAll("#rg button").forEach(x=>x.classList.toggle("on",x===b))}});
- cv.onmousemove=e=>{mx=e.offsetX};cv.onmouseleave=()=>{mx=-1};cv.ontouchmove=e=>{mx=e.touches[0].clientX-cv.getBoundingClientRect().left};
+ document.querySelectorAll("#rg button").forEach(b=>{const active=+b.dataset.r===rng;b.classList.toggle("on",active);b.setAttribute("aria-pressed",String(active));b.onclick=()=>{rng=+b.dataset.r;chartStarted=performance.now();document.querySelectorAll("#rg button").forEach(x=>{const on=x===b;x.classList.toggle("on",on);x.setAttribute("aria-pressed",String(on))})}});
+ $("#chartLegend").querySelectorAll("[data-scenario]").forEach(b=>b.onclick=()=>{const key=b.dataset.scenario;if(visibleScenarios.has(key))visibleScenarios.delete(key);else visibleScenarios.add(key);const on=visibleScenarios.has(key);b.classList.toggle("on",on);b.setAttribute("aria-pressed",String(on))});
+ chartStarted=performance.now();
+ cv.onmousemove=e=>{mx=e.offsetX};cv.onmouseleave=()=>{mx=-1};cv.ontouchstart=e=>{if(e.touches[0])mx=e.touches[0].clientX-cv.getBoundingClientRect().left};cv.ontouchmove=e=>{if(e.touches[0])mx=e.touches[0].clientX-cv.getBoundingClientRect().left};cv.ontouchend=()=>{mx=-1};cv.onfocus=()=>{if(mx<0)mx=cv.clientWidth*.72};cv.onblur=()=>{mx=-1};
  const smoothPath=(pts)=>{if(!pts.length)return;c.beginPath();c.moveTo(pts[0].x,pts[0].y);for(let i=1;i<pts.length-1;i++){const m={x:(pts[i].x+pts[i+1].x)/2,y:(pts[i].y+pts[i+1].y)/2};c.quadraticCurveTo(pts[i].x,pts[i].y,m.x,m.y)}if(pts.length>1){const q=pts[pts.length-1];c.lineTo(q.x,q.y)}};
  const css=getComputedStyle(document.documentElement);
- (function loop(){if(!document.body.contains(cv))return;const g=geo(),W=cv.clientWidth,Hh=360,pd=38,X=i=>pd+i/g.n*(W-pd*2),Y=v=>Hh-pd-(v/g.ym)*(Hh-pd*2),mut=css.getPropertyValue("--mut")||"#9aa4b8",tx=css.getPropertyValue("--tx")||"#fff";
+ const chartObserver=("IntersectionObserver" in window)?new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)&&!chartStarted)chartStarted=performance.now()},{threshold:.12}):null;if(chartObserver)chartObserver.observe(cv);
+ (function loop(){if(!document.body.contains(cv)){if(chartObserver)chartObserver.disconnect();return}const g=geo(),W=cv.clientWidth,Hh=360,pd=38,X=i=>pd+i/g.n*(W-pd*2),Y=v=>Hh-pd-(v/g.ym)*(Hh-pd*2),mut=css.getPropertyValue("--mut")||"#9aa4b8",tx=css.getPropertyValue("--tx")||"#fff",reveal=chartStarted?Math.min(1,(performance.now()-chartStarted)/1050):0;
   c.clearRect(0,0,W,Hh);
   const gridCount=5;c.font="11px sans-serif";c.textAlign="left";
   for(let k=0;k<=gridCount;k++){const v=g.ym*k/gridCount,y=Y(v);c.strokeStyle="rgba(150,165,195,.13)";c.lineWidth=1;c.beginPath();c.moveTo(pd,y);c.lineTo(W-pd,y);c.stroke();c.fillStyle=mut;c.fillText(Math.round(v/1000*10)/10+"k",5,y-5)}
-  const actual=g.past.map((v,i)=>({x:X(i),y:Y(v)}));smoothPath(actual);c.lineWidth=3;c.strokeStyle="#50d8c8";c.shadowColor="rgba(80,216,200,.28)";c.shadowBlur=9;c.stroke();c.shadowBlur=0;
-  const scenarios=[{rate:R.fast,color:"#a78bfa",dash:[5,6]},{rate:R.mid,color:"#4f8cff",dash:[]},{rate:R.slow,color:"#f2b45e",dash:[3,5]},{rate:personalRate,color:"#c8ff3a",dash:[8,4]}];
-  scenarios.forEach((sc,idx)=>{const duration=eta(sc.rate),days=Math.min(g.fu,duration),pts=[];for(let j=0;j<=days;j++){const t=Math.min(1,j/Math.max(1,duration)),ease=t*t*(3-2*t),v=Math.min(MAX,S.xp+left*ease);pts.push({x:X(g.pa+j),y:Y(v)})}
-   smoothPath(pts);c.lineWidth=idx===3?4:idx===1?3.5:2;c.strokeStyle=sc.color;c.setLineDash(sc.dash);c.globalAlpha=idx===3?1:idx===1?1:.72;c.shadowColor=sc.color;c.shadowBlur=idx===3?10:0;c.stroke();c.shadowBlur=0;c.setLineDash([]);c.globalAlpha=1;
-   if((idx===1||idx===3)&&pts.length>1){const p=pts[pts.length-1];c.fillStyle=sc.color;c.beginPath();c.arc(p.x,p.y,4,0,Math.PI*2);c.fill()}
+  const actual=g.past.map((v,i)=>({x:X(i),y:Y(v)})),actualVisible=actual.slice(0,Math.max(2,Math.ceil(actual.length*reveal)));smoothPath(actualVisible);c.lineWidth=3;c.strokeStyle="#50d8c8";c.shadowColor="rgba(80,216,200,.28)";c.shadowBlur=9;c.stroke();c.shadowBlur=0;
+  const scenarios=[{key:"fast",rate:R.fast,color:"#a78bfa",dash:[5,6]},{key:"mid",rate:R.mid,color:"#4f8cff",dash:[]},{key:"slow",rate:R.slow,color:"#f2b45e",dash:[3,5]},{key:"personal",rate:personalRate,color:"#c8ff3a",dash:[8,4]}];
+  scenarios.forEach((sc,idx)=>{if(!visibleScenarios.has(sc.key))return;const duration=eta(sc.rate),days=Math.min(g.fu,duration),pts=[];for(let j=0;j<=days;j++){const t=Math.min(1,j/Math.max(1,duration)),ease=t*t*(3-2*t),v=Math.min(MAX,S.xp+left*ease);pts.push({x:X(g.pa+j),y:Y(v)})}const shown=pts.slice(0,Math.max(2,Math.ceil(pts.length*reveal)));
+   smoothPath(shown);c.lineWidth=idx===3?4:idx===1?3.5:2;c.strokeStyle=sc.color;c.setLineDash(sc.dash);c.globalAlpha=idx===3?1:idx===1?1:.72;c.shadowColor=sc.color;c.shadowBlur=idx===3?10:0;c.stroke();c.shadowBlur=0;c.setLineDash([]);c.globalAlpha=1;
+   if((idx===1||idx===3)&&shown.length>1){const p=shown[shown.length-1];c.fillStyle=sc.color;c.beginPath();c.arc(p.x,p.y,4,0,Math.PI*2);c.fill()}
   });
   c.fillStyle=mut;c.font="11px sans-serif";c.fillText("HISTÓRICO",pd,Hh-12);c.fillText("PROJEÇÃO",W-pd-62,Hh-12);
   const currentX=X(g.pa),currentY=Y(S.xp);c.strokeStyle="rgba(255,255,255,.35)";c.setLineDash([4,5]);c.beginPath();c.moveTo(currentX,pd);c.lineTo(currentX,Hh-pd);c.stroke();c.setLineDash([]);
@@ -845,7 +849,7 @@ function brz(){const el=$("#brz");if(!el)return;
    c.strokeStyle="rgba(255,255,255,.55)";c.beginPath();c.moveTo(X(i),pd);c.lineTo(X(i),Hh-pd);c.stroke();c.fillStyle="rgba(18,25,43,.94)";c.fillRect(bx,by,188,57);c.strokeStyle="#4f8cff";c.strokeRect(bx,by,188,57);c.fillStyle="#fff";c.font="bold 12px sans-serif";c.fillText(day,bx+9,by+17);c.font="12px sans-serif";c.fillText(Math.round(v).toLocaleString("pt-BR")+" XP · nível "+(()=>{let n=0;while(n<301&&v>=xpTo(n+1))n++;return n})(),bx+9,by+38)
   }
   requestAnimationFrame(loop)})();
- addEventListener("resize",sz)}
+ addEventListener("resize",sz,{passive:true})}
 
 function bkp(){const el=$("#bkp");if(!el)return;
  const d=S.lbk?Math.floor((Date.now()-S.lbk)/864e5):null,warn=d===null?"Você ainda não fez nenhum backup.":d>=7?"Faz "+d+" dias do último backup. Vale fazer outro.":"Último backup: "+(d?"há "+d+" dia(s)":"hoje")+".";
@@ -854,20 +858,28 @@ function bkp(){const el=$("#bkp");if(!el)return;
  $("#bi").onclick=()=>$("#bf").click();
  $("#bf").onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>10*1024*1024){$("#bm").textContent="Arquivo muito grande. O limite de backup é 10 MB.";e.target.value="";return}const r=new FileReader();r.onerror=()=>{$("#bm").textContent="Não foi possível ler o arquivo selecionado."};r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||o.app!=="English Immersion Hub"||!o.eih||!Number.isFinite(o.eih.xp)||o.eih.xp<0||typeof o.eih!=="object")throw 0;if(!confirm("Importar este backup? Ele vai SUBSTITUIR o progresso atual ("+S.xp+" XP) pelo do arquivo ("+o.eih.xp+" XP)."))return;localStorage.setItem("eih_prev",localStorage.getItem("eih")||"");localStorage.setItem("eih",JSON.stringify(o.eih));if(o.eih_c)localStorage.setItem("eih_c",o.eih_c);$("#bm").textContent="Backup restaurado! Recarregando…";setTimeout(()=>location.reload(),700)}catch(x){$("#bm").textContent="Esse arquivo não parece ser um backup válido do English Hub."}};r.readAsText(f)}}
 
-/* Cascata de rolagem: revela ao entrar na tela e recolhe ao sair do campo visível. */
-let cascadeObserver=null;
+/* Cascata de rolagem: observa o documento (o site não usa .app como scroll container),
+   inclui conteúdo do painel lateral e atualiza alvos quando as views são recriadas. */
+let cascadeObserver=null,cascadeMutationObserver=null,cascadeRefreshFrame=0;
 function setupScrollCascade(){
  if(cascadeObserver)cascadeObserver.disconnect();
- const root=document.querySelector(".app");
- const nodes=[...document.querySelectorAll("#view > *,#view .sc,#view .cc,#view .card,#view .sh2,#view .rb,#view .tl > div")];
- const unique=[...new Set(nodes)].filter(el=>!el.closest(".daily-feature")||el.classList.contains("daily-feature"));
+ const selectors="#view > *,#rail > *,#view .sc3 > .sc,#view .tl > div,#view .grid > *,#rail .tl > div";
+ const nodes=[...document.querySelectorAll(selectors)];
+ const unique=[...new Set(nodes)].filter(el=>!el.matches(".top")&&!el.closest(".daily-feature")||el.classList.contains("daily-feature"));
  if(!("IntersectionObserver" in window)){unique.forEach(el=>el.classList.add("cascade-visible"));return}
  cascadeObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
-  if(entry.isIntersecting)entry.target.classList.add("cascade-visible");
-  else entry.target.classList.remove("cascade-visible");
- }),{root:null,threshold:.06,rootMargin:"0px 0px -35px 0px"});
- unique.forEach((el,i)=>{el.classList.add("cascade-item");el.style.setProperty("--cascade-order",Math.min(i%12,11));cascadeObserver.observe(el)});
+  entry.target.classList.toggle("cascade-visible",entry.isIntersecting);
+ }),{root:null,threshold:.04,rootMargin:"0px 0px -8% 0px"});
+ unique.forEach((el,i)=>{el.classList.add("cascade-item");el.style.setProperty("--cascade-order",Math.min(i%10,9));cascadeObserver.observe(el)});
 }
+function watchCascadeContent(){
+ if(cascadeMutationObserver)cascadeMutationObserver.disconnect();
+ const targets=[$("#view"),$("#rail")].filter(Boolean);
+ if(!("MutationObserver" in window)||!targets.length)return;
+ cascadeMutationObserver=new MutationObserver(()=>{if(cascadeRefreshFrame)return;cascadeRefreshFrame=requestAnimationFrame(()=>{cascadeRefreshFrame=0;setupScrollCascade()})});
+ targets.forEach(el=>cascadeMutationObserver.observe(el,{childList:true,subtree:true}));
+}
+watchCascadeContent();
 
 /* views */
 const TABS=[["home","Início"],["music","Músicas"],["real","Inglês real"],["basic","Básico do Inglês"],["scientific","Artigo científico"],["daily","Dia a dia"],["review","Meus erros"]];function go(v,arg){touch();save();stopP();KH=navKH;$("main").className="";document.body.classList.remove("wide");shell();
