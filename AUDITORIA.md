@@ -142,3 +142,5 @@ O funcionamento de recursos específicos depende de serviços externos, incluind
 - A integração GitHub usada nesta revisão não permitiu ler as configurações de proteção de branch nem os alertas privados de segurança do repositório. Não é possível confirmar por esta auditoria se branch protection, secret scanning e Dependabot estão habilitados.
 - Não foram testados fluxos reais de navegador, importações com payloads maliciosos, limites de taxa, nem configurações de segurança do painel Cloudflare.
 - Esta revisão estática reduz riscos identificados, mas não equivale a um pentest ou a uma certificação de segurança.
+
+- Revisada também a restauração do estado local: propriedades especiais de objetos JSON são descartadas, letras importadas são limitadas e tipadas, e os campos de exercícios exibidos na tela de revisão passam por escape HTML.
