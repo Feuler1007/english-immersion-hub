@@ -1,0 +1,3 @@
+name = "english-immersion-news"
+main = "news-worker.js"
+compatibility_date = "2026-11-13"
