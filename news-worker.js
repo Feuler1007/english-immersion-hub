@@ -20,6 +20,8 @@ const CORS = {
   "Access-Control-Allow-Methods": "GET, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Cache-Control",
   "Access-Control-Max-Age": "86400",
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "no-referrer",
   "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0"
 };
 function decode(s = "") {
@@ -74,6 +76,7 @@ function score(a) {
 export default {
   async fetch(request) {
     if (request.method === "OPTIONS") return new Response(null, { headers: CORS });
+    if (request.method !== "GET") return Response.json({ ok: false, error: "Method not allowed" }, { status: 405, headers: { ...CORS, "Allow": "GET, OPTIONS" } });
     const url = new URL(request.url);
     if (url.pathname !== "/news") return Response.json({ ok: true, service: "English Immersion Hub multi-publisher RSS aggregator", endpoint: "/news" }, { headers: CORS });
     const limit = Math.max(1, Math.min(100, Number(url.searchParams.get("limit") || 70)));
