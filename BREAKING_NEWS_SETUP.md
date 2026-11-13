@@ -15,15 +15,11 @@ The English Immersion Hub group chat uses Google News RSS through a small Cloudf
 Example format (replace the name with your own Worker):
 `https://your-worker-name.your-account.workers.dev/news`
 
-## 2. Connect it to the site
+## 2. Automatic connection in the public site
 
-1. Open the English Immersion Hub.
-2. Open **BREAKING NEWS 💀** in the sidebar.
-3. Paste the HTTPS Worker URL into **Cloudflare Worker URL**.
-4. Click **Save news connection**.
-5. Use the refresh button to request the latest headlines.
+The Worker endpoint is configured centrally in `shitpost-engine.js`. Visitors do not need to paste a URL, save settings, or configure their browsers. To change the Worker in the future, update the `endpoint()` function once in the repository and publish the site again.
 
-The URL is stored in the current browser's local storage. Each visitor must connect the same public Worker URL once per browser unless the project later defines a shared configuration.
+Current endpoint: `https://english-immersion-news.felipechves8.workers.dev/news`
 
 ## 3. What the feed collects
 
@@ -60,7 +56,7 @@ No generative AI service or paid token API is used. The interpreter is intention
 ## Important limitations
 
 - Google News RSS supplies headlines and links, not full article text. Users open the publisher's original article for the full report.
-- The Worker fetches feeds when the site requests them. The daily featured headline is remembered in each browser; this is not yet a shared server-side daily post.
+- The Worker fetches feeds when the site requests them. The Worker endpoint is shared by all visitors. The daily featured headline and chat history are still selected/stored per browser; a globally synchronized daily headline would require a separate shared server-side store (for example, a Cloudflare KV or D1 binding).
 - The chat is currently a personal group simulation. Messages are stored in that browser and are not synchronized between different users.
 - Aviation and accident stories are filtered to reduce graphic/tragic material, but automated keyword filtering is not perfect.
 - The initial preview stories are clearly marked as built-in examples and are not real news reports.
