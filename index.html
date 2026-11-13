@@ -290,12 +290,15 @@ main:has(.lv)>.card:has(#rv),main:has(.lv)>.xpg{min-width:0}
  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 
+
+/* Aura Tracker: visual limpo e gráfico com curvas suaves */
+#brz{min-width:0}#brz h2{font-size:clamp(19px,2vw,24px);letter-spacing:-.02em}#cv{display:block;width:100%;height:360px;border-radius:16px;background:linear-gradient(145deg,rgba(65,105,225,.12),rgba(70,190,180,.07));border:1px solid var(--bd);touch-action:pan-y}.aura-scenarios>div{border:1px solid var(--bd)!important;border-radius:13px;padding:13px;background:var(--card2)}.aura-scenarios>div:nth-child(1){border-left:3px solid #a78bfa!important}.aura-scenarios>div:nth-child(2){border-left:3px solid #4f8cff!important}.aura-scenarios>div:nth-child(3){border-left:3px solid #f2b45e!important}.aura-note{line-height:1.55;max-width:900px}
 </style></head><body>
 <div class="app"><aside id="side"><div class="logo"><svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4d7cff"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><path d="M8 10a6 6 0 0 1 6-6h20a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6H22l-9 9v-9h-1a4 4 0 0 1-4-4z" fill="url(#lg1)" stroke="#050a24" stroke-width="2.5" stroke-linejoin="round"/><text x="24" y="25" text-anchor="middle" font-family="Bricolage Grotesque,sans-serif" font-weight="800" font-size="15" fill="#fff">EN</text><path d="M38 1l-6 11h5l-4 9 10-12h-5z" fill="#c8ff3a" stroke="#050a24" stroke-width="1.6" stroke-linejoin="round"/></svg><span>English<b>Hub</b><small>no cap · só aura</small></span></div><div class="sl">VISÃO GERAL</div><nav id="nav"></nav><div class="sl">FAVORITAS</div><div id="fav"></div><div style="flex:1"></div><div class="sl setg">TEMA</div><div class="seg setg" id="seg"><button data-th="light">☀ Claro</button><button data-th="dark">☾ Escuro</button></div></aside><div class="mid"><div class="top"><input id="gs" placeholder="Buscar música ou artista… (/)" aria-label="Buscar"><a class="yt-account" href="https://accounts.google.com/ServiceLogin?service=youtube&amp;continue=https%3A%2F%2Fwww.youtube.com%2F" target="_blank" rel="noopener noreferrer" title="Entrar na sua conta Google no YouTube">▶ Entrar no YouTube</a><button class="rnd" id="th" aria-label="Alternar tema"></button></div><main id="view"></main></div><aside id="rail"></aside></div>
 <script>
 const $=s=>document.querySelector(s);if($(".app")&&$(".app").parentElement!==document.body)document.documentElement.classList.add("emb");
 const LV=["Beginner","Elementary","Pre-Intermediate","Intermediate","Upper-Intermediate","Advanced"],TH=[0,100,250,500,900,1500];
-const GOAL=90,XPM=1.5;
+const GOAL=90,GOAL_INTENSE=180,GOAL_SLOW=60,XPM=2.4;
 const SONGS=[
 {id:"bj",t:"Billie Jean",a:"Michael Jackson",c:"Michael Jackson",y:"Zi_XLOBDo_Y",l:"Intermediário",h:330,m:"O narrador nega ser o pai do filho de uma mulher que o acusa, e a música fala de fama, boatos e pressão pública.",v:[["claim","alegar, afirmar"],["rumor","boato"],["deny","negar"],["truth","verdade"]],e:[["take the blame","levar a culpa"],["spread a rumor","espalhar um boato"]],f:["Don’t believe every ___ you read online.",["rumor","kitchen","window"],"rumor"]},
 {id:"bi",t:"Beat It",a:"Michael Jackson",c:"Michael Jackson",y:"oRdxUFDoQe0",l:"Iniciante",h:10,m:"Uma mensagem para fugir de brigas: ser corajoso de verdade é saber evitar o confronto.",v:[["fight","briga, lutar"],["brave","corajoso"],["tough","durão"],["run away","fugir"]],e:[["beat it","sai fora, vai embora (gíria)"],["back down","recuar, ceder"]],f:["He didn’t want trouble, so he decided to back ___.",["down","pizza","blue"],"down"]},
@@ -538,41 +541,39 @@ const meaning=s=>{const d=DEEP[s.id];if(!d)return`<h3>O que a música quer dizer
 function brz(){const el=$("#brz");if(!el)return;
  const H=S.hist||{},D=864e5,iso=d=>new Date(d).toISOString().slice(0,10),now=Date.now(),ks=Object.keys(H).sort(),fs=ks.length?new Date(ks[0]).getTime():now;
  const sp=Math.min(14,Math.max(1,Math.round((now-fs)/D)+1)),rec=[...Array(sp)].map((_,i)=>H[iso(now-(sp-1-i)*D)]||0);
- let mean=rec.reduce((a,b)=>a+b,0)/sp;const guess=mean<=0;if(guess)mean=GOAL;
- const sd=Math.sqrt(rec.reduce((a,b)=>a+(b-mean)**2,0)/sp)||mean*.35,R={fast:mean+sd,mid:mean,slow:Math.max(mean-sd,mean*.25)};
+ const mean=rec.reduce((a,b)=>a+b,0)/sp,hasData=mean>0,sd=Math.sqrt(rec.reduce((a,b)=>a+(b-mean)**2,0)/sp)||0;
  const MAX=xpTo(301),left=Math.max(0,MAX-S.xp),eta=r=>Math.ceil(left/r),dt=n=>new Date(now+n*D).toLocaleDateString("pt-BR",{month:"short",year:"numeric"}),yrs=n=>n>730?(n/365).toFixed(1)+" anos":n+" dias";
- const LI=lvInfo(),ri=rankOf(LI.n),best=Math.max(0,...Object.values(H)),done=Object.keys(S.done).length;
- const vd=guess?"SEM DADOS AINDA 💀 estimando com a meta diária":mean>=GOAL?"SIGMA GRINDSET 🗿 aura infinita":"NPC ENERGY 😭 abre o app e farma aura";
- el.innerHTML=`<h2>🧠 AURA TRACKER · progresso do inglês</h2><p class="mut">${vd}. Previsão baseada na sua média dos últimos ${sp} dia(s): <b>${mean.toFixed(0)} XP/dia</b> (±${sd.toFixed(0)}).</p>
- <div class="rg" id="rg"><button data-r="30">30 dias</button><button data-r="90">90 dias</button><button data-r="0">RUMO AO TOPO 👑</button></div><canvas id="cv"></canvas>
- <div class="tl"><div><small>Nível</small><b>${LI.n} / 301</b></div><div><small>Elo</small><b>${ri+1} / 23 · ${RNAMES[ri]}</b></div><div><small>Rumo ao topo</small><b>${(S.xp/MAX*100).toFixed(2)}%</b></div><div><small>Aura total</small><b>${S.xp.toLocaleString("pt-BR")} XP</b></div><div><small>Melhor dia</small><b>${best} XP</b></div><div><small>Itens aprendidos</small><b>${done}</b></div></div>
- <div class="tl"><div style="border:1px solid #4fd6a0"><small>🚀 Cenário rápido (${R.fast.toFixed(0)}/dia)</small><b>${yrs(eta(R.fast))}</b><small>${dt(eta(R.fast))}</small></div><div style="border:1px solid #ffc857"><small>🎯 Cenário esperado (${R.mid.toFixed(0)}/dia)</small><b>${yrs(eta(R.mid))}</b><small>${dt(eta(R.mid))}</small></div><div style="border:1px solid #ff7a6b"><small>🐌 Cenário lento (${R.slow.toFixed(0)}/dia)</small><b>${yrs(eta(R.slow))}</b><small>${dt(eta(R.slow))}</small></div></div>
- <p class="mut" style="font-size:13px">📌 Metas do app: <b>${GOAL} XP/dia</b> (pior caso) leva ${yrs(Math.ceil(MAX/GOAL))} · <b>${GOAL*2} XP/dia</b> (intenso) leva ${yrs(Math.ceil(MAX/(GOAL*2)))}.<br>A faixa colorida é a variabilidade: média ± desvio padrão do seu XP diário. Quanto mais irregular você estuda, mais larga ela fica. Passe o mouse ou o dedo no gráfico; clique para explodir.</p>`;
- const cv=$("#cv"),c=cv.getContext("2d");let rng=30,mx=-1,t0=performance.now(),fx=[];const em=["💀","🗿","🔥","😭","🫡","✨","🧠"],ph=["skibidi aura +","sigma grind 🗿","fanum tax: ","rizz level ","no cap, "];
- const sz=()=>{const r=devicePixelRatio||1,w=cv.clientWidth;cv.width=w*r;cv.height=360*r;c.setTransform(r,0,0,r,0,0)};sz();
- const geo=()=>{const pa=rng?Math.min(rng,60):30,fu=rng||Math.min(3650,Math.max(30,eta(R.slow))),past=[];let acc=S.xp;for(let i=0;i<=pa;i++){past.unshift(acc);acc-=H[iso(now-i*D)]||0}
-  const ym=rng?Math.min(MAX,S.xp+R.fast*fu)*1.05:MAX;return{pa,fu,past,ym,n:pa+fu}};
- document.querySelectorAll("#rg button").forEach(b=>{b.classList.toggle("on",+b.dataset.r===rng);b.onclick=()=>{rng=+b.dataset.r;t0=performance.now();document.querySelectorAll("#rg button").forEach(x=>x.classList.toggle("on",x===b))}});
- cv.onmousemove=e=>{mx=e.offsetX};cv.onmouseleave=()=>mx=-1;cv.ontouchmove=e=>{mx=e.touches[0].clientX-cv.getBoundingClientRect().left};
- cv.onclick=e=>{boom();cv.classList.remove("shk");void cv.offsetWidth;cv.classList.add("shk");for(let k=0;k<14;k++)fx.push({x:e.offsetX,y:e.offsetY,vx:(Math.random()-.5)*5,vy:-Math.random()*5-1,e:em[k%7],l:1})};
- const cs=getComputedStyle(document.documentElement);
- (function loop(ts){if(!document.body.contains(cv))return;const g=geo(),W=cv.clientWidth,Hh=360,pd=34,X=i=>pd+(i/g.n)*(W-pd*2),Y=v=>Hh-pd-(v/g.ym)*(Hh-pd*2),p=Math.min(1,(ts-t0)/1400),hue=(ts/20)%360,tx=cs.getPropertyValue("--tx")||"#fff",mu=cs.getPropertyValue("--mut")||"#999";
-  c.clearRect(0,0,W,Hh);c.font="11px sans-serif";
-  for(let k=1;k<23;k++){const v=xpTo(rkStart(k));if(v>g.ym)break;c.strokeStyle="rgba(150,150,180,.18)";c.beginPath();c.moveTo(pd,Y(v));c.lineTo(W-pd,Y(v));c.stroke();c.fillStyle=mu;c.fillText(RNAMES[k],pd+4,Y(v)-3)}
-  const sc=(r,fl)=>{const a=[];for(let j=0;j<=g.fu;j++)a.push(Math.min(MAX,S.xp+r*j));return a};
-  const fa=sc(R.fast),fm=sc(R.mid),fs2=sc(R.slow),lim=Math.floor(g.n*p);
-  c.beginPath();for(let j=0;j<=g.fu;j++){if(g.pa+j>lim)break;c.lineTo(X(g.pa+j),Y(fa[j]))}for(let j=g.fu;j>=0;j--){if(g.pa+j>lim)continue;c.lineTo(X(g.pa+j),Y(fs2[j]))}c.closePath();const gr=c.createLinearGradient(0,0,W,0);gr.addColorStop(0,`hsla(${hue},95%,60%,.30)`);gr.addColorStop(1,`hsla(${hue+120},95%,60%,.30)`);c.fillStyle=gr;c.fill();
-  c.lineWidth=3;c.shadowBlur=18;c.shadowColor=`hsl(${hue},100%,60%)`;c.strokeStyle=`hsl(${hue},100%,65%)`;c.beginPath();g.past.forEach((v,i)=>{if(i<=lim)i?c.lineTo(X(i),Y(v)):c.moveTo(X(i),Y(v))});c.stroke();
-  c.setLineDash([7,6]);c.strokeStyle=`hsl(${hue+160},100%,70%)`;c.beginPath();for(let j=0;j<=g.fu;j++){if(g.pa+j>lim)break;j?c.lineTo(X(g.pa+j),Y(fm[j])):c.moveTo(X(g.pa),Y(fm[0]))}c.stroke();c.setLineDash([]);c.shadowBlur=0;
-  c.fillStyle=mu;c.fillText("passado",pd,Hh-10);c.fillText("futuro previsto →",W-pd-96,Hh-10);c.strokeStyle="rgba(255,255,255,.35)";c.beginPath();c.moveTo(X(g.pa),pd);c.lineTo(X(g.pa),Hh-pd);c.stroke();
-  const pu=1+.25*Math.sin(ts/150);c.font=(22*pu)+"px sans-serif";c.fillText("🔥",X(g.pa)-12,Y(S.xp)+6);
-  if(Math.random()<.18)fx.push({x:X(g.pa),y:Y(S.xp),vx:(Math.random()-.5)*2,vy:-1-Math.random()*2,e:em[Math.floor(Math.random()*7)],l:1});
-  fx=fx.filter(f=>f.l>0);fx.forEach(f=>{f.x+=f.vx;f.y+=f.vy;f.vy+=.05;f.l-=.015;c.globalAlpha=Math.max(0,f.l);c.font="18px sans-serif";c.fillText(f.e,f.x,f.y)});c.globalAlpha=1;
-  if(mx>=pd&&mx<=W-pd){const i=Math.max(0,Math.min(g.n,Math.round((mx-pd)/(W-pd*2)*g.n))),fut=i>g.pa,v=fut?fm[i-g.pa]:g.past[i],lo=fut?fs2[i-g.pa]:v,hi=fut?fa[i-g.pa]:v,L2=(()=>{let n=0;while(n<301&&v>=xpTo(n+1))n++;return n})(),day=new Date(now+(i-g.pa)*D).toLocaleDateString("pt-BR",{day:"2-digit",month:"short",year:"2-digit"});
-   c.strokeStyle="#fff";c.beginPath();c.moveTo(X(i),pd);c.lineTo(X(i),Hh-pd);c.stroke();c.fillStyle="#fff";c.beginPath();c.arc(X(i),Y(v),6,0,7);c.fill();
-   const L3=[day+(fut?" (previsto)":""),Math.round(v).toLocaleString("pt-BR")+" XP · nível "+L2,RNAMES[rankOf(L2)],fut?"faixa: "+Math.round(lo).toLocaleString("pt-BR")+" a "+Math.round(hi).toLocaleString("pt-BR"):ph[i%5]+Math.round(v/10)],bw=210,bx=Math.min(W-bw-6,Math.max(6,X(i)+12));
-   c.fillStyle="rgba(20,16,32,.92)";c.fillRect(bx,pd,bw,78);c.strokeStyle=`hsl(${hue},100%,65%)`;c.strokeRect(bx,pd,bw,78);c.fillStyle="#fff";c.font="bold 12px sans-serif";L3.forEach((s2,k)=>c.fillText(s2,bx+8,pd+17+k*17))}
-  requestAnimationFrame(loop)})(t0);
+ const R={fast:GOAL_INTENSE,mid:GOAL,slow:GOAL_SLOW},LI=lvInfo(),ri=rankOf(LI.n),best=Math.max(0,...Object.values(H)),done=Object.keys(S.done).length;
+ el.innerHTML=`<h2>📈 Progresso rumo à fluência</h2><p class="mut">Sua média recente: <b>${hasData?mean.toFixed(0):"sem dados"} XP/dia</b>. Projeções calculadas com as três metas de estudo.</p>
+ <div class="rg" id="rg"><button data-r="30">30 dias</button><button data-r="90">90 dias</button><button data-r="0">Até a fluência</button></div><canvas id="cv" aria-label="Gráfico de evolução de XP e projeção até o nível fluente"></canvas>
+ <div class="tl"><div><small>Nível atual</small><b>${LI.n} / 301</b></div><div><small>Elo</small><b>${ri+1} / 23 · ${RNAMES[ri]}</b></div><div><small>Progresso total</small><b>${(S.xp/MAX*100).toFixed(2)}%</b></div><div><small>XP acumulado</small><b>${S.xp.toLocaleString("pt-BR")}</b></div><div><small>Melhor dia</small><b>${best} XP</b></div><div><small>Itens aprendidos</small><b>${done}</b></div></div>
+ <div class="tl aura-scenarios"><div><small>Ritmo intensivo · 180 XP/dia</small><b>${yrs(eta(R.fast))}</b><small>${dt(eta(R.fast))}</small></div><div><small>Ritmo normal · 90 XP/dia</small><b>${yrs(eta(R.mid))}</b><small>${dt(eta(R.mid))}</small></div><div><small>Ritmo mínimo · 60 XP/dia</small><b>${yrs(eta(R.slow))}</b><small>${dt(eta(R.slow))}</small></div></div>
+ <p class="mut aura-note">Meta de conclusão: nível 301, classificado como fluente dentro da progressão do aplicativo. As estimativas pressupõem estudo consistente e não substituem prática real de conversação, escuta, leitura e escrita. A linha do gráfico mostra uma trajetória suavizada, limitada ao XP necessário para chegar ao nível máximo.</p>`;
+ const cv=$("#cv"),c=cv.getContext("2d");let rng=30,mx=-1;
+ const sz=()=>{const r=window.devicePixelRatio||1,w=cv.clientWidth;cv.width=w*r;cv.height=360*r;c.setTransform(r,0,0,r,0,0)};sz();
+ const geo=()=>{const pa=rng?Math.min(rng,60):Math.min(90,Math.max(30,Math.ceil((Date.now()-new Date(ks[0]||iso(now)).getTime())/D))),fu=rng||Math.min(3650,Math.max(30,eta(R.slow))),past=[];let acc=S.xp;for(let i=0;i<=pa;i++){past.unshift(acc);acc=Math.max(0,acc-(H[iso(now-i*D)]||0))}
+  return{pa,fu,past,n:pa+fu,ym:Math.max(xpTo(301),S.xp+GOAL_INTENSE*fu)*1.04}};
+ document.querySelectorAll("#rg button").forEach(b=>{b.classList.toggle("on",+b.dataset.r===rng);b.onclick=()=>{rng=+b.dataset.r;document.querySelectorAll("#rg button").forEach(x=>x.classList.toggle("on",x===b))}});
+ cv.onmousemove=e=>{mx=e.offsetX};cv.onmouseleave=()=>{mx=-1};cv.ontouchmove=e=>{mx=e.touches[0].clientX-cv.getBoundingClientRect().left};
+ const smoothPath=(pts)=>{if(!pts.length)return;c.beginPath();c.moveTo(pts[0].x,pts[0].y);for(let i=1;i<pts.length-1;i++){const m={x:(pts[i].x+pts[i+1].x)/2,y:(pts[i].y+pts[i+1].y)/2};c.quadraticCurveTo(pts[i].x,pts[i].y,m.x,m.y)}if(pts.length>1){const q=pts[pts.length-1];c.lineTo(q.x,q.y)}};
+ const css=getComputedStyle(document.documentElement);
+ (function loop(){if(!document.body.contains(cv))return;const g=geo(),W=cv.clientWidth,Hh=360,pd=38,X=i=>pd+i/g.n*(W-pd*2),Y=v=>Hh-pd-(v/g.ym)*(Hh-pd*2),mut=css.getPropertyValue("--mut")||"#9aa4b8",tx=css.getPropertyValue("--tx")||"#fff";
+  c.clearRect(0,0,W,Hh);
+  const gridCount=5;c.font="11px sans-serif";c.textAlign="left";
+  for(let k=0;k<=gridCount;k++){const v=g.ym*k/gridCount,y=Y(v);c.strokeStyle="rgba(150,165,195,.13)";c.lineWidth=1;c.beginPath();c.moveTo(pd,y);c.lineTo(W-pd,y);c.stroke();c.fillStyle=mut;c.fillText(Math.round(v/1000*10)/10+"k",5,y-5)}
+  const actual=g.past.map((v,i)=>({x:X(i),y:Y(v)}));smoothPath(actual);c.lineWidth=3;c.strokeStyle="#50d8c8";c.shadowColor="rgba(80,216,200,.28)";c.shadowBlur=9;c.stroke();c.shadowBlur=0;
+  const scenarios=[{rate:R.fast,color:"#a78bfa",dash:[5,6]},{rate:R.mid,color:"#4f8cff",dash:[]},{rate:R.slow,color:"#f2b45e",dash:[3,5]}];
+  scenarios.forEach((sc,idx)=>{const days=Math.min(g.fu,eta(sc.rate)),pts=[];for(let j=0;j<=days;j++){const t=days?j/days:1,ease=t*t*(3-2*t),v=Math.min(MAX,S.xp+left*ease);pts.push({x:X(g.pa+j),y:Y(v)})}
+   smoothPath(pts);c.lineWidth=idx===1?3.5:2;c.strokeStyle=sc.color;c.setLineDash(sc.dash);c.globalAlpha=idx===1?1:.78;c.stroke();c.setLineDash([]);c.globalAlpha=1;
+   if(idx===1&&pts.length>1){const p=pts[pts.length-1];c.fillStyle=sc.color;c.beginPath();c.arc(p.x,p.y,4,0,Math.PI*2);c.fill()}
+  });
+  c.fillStyle=mut;c.font="11px sans-serif";c.fillText("HISTÓRICO",pd,Hh-12);c.fillText("PROJEÇÃO",W-pd-62,Hh-12);
+  const currentX=X(g.pa),currentY=Y(S.xp);c.strokeStyle="rgba(255,255,255,.35)";c.setLineDash([4,5]);c.beginPath();c.moveTo(currentX,pd);c.lineTo(currentX,Hh-pd);c.stroke();c.setLineDash([]);
+  c.fillStyle="#fff";c.shadowColor="#50d8c8";c.shadowBlur=12;c.beginPath();c.arc(currentX,currentY,5,0,Math.PI*2);c.fill();c.shadowBlur=0;
+  if(mx>=pd&&mx<=W-pd){const i=Math.max(0,Math.min(g.n,Math.round((mx-pd)/(W-pd*2)*g.n))),fut=i>g.pa,v=fut?Math.min(MAX,S.xp+GOAL*((i-g.pa)/Math.max(1,eta(GOAL)))*eta(GOAL)):g.past[i]||0,day=new Date(now+(i-g.pa)*D).toLocaleDateString("pt-BR",{day:"2-digit",month:"short",year:"numeric"}),bx=Math.min(W-196,Math.max(8,X(i)+12)),by=16;
+   c.strokeStyle="rgba(255,255,255,.55)";c.beginPath();c.moveTo(X(i),pd);c.lineTo(X(i),Hh-pd);c.stroke();c.fillStyle="rgba(18,25,43,.94)";c.fillRect(bx,by,188,57);c.strokeStyle="#4f8cff";c.strokeRect(bx,by,188,57);c.fillStyle="#fff";c.font="bold 12px sans-serif";c.fillText(day,bx+9,by+17);c.font="12px sans-serif";c.fillText(Math.round(v).toLocaleString("pt-BR")+" XP · nível "+(()=>{let n=0;while(n<301&&v>=xpTo(n+1))n++;return n})(),bx+9,by+38)
+  }
+  requestAnimationFrame(loop)})();
  addEventListener("resize",sz)}
 
 function bkp(){const el=$("#bkp");if(!el)return;
