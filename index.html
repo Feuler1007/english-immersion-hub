@@ -1071,7 +1071,7 @@ const trophyDefs=[
 ["xp3500","A evolução aparece","Acumule 3.500 XP.","silver",()=>S.xp>=3500],
 ["xp5000","Banco de experiência","Acumule 5.000 XP.","silver",()=>S.xp>=5000],
 ["xp8000","Fome de aprender","Acumule 8.000 XP.","gold",()=>S.xp>=8000],
-["xp12000","XP não mente","Acumule 12.000 XP.","gold",()=>S.xp>=12000],
+["level301","Fluência absoluta","Alcance o nível máximo: 301.","gold",()=>lvInfo().n>=301],
 ["streak3","Três dias de foco","Estude por 3 dias consecutivos.","bronze",()=>S.streak>=3],
 ["streak5","Ritmo consistente","Estude por 5 dias consecutivos.","bronze",()=>S.streak>=5],
 ["streak7","Uma semana sem falhar","Estude por 7 dias consecutivos.","silver",()=>S.streak>=7],
@@ -1112,7 +1112,7 @@ const trophyDefs=[
 ["secret_open","Sem rede de proteção","", "secret",()=>S.trophies.openAnswers>=30],
 ["secret_recovery","Aprendeu com a queda","", "secret",()=>S.trophies.recoveredErrors>=15],
 ["secret_marathon","Até perder a noção do tempo","", "secret",()=>Object.values(S.trophies.sessionsByDay||{}).some(n=>n>=5)],
-["platinum","PLATINA · Fluência absoluta","Alcance o nível máximo: 301.","platinum",()=>lvInfo().n>=301]
+["platinum","PLATINA · English Hub","Desbloqueie todas as outras 49 conquistas.","platinum",()=>trophyDefs.filter(t=>t[0]!=="platinum").every(t=>trophyUnlocked(t[0]))]
 ];
 function trophyUnlocked(id){return !!S.trophies.unlocked?.[id]}
 function syncTrophies(){
