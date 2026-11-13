@@ -65,3 +65,17 @@ O funcionamento de recursos específicos depende de serviços externos, incluind
 
 ---
 *Documento de auditoria técnica inicial. Os itens identificados são pontos de revisão e não devem ser interpretados automaticamente como falhas confirmadas.*
+
+## Etapa 3 de 8 — XP, níveis e gamificação
+
+**Status:** concluída e publicada.
+
+- Corrigida a contabilização da meta diária: os quarenta e cinco XP de bônus continuam sendo adicionados ao XP total, mas deixam de inflar o contador de XP obtido em atividades.
+- Adicionada migração única e conservadora para descontar o bônus legado do contador diário quando ele já tiver sido concedido no dia atual. O XP total acumulado e os níveis não são alterados.
+- Indicador da tela inicial renomeado para “XP de atividades hoje”, deixando explícito o que a meta mede.
+- Explicação das regras atualizada para diferenciar XP de atividades e bônus diário.
+- Mantidos o multiplicador global de 2,4, os níveis e seus limites, os bônus por combo e sequência, as recompensas únicas, o limite diário de XP por repetição e o limite de bônus de sessão.
+
+**Validação realizada:** confirmação do conteúdo publicado, presença de uma tag de abertura e fechamento do script, ausência da sequência de escape de quebra de linha que havia sido corrigida antes da verificação, e checagem estática das regras de bônus, repetição e sessão.
+
+**Limitação:** não foi executado teste interativo em navegador real nesta etapa. A validação de interface e fluxos completos permanece para a etapa final de regressão.
