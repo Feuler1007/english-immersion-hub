@@ -201,6 +201,57 @@ main:has(.lv){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 2
 @media(max-width:1100px){.app{grid-template-columns:232px minmax(0,1fr)}}
 @media(max-width:860px){.app{grid-template-columns:1fr}.mid{padding:0 14px}main:has(.lv){display:block}.lv{padding:22px}}
 @media(max-width:640px){.lv{grid-template-columns:1fr;justify-items:center;text-align:center}.lv .ring{width:140px;height:140px}.rvb{justify-content:center}}
+
+/* ===== AJUSTE RESPONSIVO REAL: respeita a largura do painel/iframe ===== */
+html,body{width:100%;min-width:0}
+body{container-type:inline-size;container-name:page}
+.app{width:100%;min-width:0;min-height:100dvh;grid-template-columns:clamp(220px,16vw,270px) minmax(0,1fr) clamp(270px,20vw,340px)}
+.mid{min-width:0;padding-inline:clamp(16px,2vw,32px)}
+.mid main,.mid .top{width:100%;max-width:1600px}
+#side,#rail{min-width:0}
+#rail{padding-inline:clamp(14px,1.5vw,24px)}
+main:has(.lv)>*{min-width:0}
+main:has(.lv)>.card:has(#rv),main:has(.lv)>.xpg{min-width:0}
+.lv{min-width:0;grid-template-columns:minmax(120px,160px) minmax(0,1fr);gap:clamp(14px,2vw,26px);padding:clamp(18px,2vw,28px)}
+.lv .ring{width:clamp(120px,12vw,160px);height:clamp(120px,12vw,160px)}
+.lv .ring b{font-size:clamp(42px,4vw,58px)}
+.lv>div{min-width:0}
+.lv h1{font-size:clamp(24px,2.5vw,34px);overflow-wrap:normal;word-break:normal}
+.lv .xl{min-width:0;flex-wrap:wrap}
+.rvb{min-width:0;white-space:normal}
+.rvb em{flex:none}
+.rk{min-width:0;padding:16px 12px}
+.rkw,.rkin{max-width:100%}
+.sc3,.grid,.songs,.vgrid{min-width:0}
+.sc,.song,.vc,.cc{min-width:0}
+@container page (max-width:1100px){
+  .app{grid-template-columns:220px minmax(0,1fr)}
+  #rail{display:none}
+  .mid{padding-inline:20px}
+  .mid main,.mid .top{max-width:none}
+  main:has(.lv){grid-template-columns:minmax(0,1fr);display:block}
+  main:has(.lv)>.card:has(#rv),main:has(.lv)>.xpg{margin:12px 0}
+  .lv{grid-template-columns:minmax(120px,145px) minmax(0,1fr);padding:20px;gap:16px}
+  .lv .ring{width:136px;height:136px}
+}
+@container page (max-width:700px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  #side{position:static;height:auto;max-height:none;flex-direction:row;flex-wrap:wrap;align-items:center;padding:12px;border:0;border-bottom:1px solid var(--bd)}
+  #side .sl,#fav,.setg{display:none}
+  .logo{margin:0 8px 0 0}
+  #nav{display:flex;overflow-x:auto;flex:1 1 100%;min-width:0}
+  #nav button{width:auto;white-space:nowrap}
+  .mid{padding:0 14px}
+  .lv{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;padding:20px}
+  .lv .ring{width:140px;height:140px}
+  .rvb{justify-content:center;text-align:center}
+  .top{gap:8px}
+}
+@media(max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  #side{position:static;height:auto;max-height:none}
+}
+
 </style></head><body>
 <div class="app"><aside id="side"><div class="logo"><svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4d7cff"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><path d="M8 10a6 6 0 0 1 6-6h20a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6H22l-9 9v-9h-1a4 4 0 0 1-4-4z" fill="url(#lg1)" stroke="#050a24" stroke-width="2.5" stroke-linejoin="round"/><text x="24" y="25" text-anchor="middle" font-family="Bricolage Grotesque,sans-serif" font-weight="800" font-size="15" fill="#fff">EN</text><path d="M38 1l-6 11h5l-4 9 10-12h-5z" fill="#c8ff3a" stroke="#050a24" stroke-width="1.6" stroke-linejoin="round"/></svg><span>English<b>Hub</b><small>no cap · só aura</small></span></div><div class="sl">VISÃO GERAL</div><nav id="nav"></nav><div class="sl">FAVORITAS</div><div id="fav"></div><div style="flex:1"></div><div class="sl setg">TEMA</div><div class="seg setg" id="seg"><button data-th="light">☀ Claro</button><button data-th="dark">☾ Escuro</button></div></aside><div class="mid"><div class="top"><input id="gs" placeholder="Buscar música ou artista… (/)" aria-label="Buscar"><button class="rnd" id="th" aria-label="Alternar tema"></button></div><main id="view"></main></div><aside id="rail"></aside></div>
 <script>
