@@ -563,14 +563,14 @@ function brz(){const el=$("#brz");if(!el)return;
   for(let k=0;k<=gridCount;k++){const v=g.ym*k/gridCount,y=Y(v);c.strokeStyle="rgba(150,165,195,.13)";c.lineWidth=1;c.beginPath();c.moveTo(pd,y);c.lineTo(W-pd,y);c.stroke();c.fillStyle=mut;c.fillText(Math.round(v/1000*10)/10+"k",5,y-5)}
   const actual=g.past.map((v,i)=>({x:X(i),y:Y(v)}));smoothPath(actual);c.lineWidth=3;c.strokeStyle="#50d8c8";c.shadowColor="rgba(80,216,200,.28)";c.shadowBlur=9;c.stroke();c.shadowBlur=0;
   const scenarios=[{rate:R.fast,color:"#a78bfa",dash:[5,6]},{rate:R.mid,color:"#4f8cff",dash:[]},{rate:R.slow,color:"#f2b45e",dash:[3,5]}];
-  scenarios.forEach((sc,idx)=>{const days=Math.min(g.fu,eta(sc.rate)),pts=[];for(let j=0;j<=days;j++){const t=days?j/days:1,ease=t*t*(3-2*t),v=Math.min(MAX,S.xp+left*ease);pts.push({x:X(g.pa+j),y:Y(v)})}
+  scenarios.forEach((sc,idx)=>{const duration=eta(sc.rate),days=Math.min(g.fu,duration),pts=[];for(let j=0;j<=days;j++){const t=Math.min(1,j/Math.max(1,duration)),ease=t*t*(3-2*t),v=Math.min(MAX,S.xp+left*ease);pts.push({x:X(g.pa+j),y:Y(v)})}
    smoothPath(pts);c.lineWidth=idx===1?3.5:2;c.strokeStyle=sc.color;c.setLineDash(sc.dash);c.globalAlpha=idx===1?1:.78;c.stroke();c.setLineDash([]);c.globalAlpha=1;
    if(idx===1&&pts.length>1){const p=pts[pts.length-1];c.fillStyle=sc.color;c.beginPath();c.arc(p.x,p.y,4,0,Math.PI*2);c.fill()}
   });
   c.fillStyle=mut;c.font="11px sans-serif";c.fillText("HISTÓRICO",pd,Hh-12);c.fillText("PROJEÇÃO",W-pd-62,Hh-12);
   const currentX=X(g.pa),currentY=Y(S.xp);c.strokeStyle="rgba(255,255,255,.35)";c.setLineDash([4,5]);c.beginPath();c.moveTo(currentX,pd);c.lineTo(currentX,Hh-pd);c.stroke();c.setLineDash([]);
   c.fillStyle="#fff";c.shadowColor="#50d8c8";c.shadowBlur=12;c.beginPath();c.arc(currentX,currentY,5,0,Math.PI*2);c.fill();c.shadowBlur=0;
-  if(mx>=pd&&mx<=W-pd){const i=Math.max(0,Math.min(g.n,Math.round((mx-pd)/(W-pd*2)*g.n))),fut=i>g.pa,v=fut?Math.min(MAX,S.xp+GOAL*((i-g.pa)/Math.max(1,eta(GOAL)))*eta(GOAL)):g.past[i]||0,day=new Date(now+(i-g.pa)*D).toLocaleDateString("pt-BR",{day:"2-digit",month:"short",year:"numeric"}),bx=Math.min(W-196,Math.max(8,X(i)+12)),by=16;
+  if(mx>=pd&&mx<=W-pd){const i=Math.max(0,Math.min(g.n,Math.round((mx-pd)/(W-pd*2)*g.n))),fut=i>g.pa,v=fut?Math.min(MAX,S.xp+left*(Math.min(1,(i-g.pa)/Math.max(1,eta(GOAL)))**2)*(3-2*Math.min(1,(i-g.pa)/Math.max(1,eta(GOAL))))):g.past[i]||0,day=new Date(now+(i-g.pa)*D).toLocaleDateString("pt-BR",{day:"2-digit",month:"short",year:"numeric"}),bx=Math.min(W-196,Math.max(8,X(i)+12)),by=16;
    c.strokeStyle="rgba(255,255,255,.55)";c.beginPath();c.moveTo(X(i),pd);c.lineTo(X(i),Hh-pd);c.stroke();c.fillStyle="rgba(18,25,43,.94)";c.fillRect(bx,by,188,57);c.strokeStyle="#4f8cff";c.strokeRect(bx,by,188,57);c.fillStyle="#fff";c.font="bold 12px sans-serif";c.fillText(day,bx+9,by+17);c.font="12px sans-serif";c.fillText(Math.round(v).toLocaleString("pt-BR")+" XP · nível "+(()=>{let n=0;while(n<301&&v>=xpTo(n+1))n++;return n})(),bx+9,by+38)
   }
   requestAnimationFrame(loop)})();
