@@ -293,8 +293,178 @@ main:has(.lv)>.card:has(#rv),main:has(.lv)>.xpg{min-width:0}
 
 /* Aura Tracker: visual limpo e gráfico com curvas suaves */
 #brz{min-width:0}#brz h2{font-size:clamp(19px,2vw,24px);letter-spacing:-.02em}#cv{display:block;width:100%;height:360px;border-radius:16px;background:linear-gradient(145deg,rgba(65,105,225,.12),rgba(70,190,180,.07));border:1px solid var(--bd);touch-action:pan-y}.aura-scenarios>div{border:1px solid var(--bd)!important;border-radius:13px;padding:13px;background:var(--card2)}.aura-scenarios>div:nth-child(1){border-left:3px solid #a78bfa!important}.aura-scenarios>div:nth-child(2){border-left:3px solid #4f8cff!important}.aura-scenarios>div:nth-child(3){border-left:3px solid #f2b45e!important}.aura-note{line-height:1.55;max-width:900px}
+
+/* ===== ETAPA 2/8 · SISTEMA VISUAL E EXPERIÊNCIA ===== */
+:root{
+ --bg:#f6f7fc;--card:#fff;--card2:#eef0fa;--tx:#20243a;--mut:#737b96;
+ --ac:#6554d9;--ac2:#e9ad43;--hov:#e7e9f7;--bd:#e3e6f1;
+ --ok:#229b72;--bad:#d85c68;--sh:0 8px 28px rgba(36,43,86,.065);
+ --surface-glass:rgba(255,255,255,.88);--focus:rgba(101,84,217,.22);
+}
+@media(prefers-color-scheme:dark){
+ :root:not([data-theme="light"]){--bg:#101522;--card:#171f30;--card2:#202b40;--tx:#edf1fb;--mut:#9aa8bf;--ac:#9b8cff;--ac2:#f0c16a;--hov:#29364e;--bd:#2b3850;--sh:0 10px 30px rgba(0,0,0,.18);--surface-glass:rgba(23,31,48,.9);--focus:rgba(155,140,255,.25)}
+}
+:root[data-theme="dark"]{--bg:#101522;--card:#171f30;--card2:#202b40;--tx:#edf1fb;--mut:#9aa8bf;--ac:#9b8cff;--ac2:#f0c16a;--hov:#29364e;--bd:#2b3850;--sh:0 10px 30px rgba(0,0,0,.18);--surface-glass:rgba(23,31,48,.9);--focus:rgba(155,140,255,.25)}
+html{background:var(--bg);scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);letter-spacing:-.01em}
+.app{grid-template-columns:244px minmax(0,1fr) 292px;background:var(--bg);background-image:radial-gradient(ellipse at 48% -18%,rgba(101,84,217,.07),transparent 42%)}
+#side{padding:25px 16px 18px;background:var(--card);border-right:1px solid var(--bd);box-shadow:4px 0 24px rgba(25,30,60,.025)}
+.logo{gap:11px;margin:0 7px 24px;color:var(--tx);font-size:21px;letter-spacing:-.04em}
+.logo svg{width:40px;height:40px;filter:drop-shadow(0 4px 8px rgba(101,84,217,.15))}
+.logo span{display:grid;line-height:1.05}
+.logo span>b{display:inline;color:var(--ac)}
+.logo small{margin-top:5px;color:var(--mut);font:500 10px/1.2 "DM Sans",sans-serif;letter-spacing:.015em}
+.sl{margin:17px 10px 7px;font-size:10px;letter-spacing:.12em;font-weight:700;color:var(--mut)}
+#nav{gap:4px}
+#nav button{min-height:42px;padding:10px 12px;border:1px solid transparent;border-radius:11px;color:var(--mut);font-size:13px;transition:background .18s,border-color .18s,color .18s,transform .18s}
+#nav button:before{width:20px;height:20px;display:grid;place-items:center;border-radius:7px;background:var(--card2);color:var(--mut);font-size:14px;line-height:1;flex:none}
+#nav button:hover{background:var(--card2);color:var(--tx);transform:translateX(2px)}
+#nav button.on{background:color-mix(in srgb,var(--ac) 10%,var(--card));border-color:color-mix(in srgb,var(--ac) 17%,var(--bd));color:var(--ac);font-weight:700}
+#nav button.on:before{background:var(--ac);color:#fff}
+#fav{font-size:13px}
+#side .seg{padding:3px;border:1px solid var(--bd);background:var(--bg)}
+#side .seg button{font-size:12px;color:var(--mut);padding:8px 5px}
+#side .seg button.on{background:var(--card);color:var(--ac);box-shadow:0 2px 8px rgba(25,30,60,.08)}
+.mid{padding-inline:clamp(20px,2.4vw,38px)}
+.mid main,.mid .top{max-width:1440px}
+.top{min-height:76px;gap:11px;padding:15px 0 13px;background:var(--bg);background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.top input{height:44px;border:1px solid var(--bd);background:var(--card);box-shadow:none;padding:0 15px;font-size:13px}
+.top input:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 4px var(--focus)}
+.yt-account{border:1px solid var(--bd);box-shadow:none;font-size:12px;font-weight:600;transition:background .18s,border-color .18s}
+.yt-account:hover{border-color:var(--ac)}
+.rnd{width:42px;height:42px;border:1px solid var(--bd);box-shadow:none;background:var(--card);color:var(--tx)}
+#rail{padding:24px 17px;background:var(--card);border-left:1px solid var(--bd)}
+#rail>.card,#rail .card{border:1px solid var(--bd);box-shadow:none}
+#rail .mut{line-height:1.45}
+#view{padding:5px 0 52px}
+#view>h1,#view>h2{letter-spacing:-.035em}
+#view>.card,.basic-box,.sci-panel,.sci-card{border:1px solid var(--bd);box-shadow:var(--sh);border-radius:17px}
+#view>.card{padding:20px;margin:14px 0}
+.card{border:1px solid var(--bd);box-shadow:var(--sh);border-radius:17px}
+.sh2{margin:22px 0 11px}
+.sh2 h3{font-size:18px;letter-spacing:-.025em}
+.sc3{gap:12px;margin:17px 0 24px}
+.sc{border:1px solid var(--bd);border-radius:15px;padding:15px;box-shadow:none;animation:none}
+.sc .ic{width:38px;height:38px;background:var(--card2);color:var(--ac);border-radius:11px;font-size:16px}
+.sc b{font-size:17px}
+.sc .bar{height:7px;background:var(--card2)}
+.sc .bar i{background:var(--ac);border-radius:8px}
+.lv{border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:clamp(20px,2.4vw,30px);gap:clamp(16px,2.4vw,30px);background:linear-gradient(118deg,#302b68 0%,#40377f 53%,#344d78 100%);box-shadow:0 16px 36px rgba(43,43,105,.15);animation:none}
+.lv .ring{width:clamp(118px,11vw,150px);height:clamp(118px,11vw,150px)}
+.lv .ring svg{filter:none}
+.lv .ring b{font-size:clamp(42px,4vw,54px);text-shadow:none}
+.lv .tier{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);font-size:10px;letter-spacing:.08em}
+.lv h1{font-size:clamp(25px,2.7vw,35px);letter-spacing:-.035em}
+.xb{height:10px;background:rgba(255,255,255,.15);margin:17px 0 8px}
+.xb i{background:linear-gradient(90deg,#e9c16f,#c1b4ff);border-radius:20px}
+.xl{font-size:12px;color:rgba(255,255,255,.8)}
+.xl b{color:#f4d48e}
+.rvb{margin-top:17px;padding:13px 16px;border-radius:12px;background:#f1d28d;color:#302b55;font-size:14px;font-weight:700;box-shadow:none;transition:transform .18s,filter .18s}
+.rvb:hover{background:#f6dda4;filter:none;transform:translateY(-1px)}
+.rvb em{background:#39356b;color:#fff1c9;font-size:12px;padding:5px 10px}
+.rk{border-radius:17px;box-shadow:var(--sh);padding:17px;border-color:var(--bd);background:var(--card)}
+.rkh{padding:0 2px 8px}
+.rkh h2{font-size:17px;letter-spacing:-.02em}
+.stk{font-size:12px}
+.rkw{padding-top:14px}
+.trk{top:29px}
+.rb{width:88px}
+.rb img{width:76px;height:62px}
+.rb b{text-shadow:none;font-size:10px;color:var(--tx)}
+.rb small{color:var(--mut)}
+.rb.now b{color:var(--ac)}
+.rb.now img{filter:drop-shadow(0 4px 7px rgba(101,84,217,.2))}
+.rb.next b{color:var(--mut)}
+.rb.next:after,.rb.lock:after{color:var(--mut);font-size:24px}
+.lb{border:0;background:var(--card2)}
+.lb i{background:var(--ok)}
+.cw{gap:13px;padding:3px 2px 14px}
+.cc{border:1px solid var(--bd);border-radius:16px;padding:10px;box-shadow:var(--sh);animation:none;transition:transform .18s,border-color .18s,box-shadow .18s}
+.cc:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--ac) 30%,var(--bd));box-shadow:0 12px 28px rgba(36,43,86,.09)}
+.thb{background:var(--card2)!important}
+.cc h4{font-size:15px;letter-spacing:-.015em}
+.cc .bar{height:6px;background:var(--card2)}
+.cc .bar i{background:var(--ac)}
+.tag{background:var(--card2);color:var(--mut);font-size:11px;font-weight:600}
+.pill{color:var(--ac)}
+button,.btn,select{transition:background .18s,color .18s,border-color .18s,box-shadow .18s,transform .18s}
+button{border:1px solid var(--bd)}
+button:hover,.btn:hover{background:var(--hov)}
+button:active,.btn:active{transform:translateY(1px) scale(.99)}
+button:focus-visible,.btn:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.pri{background:var(--ac);color:#fff;box-shadow:none;border-color:var(--ac);font-weight:700}
+.pri:hover{background:color-mix(in srgb,var(--ac) 88%,#000);filter:none}
+input,textarea,select{border:1px solid var(--bd);background:var(--card);border-radius:11px}
+input:focus,textarea:focus,select:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 4px var(--focus)}
+.filters button,.sci-filters button{font-size:12px}
+.sci-card{transition:transform .18s,border-color .18s}
+.sci-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--ac) 35%,var(--bd))}
+.basic-hero{background:linear-gradient(120deg,#302b68,#3c4d83);border:1px solid rgba(255,255,255,.12);border-radius:18px;box-shadow:0 12px 28px rgba(43,43,105,.1)}
+.basic-lesson{border-color:var(--bd);box-shadow:none;transition:border-color .18s,background .18s,transform .18s}
+.basic-lesson:hover{border-color:var(--ac);background:var(--card2);transform:translateY(-1px)}
+.basic-number{border-radius:10px}
+.sci-lesson-hero{background:linear-gradient(120deg,#302b68,#3c4d83);border:1px solid rgba(255,255,255,.12)}
+.sci-panel{box-shadow:var(--sh)}
+.sci-stage-dot{transition:width .18s,background .18s}
+table{border-collapse:separate;border-spacing:0;width:100%}
+th{font-size:10px;letter-spacing:.09em}
+td{font-size:13px}
+tr+tr td{border-top:1px solid var(--bd)}
+.toast{box-shadow:0 8px 26px rgba(0,0,0,.16);border-radius:12px;font-size:13px}
+@media(max-width:1200px){.app{grid-template-columns:232px minmax(0,1fr)}}
+@media(max-width:860px){
+ .app{display:block;min-height:100dvh}
+ #side{position:sticky;top:0;z-index:20;display:flex;flex-direction:row;flex-wrap:wrap;gap:5px 10px;padding:10px 14px 8px;background:var(--surface-glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);box-shadow:0 5px 20px rgba(30,35,70,.05)}
+ .logo{font-size:18px;margin:0 auto 0 0}
+ .logo svg{width:34px;height:34px}
+ #nav{order:2;flex:1 0 100%;gap:5px;padding:3px 0 2px;scrollbar-width:none}
+ #nav::-webkit-scrollbar{display:none}
+ #nav button{flex:0 0 auto;width:auto;min-height:37px;padding:8px 11px;font-size:12px;white-space:nowrap}
+ #nav button:before{width:17px;height:17px;background:transparent}
+ #side .sl,#fav,.setg{display:none}
+ .mid{padding:0 18px}
+ .top{top:0;min-height:65px;padding:10px 0;background:var(--surface-glass)}
+ #rail{display:none}
+ #view{padding-top:8px}
+}
+@media(max-width:600px){
+ #side{padding:8px 10px 6px;gap:3px}
+ .logo{font-size:16px}.logo svg{width:31px;height:31px}
+ .logo small{font-size:9px}
+ #nav{gap:4px}
+ #nav button{padding:7px 9px;font-size:11px}
+ .mid{padding-inline:12px}
+ .top{gap:7px;min-height:58px}
+ .top input{height:40px;font-size:12px;padding:0 11px}
+ .yt-account{padding:8px;font-size:0;min-width:38px;width:38px;height:38px}
+ .yt-account:first-letter{font-size:14px}
+ .rnd{width:38px;height:38px;min-width:38px}
+ .lv{grid-template-columns:1fr;justify-items:center;text-align:center;padding:19px 16px;gap:12px}
+ .lv .ring{width:126px;height:126px}
+ .lv .ring b{font-size:43px}
+ .lv h1{font-size:26px}
+ .xl{justify-content:center}
+ .rvb{justify-content:space-between;text-align:left}
+ .sc3{grid-template-columns:1fr;gap:8px}
+ .sc{grid-template-columns:38px minmax(0,1fr);padding:12px}
+ .sc .bar{grid-column:1/-1}
+ .sh2{margin-top:19px}
+ .sh2 h3{font-size:16px}
+ #view>.card{padding:15px}
+ .cw .cc{flex-basis:min(250px,82%)}
+ .rk{padding:13px 10px}
+ .rkh h2{font-size:15px}
+ .rb{width:78px}
+ .rb img{width:66px;height:56px}
+ .sci-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
 </style></head><body>
-<div class="app"><aside id="side"><div class="logo"><svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4d7cff"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><path d="M8 10a6 6 0 0 1 6-6h20a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6H22l-9 9v-9h-1a4 4 0 0 1-4-4z" fill="url(#lg1)" stroke="#050a24" stroke-width="2.5" stroke-linejoin="round"/><text x="24" y="25" text-anchor="middle" font-family="Bricolage Grotesque,sans-serif" font-weight="800" font-size="15" fill="#fff">EN</text><path d="M38 1l-6 11h5l-4 9 10-12h-5z" fill="#c8ff3a" stroke="#050a24" stroke-width="1.6" stroke-linejoin="round"/></svg><span>English<b>Hub</b><small>no cap · só aura</small></span></div><div class="sl">VISÃO GERAL</div><nav id="nav"></nav><div class="sl">FAVORITAS</div><div id="fav"></div><div style="flex:1"></div><div class="sl setg">TEMA</div><div class="seg setg" id="seg"><button data-th="light">☀ Claro</button><button data-th="dark">☾ Escuro</button></div></aside><div class="mid"><div class="top"><input id="gs" placeholder="Buscar música ou artista… (/)" aria-label="Buscar"><a class="yt-account" href="https://accounts.google.com/ServiceLogin?service=youtube&amp;continue=https%3A%2F%2Fwww.youtube.com%2F" target="_blank" rel="noopener noreferrer" title="Entrar na sua conta Google no YouTube">▶ Entrar no YouTube</a><button class="rnd" id="th" aria-label="Alternar tema"></button></div><main id="view"></main></div><aside id="rail"></aside></div>
+<div class="app"><aside id="side"><div class="logo"><svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4d7cff"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><path d="M8 10a6 6 0 0 1 6-6h20a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6H22l-9 9v-9h-1a4 4 0 0 1-4-4z" fill="url(#lg1)" stroke="#050a24" stroke-width="2.5" stroke-linejoin="round"/><text x="24" y="25" text-anchor="middle" font-family="Bricolage Grotesque,sans-serif" font-weight="800" font-size="15" fill="#fff">EN</text><path d="M38 1l-6 11h5l-4 9 10-12h-5z" fill="#c8ff3a" stroke="#050a24" stroke-width="1.6" stroke-linejoin="round"/></svg><span>English<b>Hub</b><small>Seu espaço de imersão em inglês</small></span></div><div class="sl">VISÃO GERAL</div><nav id="nav"></nav><div class="sl">FAVORITAS</div><div id="fav"></div><div style="flex:1"></div><div class="sl setg">TEMA</div><div class="seg setg" id="seg"><button data-th="light">☀ Claro</button><button data-th="dark">☾ Escuro</button></div></aside><div class="mid"><div class="top"><input id="gs" placeholder="Buscar música ou artista… (/)" aria-label="Buscar"><a class="yt-account" href="https://accounts.google.com/ServiceLogin?service=youtube&amp;continue=https%3A%2F%2Fwww.youtube.com%2F" target="_blank" rel="noopener noreferrer" title="Entrar na sua conta Google no YouTube">▶ Entrar no YouTube</a><button class="rnd" id="th" aria-label="Alternar tema"></button></div><main id="view"></main></div><aside id="rail"></aside></div>
 <script>
 const $=s=>document.querySelector(s);if($(".app")&&$(".app").parentElement!==document.body)document.documentElement.classList.add("emb");
 const LV=["Beginner","Elementary","Pre-Intermediate","Intermediate","Upper-Intermediate","Advanced"],TH=[0,100,250,500,900,1500];
