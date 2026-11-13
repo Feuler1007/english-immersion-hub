@@ -424,7 +424,7 @@ function award(it,combo,self){const base=Math.round((XPL[it.lv]||10)*(XPK[it.ty]
  if(combo>1){const c=Math.min(.5,(combo-1)*.1);m*=1+c;why.push("combo +"+Math.round(c*100)+"%")}
  const sm=1+Math.min(.5,S.streak*.02);if(sm>1){m*=sm;why.push("sequência +"+Math.round((sm-1)*100)+"%")}
  if(self){m*=.5;why.push("autoavaliado ×0,5")}let xp=Math.max(1,Math.round(base*m));
- if(seen&&!red){S.rxp=S.rd===today()?S.rxp||0:0;S.rd=today();xp=Math.max(0,Math.min(xp,Math.round(40*XPM)-S.rxp));S.rxp+=xp;if(!xp)why.push("limite diário de repetição")}
+ if(seen){S.rxp=S.rd===today()?S.rxp||0:0;S.rd=today();xp=Math.max(0,Math.min(xp,Math.round(40*XPM)-S.rxp));S.rxp+=xp;if(!xp)why.push("limite diário de repetição")}
  grantXP(xp);return{xp,why:why.join(" · ")}}
 /* quiz engine */
 function quiz(items,title,back,onEnd){
