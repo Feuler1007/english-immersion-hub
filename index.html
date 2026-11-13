@@ -553,7 +553,9 @@ try{S=Object.assign(S,JSON.parse(localStorage.getItem("eih")||"{}"))}catch(e){}
 S.custom=S.custom||[];S.lyrics=S.lyrics||{};SONGS.push(...S.custom);
 const esc=t=>String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;");
 const today=()=>new Date().toISOString().slice(0,10);
-function save(){try{localStorage.setItem("eih",JSON.stringify(S))}catch(e){}}\n/* Migração única: corrige o contador diário legado, sem alterar XP acumulado. */\nif(!S.xpDailyFix){if(S.gb===today())S.dxp=Math.max(0,(S.dxp||0)-45);S.xpDailyFix=1;save()}
+function save(){try{localStorage.setItem("eih",JSON.stringify(S))}catch(e){}}
+/* Migração única: corrige o contador diário legado, sem alterar XP acumulado. */
+if(!S.xpDailyFix){if(S.gb===today())S.dxp=Math.max(0,(S.dxp||0)-45);S.xpDailyFix=1;save()}
 function lvl(){return lvInfo().n}
 const sh=a=>[...a].sort(()=>Math.random()-.5);
 const pick=(a,n)=>sh(a).slice(0,n);
