@@ -891,6 +891,9 @@ app.render=function(){
 };
 
 
+/* Conversation helpers */
+function spPick(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function spRemember(ctx,key,value,limit=12){ctx[key]=(ctx[key]||[]).concat(value).slice(-limit)}
 /* Conversation architecture v2: direct answers, natural turn-taking, contextual learning. */
 function spV2Words(s){return norm(s).split(" ").filter(Boolean)}
 function spV2Knowledge(s){
