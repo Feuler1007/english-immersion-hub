@@ -240,10 +240,25 @@ Object.assign(D.slang,{
  "canon event":"a memorable experience framed as unavoidable character development"
 });
 D.intents.push(
+ ["direct_question",["what","where","when","who","which","can you","could you","do you","is it","are they","does it","why","how"],1],
+ ["news_reaction",["this headline","this news","the article","the report","is this true","is that confirmed","what does this mean"],3],
+ ["complaint",["this sucks","i hate","annoying","i am tired","im tired","i am bored","im bored","cant believe","cannot believe"],2],
+ ["plan",["lets","should we","anyone want","whos up","wanna play","want to play","what are we doing"],2],
  ["brainrot_reaction",["aura","rizz","sigma","skibidi","gyatt","fanum tax","brainrot","mog","cooked","ate","no cap","chat is this real","it's so over","we are so back","negative aura","aura farming"],2],
  ["meme_reference",["bro thinks he's","we got","before gta","main character energy","side eye","caught lacking","standing on business","rent was due","lore accurate","touch grass"],2],
  ["daily_chat",["what are you doing","wyd","i'm bored","im bored","any plans","what's the plan","good night","good afternoon","i just woke up","i'm hungry","im hungry","going to sleep"],2]
 );
+
+/* Character profiles: each member has a stable role, interests and conversational limits. */
+const CHAT_PERSONAS=[
+ {name:"Oliver",avatar:"📰",role:"The fact-checker",style:"calm, curious and precise",categories:["tech","aviation","science","transport","wholesome"],strength:["ask_explain","ask_word","direct_question","news_reaction"],voice:"He separates confirmed details from guesses."},
+ {name:"Jake",avatar:"💀",role:"The shitposter",style:"quick, playful and shamelessly unserious",categories:["games","internet","weird","tech","food"],strength:["reaction_funny","meme_reference","brainrot_reaction","daily_chat"],voice:"He jokes about the actual message, not random topics."},
+ {name:"Sophie",avatar:"🙄",role:"The skeptic",style:"dry, sharp and hard to impress",categories:["weird","tech","food","transport","internet"],strength:["reaction_disagree","opinion","sarcasm","direct_question"],voice:"She challenges weak takes and delivers concise deadpan replies."},
+ {name:"Daniel",avatar:"🫠",role:"The relatable one",style:"casual, slightly confused and honest",categories:["school","daily","games","tech","transport"],strength:["personal_story","confusion","daily_chat","followup"],voice:"He relates topics to ordinary life and asks natural follow-ups."},
+ {name:"Mike",avatar:"🛸",role:"The theory guy",style:"curious, dramatic and knowingly ridiculous",categories:["science","aviation","weird","tech","internet"],strength:["surprise","comparison","meme_reference","news_reaction"],voice:"His theories are obviously playful, never presented as facts."},
+ {name:"Emily",avatar:"🐸",role:"The kind one",style:"warm, funny and observant",categories:["animals","wholesome","food","daily","school"],strength:["empathy","compliment","thanks","personal_story"],voice:"She responds with empathy and notices human details."}
+];
+
 const norm=s=>String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[’‘]/g,"'").replace(/\b(gonna)\b/g,"going to").replace(/\b(wanna)\b/g,"want to").replace(/\b(gotta)\b/g,"got to").replace(/\b(gimme)\b/g,"give me").replace(/\b(dunno)\b/g,"do not know").replace(/[^a-z0-9'\s]/g," ").replace(/\s+/g," ").trim();
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const app={
@@ -314,7 +329,32 @@ const app={
   }
  },
  msg(name,avatar,text,kind,meta){this.state.messages.push({name:name,avatar:avatar,text:text,kind:kind||"",meta:meta||"",time:this.stamp()});this.state.messages=this.state.messages.slice(-90);this.save();this.messages()},
- opening(a){const cat=a.category||"weird",scenes=BRAINROT_SCENES[cat]||BRAINROT_SCENES.weird,scene=scenes[Math.floor(Math.random()*scenes.length)],recent=this.state.context.recentLines||[],pool=BRAINROT_PATTERNS.filter(p=>!recent.includes(p[2].replace(/\{scene\}/g,scene))),chosen=[];while(chosen.length<3){const p=(pool.length?pool:BRAINROT_PATTERNS)[Math.floor(Math.random()*(pool.length?pool:BRAINROT_PATTERNS).length)];const line=p[2].replace(/\{scene\}/g,scene);if(!chosen.some(x=>x[2]===line)){chosen.push([p[0],p[1],line]);const idx=pool.indexOf(p);if(idx>=0)pool.splice(idx,1);}}this.state.context.recentLines=recent.concat(chosen.map(x=>x[2])).slice(-80);this.state.context.lastScene=scene;return chosen},
+ opening(a){
+  const cat=a.category||"weird",title=String(a.title||"this story"),shortTitle=title.length>105?title.slice(0,102)+"…":title;
+  const profiles=CHAT_PERSONAS.filter(p=>p.categories.includes(cat));
+  const pick=x=>x[Math.floor(Math.random()*x.length)];
+  const first=profiles.find(p=>["Jake","Sophie","Emily","Daniel"].includes(p.name))||profiles[0]||CHAT_PERSONAS[1];
+  const oliver=CHAT_PERSONAS[0];
+  const openers={
+   tech:["That headline is going to start another GPU argument, isn't it?","Can someone explain the practical impact before Jake starts pricing kidneys?"],
+   games:["I already know the comments are blaming the patch.","Please tell me the server is not involved again."],
+   aviation:["Let's see what the report actually confirms before we invent a disaster movie.","Airports really do generate side quests nobody asked for."],
+   weird:["This headline sounds fake, which is unfortunately not proof that it is.","I need the actual context before I judge the town."],
+   animals:["Okay, this is the kind of news I needed today.","Protect this tiny legend at all costs."],
+   science:["Interesting. What did the researchers actually find?","Mike is about to turn one study into a 40-page theory."],
+   internet:["The timeline is going to make this ten times weirder.","I give the comment section six minutes before it loses the plot."],
+   transport:["Somehow transport news always becomes a group project.","I need to know how this happened before I judge anyone."],
+   food:["This is how a food debate ruins a perfectly normal afternoon.","I already know Sophie has a strong opinion about the menu."],
+   wholesome:["A rare piece of good news. Let people enjoy this one.","Emily has officially adopted this story."],
+   school:["This sounds exactly like a group project problem.","Daniel is having flashbacks to the last school assignment."],
+   daily:["This is painfully relatable already.","The group chat has found today's collective struggle."]
+  };
+  const chosen=[[first.name,first.avatar,pick(openers[cat]||openers.weird)]];
+  if(Math.random()<0.38)chosen.push([oliver.name,oliver.avatar,"The headline says: “"+shortTitle+"”. Let's stick to the details we actually have."]);
+  this.state.context.recentLines=(this.state.context.recentLines||[]).concat(chosen.map(x=>x[2])).slice(-80);
+  this.state.context.lastScene=cat;
+  return chosen;
+ },
  select(a){this.state.selected=a;this.state.context={topicTerms:norm(a.title+" "+(a.description||"")).split(" "),newsTitle:a.title,chatDay:new Date().toISOString().slice(0,10)};this.state.messages=[];this.msg("Oliver","📰","BREAKING NEWS 💀\n"+a.title,"news",a.source||"Google News");this.opening(a).forEach(x=>this.msg(x[0],x[1],x[2]));this.news();this.topic()},
  news(){const h=document.getElementById("sp-news");if(!h)return;const cats=[["all","All chaos"]].concat(D.feeds.map(x=>[x[0],x[1]]));let list=this.state.news.filter(a=>this.state.category==="all"||a.category===this.state.category).slice(0,35);h.innerHTML='<div class="sp-categories">'+cats.map(x=>'<button data-cat="'+x[0]+'" class="'+(this.state.category===x[0]?"active":"")+'">'+esc(x[1])+'</button>').join("")+'</div><div class="sp-news-list">'+(list.map((a,i)=>'<button class="sp-news-item '+(this.state.selected===a?"selected":"")+'" data-n="'+i+'"><span class="sp-news-tag">'+esc((D.feeds.find(x=>x[0]===a.category)||[])[1]||"Odd")+'</span><b>'+esc(a.title)+'</b><small>'+esc(a.source||"Google News")+' · '+(a.publishedAt?new Date(a.publishedAt).toLocaleDateString():"")+'</small></button>').join("")||'<p class="mut">No stories in this category yet.</p>')+'</div>';h.querySelectorAll("[data-cat]").forEach(b=>b.onclick=()=>{this.state.category=b.dataset.cat;this.news()});h.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>this.select(list[Number(b.dataset.n)]))},
  async translateMessage(index){const m=this.state.messages[index];if(!m)return;if(m.translation){m.showTranslation=!m.showTranslation;this.messages();return}if(m.translating)return;m.translationError="";m.translating=true;this.messages();try{const params=new URLSearchParams({client:"gtx",sl:"auto",tl:"pt",dt:"t",q:m.text});const response=await fetch("https://translate.googleapis.com/translate_a/single?"+params.toString());if(!response.ok)throw Error("Translation service returned "+response.status);const data=await response.json();m.translation=(data[0]||[]).map(part=>part[0]||"").join("");if(!m.translation)throw Error("No translation returned");m.showTranslation=true;this.save()}catch(error){m.translationError="Não foi possível traduzir agora. Tente novamente.";console.warn("Chat translation failed:",error)}finally{m.translating=false;this.messages()}},
@@ -324,9 +364,95 @@ const app={
  grammar(s){return D.grammar.filter(x=>x[0].test(s)).map(x=>x[1])},
  slang(s){const n=norm(s);return Object.keys(D.slang).filter(k=>n.indexOf(k)>=0).map(k=>k+" = "+D.slang[k])},
  feedback(s,a){const g=this.grammar(s),sl=this.slang(s),meaningful=a.normalized.split(" ").filter(x=>x.length>2&&!["the","and","but","you","are","was","this","that","with","have","what","who","how","why","when","where","from","just","like","very","really"].includes(x));if(g.length)return g[0];if(sl.length)return"Nice informal English. "+sl[0]+".";if(meaningful.length<2)return"Add a little more context: a reason, an opinion or one detail.";if(a.overlap)return"Your message connects with the headline. Good job keeping the context.";if(a.intent==="ask_explain"||a.intent==="ask_word")return"Good question. You're asking for clarification naturally.";return"Your message is understandable. Try connecting it to the headline or asking a follow-up question."},
- reply(s){const a=this.analyse(s),fb=this.feedback(s,a),sl=this.slang(s),g=this.grammar(s),pick=x=>x[Math.floor(Math.random()*x.length)];this.msg("You","🙂",s,"mine");const cat=(this.state.selected&&this.state.selected.category)||"weird",scenes=BRAINROT_SCENES[cat]||BRAINROT_SCENES.weird,scene=pick(scenes),name=pick(BRAINROT_NAMES[cat]||BRAINROT_NAMES.weird),patterns=BRAINROT_INTENT_PATTERNS[a.intent]||BRAINROT_INTENT_PATTERNS.general;let candidates=[];BRAINROT_PATTERNS.forEach((p,i)=>{candidates.push([p[0],p[1],p[2].replace(/\{scene\}/g,scene)]);});patterns.forEach((line,i)=>{const who=[["Jake","💀"],["Sophie","🙄"],["Daniel","🫠"],["Mike","🛸"],["Emily","🐸"],["Oliver","📰"]][i%6];candidates.push([who[0],who[1],line.replace(/\{scene\}/g,scene).replace(/\{name\}/g,name)]);});const recent=this.state.context.recentLines||[],available=candidates.filter(x=>!recent.includes(x[2]));const pool=available.length>=2?available:candidates;const chosen=[];while(chosen.length<3&&pool.length){const idx=Math.floor(Math.random()*pool.length),item=pool.splice(idx,1)[0];if(!chosen.some(x=>x[2]===item[2]))chosen.push(item);}chosen.forEach(x=>this.msg(x[0],x[1],x[2]));this.state.context.recentLines=recent.concat(chosen.map(x=>x[2])).slice(-80);this.state.context.lastScene=scene;this.state.context.lastEntity=name;const el=document.getElementById("sp-feedback");if(el)el.innerHTML='<div class="sp-feedback-head"><b>🧠 English check</b><span>'+esc(a.intent.replace(/_/g," "))+'</span></div><p>'+esc(fb)+'</p>'+(g.length?'<small>Grammar: '+esc(g[0])+'</small>':"")+(sl.length?'<small>Slang: '+esc(sl.join(" · "))+'</small>':"");this.state.context.lastIntent=a.intent;this.save()},
+ reply(s){
+  const a=this.analyse(s),fb=this.feedback(s,a),sl=this.slang(s),g=this.grammar(s);
+  const cat=(this.state.selected&&this.state.selected.category)||"weird";
+  const title=(this.state.selected&&this.state.selected.title)||"the current topic";
+  const titleWords=norm(title).split(" ").filter(w=>w.length>3);
+  const userWords=a.normalized.split(" ").filter(w=>w.length>2&&!["the","and","but","you","are","was","this","that","with","have","what","who","how","why","when","where","from","just","like","very","really","about","your","they","them","then","there","their","would","could","should"].includes(w));
+  const overlap=userWords.filter(w=>(this.state.context.topicTerms||[]).includes(w)||titleWords.includes(w)).length;
+  const related=overlap>0||a.intent==="ask_explain"||a.intent==="news_reaction"||a.intent==="followup";
+  const clean=s.replace(/\s+/g," ").trim();
+  const focus=clean.length>76?clean.slice(0,73)+"…":clean;
+  const pick=x=>x[Math.floor(Math.random()*x.length)];
+  this.msg("You","🙂",s,"mine");
+  const eligible=CHAT_PERSONAS.filter(p=>p.categories.includes(cat));
+  const pool=eligible.length?eligible:CHAT_PERSONAS;
+  const preferred={ask_explain:"Oliver",ask_word:"Oliver",direct_question:"Daniel",news_reaction:"Oliver",reaction_funny:"Jake",reaction_agree:"Daniel",reaction_disagree:"Sophie",opinion:"Sophie",personal_story:"Daniel",confusion:"Daniel",empathy:"Emily",thanks:"Emily",greeting:"Jake",daily_chat:"Daniel",complaint:"Emily",plan:"Jake",brainrot_reaction:"Jake",meme_reference:"Jake",sarcasm:"Sophie",surprise:"Mike"};
+  let primary=CHAT_PERSONAS.find(p=>p.name===preferred[a.intent]);
+  if(!primary||(!primary.categories.includes(cat)&&a.intent!=="ask_explain"&&a.intent!=="ask_word"&&a.intent!=="news_reaction"))primary=pick(pool);
+  const others=pool.filter(p=>p.name!==primary.name);
+  const secondary=pick(others.length?others:CHAT_PERSONAS.filter(p=>p.name!==primary.name));
+  const shortHeadline=title.length>88?title.slice(0,85)+"…":title;
+  const quoted=focus.length>58?focus.slice(0,55)+"…":focus;
+  const makeLine=person=>{
+   const n=person.name;
+   if(a.intent==="greeting")return n==="Jake"?"You appeared. The group chat was about to file a missing-person report.":"Hey! What are we talking about today?";
+   if(a.intent==="thanks")return n==="Emily"?"Anytime! That's what the group chat is for.":"No problem. You owe us one decent meme.";
+   if(a.intent==="ask_word")return sl.length?"You used “"+sl[0].split(" = ")[0]+"”. Do you want its meaning here or a more natural example?":"Which exact word or phrase in “"+quoted+"” do you want explained? The full sentence will help.";
+   if(a.intent==="ask_explain"||a.intent==="news_reaction"){
+    if(n==="Oliver")return "The headline is “"+shortHeadline+"”. That gives us the topic, but not every detail. Which part do you want to understand?";
+    if(n==="Mike")return "I have three theories, two are nonsense. First, let's check what the report actually says.";
+    return "Wait, are you asking what happened in the story or why it matters?";
+   }
+   if(a.intent==="reaction_agree")return n==="Sophie"?"I agree with the point, but let's not pretend the headline proves more than it says.":"Fair. Your point about “"+quoted+"” makes sense.";
+   if(a.intent==="reaction_disagree")return n==="Sophie"?"Okay, which part do you disagree with? I want the argument, not just the dramatic entrance.":"Wait, what part doesn't convince you?";
+   if(["reaction_funny","meme_reference","brainrot_reaction"].includes(a.intent))return n==="Jake"?"“"+quoted+"” is going straight into the group chat archives. I'm crying.":n==="Sophie"?"I hate that I laughed at “"+quoted+"”.":"That was so specific I actually pictured it.";
+   if(a.intent==="personal_story")return n==="Daniel"?"Hold on, you can't drop “"+quoted+"” and leave out what happened next.":"Wait, what happened after that?";
+   if(a.intent==="opinion")return n==="Sophie"?"Interesting. What made you think that about “"+quoted+"”?":"I can see where you're coming from. Which detail convinced you?";
+   if(a.intent==="confusion")return "Which part is confusing: the wording, the situation, or the reason behind it?";
+   if(a.intent==="empathy")return n==="Emily"?"That's rough. I hope things get better. Do you want to tell us what happened?":"Yeah, that's not an easy situation.";
+   if(a.intent==="complaint")return n==="Emily"?"That sounds exhausting. What happened?":"Honestly, fair. What set this off?";
+   if(a.intent==="plan")return n==="Jake"?"I'm in, but somebody else is responsible for choosing. I refuse to be blamed.":"Could work. What time are we thinking?";
+   if(a.intent==="daily_chat"||/\b(hungry|food|eat|pizza|sleep|tired|bored|woke up|work|school|homework)\b/.test(a.normalized)){
+    if(/hungry|food|eat|pizza/.test(a.normalized))return n==="Emily"?"What are you craving? I'm always one message away from ordering food.":"Same. Are we cooking or spending money we don't have?";
+    if(/sleep|tired|woke up/.test(a.normalized))return n==="Daniel"?"Same. My sleep schedule is a social experiment at this point.":"Go get some rest. The group chat will still be making bad decisions later.";
+    if(/bored/.test(a.normalized))return n==="Jake"?"We could play something, or continue staring at the wall professionally.":"Pick a game or give us a topic. Dead chat is unacceptable.";
+    if(/school|homework|work/.test(a.normalized))return n==="Daniel"?"How much do you have left? I'm trying to calculate how doomed we are.":"The responsibilities have found us again.";
+   }
+   if(a.intent==="direct_question"||s.includes("?")){
+    if(related&&n==="Oliver")return "About “"+shortHeadline+"”: the headline alone doesn't answer that. We should check the linked report rather than guess.";
+    return "I read your question: “"+quoted+"”. Are you asking for an explanation, an opinion, or what we would do?";
+   }
+   if(related){
+    if(n==="Oliver")return "Your point connects with “"+quoted+"”. The story we're discussing is “"+shortHeadline+"”. Let's keep confirmed details separate from speculation.";
+    if(n==="Jake")return "So we're adding “"+quoted+"” to the “"+cat+"” chaos. This chat has a new side quest.";
+    if(n==="Sophie")return "That is actually relevant to the story. I'm more interested in the detail behind “"+quoted+"” than the headline drama.";
+    if(n==="Mike")return "“"+quoted+"” raises a question. I am not calling it a conspiracy, but I am opening a spreadsheet.";
+    if(n==="Emily")return "That's a good point about “"+quoted+"”. I hadn't looked at it that way.";
+    return "Wait, so your point is “"+quoted+"”? I think I get what you mean.";
+   }
+   if(n==="Daniel")return "I get what you're saying about “"+quoted+"”. What happened next?";
+   if(n==="Sophie")return "Noted. But what's your actual point about “"+quoted+"”?";
+   if(n==="Jake")return "“"+quoted+"” is now the official topic. Nobody knows how we got here.";
+   if(n==="Emily")return "I hear you. Tell us a little more about “"+quoted+"”.";
+   if(n==="Mike")return "Interesting. I have a theory, but I need one more detail about “"+quoted+"”.";
+   return "Got it. What made you bring up “"+quoted+"”?";
+  };
+  const firstLine=makeLine(primary);
+  const isTiny=s.length<24,question=s.includes("?")||["ask_explain","ask_word","direct_question","news_reaction"].includes(a.intent);
+  const wantsSecond=!isTiny&&(question||["personal_story","opinion","plan","reaction_funny","news_reaction"].includes(a.intent)||Math.random()<0.24);
+  const secondLine=wantsSecond?makeLine(secondary):"";
+  const activeTitle=title;
+  const el=document.getElementById("sp-feedback");
+  if(el)el.innerHTML='<div class="sp-feedback-head"><b>🧠 English check</b><span>'+esc(a.intent.replace(/_/g," "))+'</span></div><p>'+esc(fb)+'</p>'+(g.length?'<small>Grammar: '+esc(g[0])+'</small>':"")+(sl.length?'<small>Slang: '+esc(sl.join(" · "))+'</small>':"")+'<small>Conversation tip: '+esc(related?"Your message connects to the selected story.":"This reply follows your message without forcing the news topic.")+'</small>';
+  this.state.context.lastIntent=a.intent;
+  this.state.context.lastUserMessage=s;
+  this.state.context.lastResponder=primary.name;
+  this.state.context.lastNewsTitle=activeTitle;
+  const schedule=(person,line,delay)=>window.setTimeout(()=>{
+   if(!this.state.selected||this.state.selected.title!==activeTitle)return;
+   this.msg(person.name,person.avatar,line);
+   this.state.context.recentLines=(this.state.context.recentLines||[]).concat([line]).slice(-80);
+   this.state.context.lastResponder=person.name;
+   this.save();
+  },delay);
+  schedule(primary,firstLine,520+Math.floor(Math.random()*700));
+  if(secondLine&&secondLine!==firstLine)schedule(secondary,secondLine,1900+Math.floor(Math.random()*1700));
+  this.save();
+ },
  send(){const i=document.getElementById("sp-input");if(!i)return;const s=i.value.trim();if(!s)return;if(s.length>500){this.status("Keep it under 500 characters. The group chat is chaotic, not a legal deposition.");return}this.reply(s);i.value="";i.focus()},
- render(){const h=document.getElementById("view");if(!h)return;this.load();h.innerHTML='<section class="sp-hero"><div><span class="sp-kicker">ENGLISH IMMERSION HUB · GROUP SIMULATOR</span><h1>BREAKING NEWS 💀</h1><p>A daily dose of headlines, bad jokes and suspiciously useful English.</p><div class="sp-hero-meta"><span>● 6 recurring members</span><span>English only</span><span>Rule-based engine · no generative AI</span></div></div><div class="sp-hero-sticker">TODAY’S<br>CHAOS</div></section><div class="sp-layout"><aside class="sp-news-panel"><div class="sp-section-title"><div><h2>Today’s headlines</h2><p class="mut">Tech, games, aviation, weird stories and wholesome breaks.</p></div><button id="sp-refresh" title="Refresh news">↻</button></div><div id="sp-status" class="sp-status">Preparing the chaos…</div><div id="sp-news"></div><div class="sp-source-note">Headlines and short metadata are shown here. Full articles remain on the publishers’ websites.</div></aside><section class="sp-chat-panel"><div class="sp-chat-head"><div class="sp-group-avatar">💬</div><div><b>BREAKING NEWS 💀</b><small>Oliver, Jake, Sophie, Daniel, Mike & Emily</small></div><span class="sp-online">● 6 online</span></div><div class="sp-topic-banner"><small>DISCUSSING</small><b id="sp-topic">Choose a headline to start</b><a id="sp-source-link" target="_blank" rel="noopener noreferrer" hidden>Read original story ↗</a></div><div class="sp-messages" id="sp-messages"></div><div id="sp-feedback" class="sp-feedback"><div class="sp-feedback-head"><b>🧠 English check</b><span>Waiting</span></div><p>Write naturally. The engine checks context, meaning, common grammar patterns and informal expressions.</p></div><form class="sp-composer" id="sp-form"><input id="sp-input" maxlength="500" autocomplete="off" placeholder="Type your message in English…" aria-label="Your message in English"><button class="pri" type="submit">Send ↗</button></form><div class="sp-chat-foot">React, ask a question, disagree or make a joke. Mistakes are part of the conversation.</div></section></div><section class="sp-engine-info"><h2>Behind the scenes: the language engine</h2><div class="sp-engine-grid"><article><b>01 · Keywords & synonyms</b><p>Recognizes related words, slang and alternative ways to express an idea.</p></article><article><b>02 · Communicative intent</b><p>Distinguishes jokes, agreement, disagreement, questions and personal stories.</p></article><article><b>03 · Sentence patterns</b><p>Checks common structures and gives short, contextual grammar hints.</p></article><article><b>04 · Conversation memory</b><p>Keeps the current headline, topic vocabulary and previous intent.</p></article></div><p class="mut">Rule-based prototype, not a human-level language model. Unusual or complex messages can still be misunderstood.</p></section>';document.getElementById("sp-form").onsubmit=e=>{e.preventDefault();this.send()};document.getElementById("sp-refresh").onclick=()=>this.fetchNews(true);this.messages();this.news();this.topic();this.fetchNews()}
+ render(){const h=document.getElementById("view");if(!h)return;this.load();h.innerHTML='<section class="sp-hero"><div><span class="sp-kicker">ENGLISH IMMERSION HUB · GROUP SIMULATOR</span><h1>BREAKING NEWS 💀</h1><p>A daily dose of headlines, bad jokes and suspiciously useful English.</p><div class="sp-hero-meta"><span>● 6 recurring members</span><span>English only</span><span>Rule-based engine · no generative AI</span></div></div><div class="sp-hero-sticker">TODAY’S<br>CHAOS</div></section><div class="sp-layout"><aside class="sp-news-panel"><div class="sp-section-title"><div><h2>Today’s headlines</h2><p class="mut">Tech, games, aviation, weird stories and wholesome breaks.</p></div><button id="sp-refresh" title="Refresh news">↻</button></div><div id="sp-status" class="sp-status">Preparing the chaos…</div><div id="sp-news"></div><div class="sp-source-note">Headlines and short metadata are shown here. Full articles remain on the publishers’ websites.</div></aside><section class="sp-chat-panel"><div class="sp-chat-head"><div class="sp-group-avatar">💬</div><div><b>BREAKING NEWS 💀</b><small>Oliver, Jake, Sophie, Daniel, Mike & Emily</small></div><span class="sp-online">● 6 online</span></div><div class="sp-topic-banner"><small>DISCUSSING</small><b id="sp-topic">Choose a headline to start</b><a id="sp-source-link" target="_blank" rel="noopener noreferrer" hidden>Read original story ↗</a></div><div class="sp-messages" id="sp-messages"></div><div id="sp-feedback" class="sp-feedback"><div class="sp-feedback-head"><b>🧠 English check</b><span>Waiting</span></div><p>Write naturally. The engine checks context, meaning, common grammar patterns and informal expressions.</p></div><form class="sp-composer" id="sp-form"><input id="sp-input" maxlength="500" autocomplete="off" placeholder="Type your message in English…" aria-label="Your message in English"><button class="pri" type="submit">Send ↗</button></form><div class="sp-chat-foot">React, ask a question, disagree or make a joke. Mistakes are part of the conversation.</div></section></div><section class="sp-engine-info"><h2>Behind the scenes: the language engine</h2><div class="sp-engine-grid"><article><b>01 · Meaning first</b><p>Reads the actual message, question, opinion or story before choosing a response.</p></article><article><b>02 · News connection</b><p>Uses the selected headline only when your message is relevant. No forced topic changes.</p></article><article><b>03 · Character roles</b><p>Each member has interests, a voice and reasons to join or stay quiet.</p></article><article><b>04 · Natural pacing</b><p>One person usually replies. A second may join later when the conversation calls for it.</p></article></div><div class="sp-persona-grid">${CHAT_PERSONAS.map(p=>`<article><b>${p.avatar} ${p.name} · ${p.role}</b><p>${p.style}. Topics: ${p.categories.join(", ")}.</p></article>`).join("")}</div><p class="mut">The conversation engine uses contextual rules, not a generative AI model. Complex or unusual wording can still be misunderstood, but replies are selected from the message, active news category and each character’s role.</p></section>';document.getElementById("sp-form").onsubmit=e=>{e.preventDefault();this.send()};document.getElementById("sp-refresh").onclick=()=>this.fetchNews(true);this.messages();this.news();this.topic();this.fetchNews()}
 };
 window.EnglishShitpost=app;
 })();
