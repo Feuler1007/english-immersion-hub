@@ -378,7 +378,7 @@ const app={
   const toks=raw.split(" ").filter(x=>x.length>2);
   const overlap=toks.filter(x=>(this.state.context.topicTerms||[]).includes(x)).length;
   let intent=found[0]?found[0].id:"general";
-  if(intent==="general"&&/[?？]/.test(s))intent="direct_question";
+  if((intent==="general"||intent==="reaction_surprise")&&/[?？]/.test(s))intent="direct_question";
   if(intent==="general"&&this.state.context.lastIntent&&/^(yes|no|why|how|what about that|exactly|maybe|i guess)$/.test(raw))intent="followup";
   return{intent,overlap,normalized:expanded,raw,previousIntent:this.state.context.lastIntent||""};
  },
@@ -442,6 +442,27 @@ const app={
     return "I read your question: “"+quoted+"”. Are you asking for an explanation, an opinion, or what we would do?";
    }
    if(related){
+    if(cat==="games"){
+     if(n==="Jake")return "Ranked matchmaking is one patch away from becoming a group therapy session. What changed in the update?";
+     if(n==="Daniel")return "Did the update mess with matchmaking, the balance, or the whole game?";
+     if(n==="Sophie")return "Worse how, exactly? Matchmaking, performance, or did the devs somehow break the menu too?";
+    }
+    if(cat==="tech"){
+     if(n==="Jake")return "Another update and somehow the device has developed a new personality. What changed for you?";
+     if(n==="Daniel")return "Is it actually slower, or did they just move every setting somewhere impossible to find?";
+     if(n==="Sophie")return "What is the actual impact? The headline could use a little more than tech-bro excitement.";
+    }
+    if(cat==="science"&&n==="Oliver")return "The discovery sounds interesting. What detail from the report caught your attention?";
+    if(cat==="aviation"&&n==="Oliver")return "Which part are you reacting to: the flight, the airport procedure, or the airline's response?";
+    if(cat==="animals"&&n==="Emily")return "Wait, are you talking about the animal itself or the people who helped it? I need the wholesome details.";
+    if(cat==="food"&&n==="Sophie")return "Food discourse again. Is your point about the taste, the price, or the very questionable decision behind it?";
+    if(cat==="internet"&&n==="Jake")return "The internet has found a new thing to overanalyse. What part of the post got you?";
+    if(cat==="weird"&&n==="Sophie")return "That is the detail I want explained. Who thought this was a sensible idea?";
+    if(cat==="transport"&&n==="Daniel")return "Wait, how did that happen? Was it the route, the vehicle, or the person in charge?";
+    if(cat==="wholesome"&&n==="Emily")return "That's genuinely lovely. Which part of the story stood out to you?";
+    if(cat==="school"&&n==="Daniel")return "This sounds like something that would happen five minutes before the deadline. What happened?";
+    if(cat==="daily"&&n==="Daniel")return "That is painfully relatable. Is this a one-day problem or has the whole week been like this?";
+
     if(n==="Oliver")return "Your point connects with “"+quoted+"”. The story we're discussing is “"+shortHeadline+"”. Let's keep confirmed details separate from speculation.";
     if(n==="Jake")return "So we're adding “"+quoted+"” to the “"+cat+"” chaos. This chat has a new side quest.";
     if(n==="Sophie")return "That is actually relevant to the story. I'm more interested in the detail behind “"+quoted+"” than the headline drama.";
@@ -457,7 +478,7 @@ const app={
    return "Got it. What made you bring up “"+quoted+"”?";
   };
   const firstLine=makeLine(primary);
-  const isTiny=s.length<24,question=s.includes("?")||["ask_explain","ask_word","direct_question","news_reaction"].includes(a.intent);
+  const isTiny=s.length<24,question=["ask_explain","ask_word","direct_question","news_reaction"].includes(a.intent);
   const wantsSecond=!isTiny&&(question||["personal_story","opinion","plan","reaction_funny","news_reaction"].includes(a.intent)||Math.random()<0.24);
   let secondLine="";
   if(wantsSecond){
