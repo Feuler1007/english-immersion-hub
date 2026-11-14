@@ -45,6 +45,7 @@ The Worker deduplicates headlines, ranks relevant stories, filters a list of gra
 - Six recurring characters with stable roles, interests and distinct voices: Oliver (fact-checker), Jake (shitposter), Sophie (skeptic), Daniel (relatable friend), Mike (playful theory guy) and Emily (kind/empathetic member).
 - Category-aware replies for technology, games, aviation, unusual stories, animals, science, internet culture, transport, food, wholesome stories, school and everyday life.
 - Variable participation: usually one person responds; a second may join later when the message is a question, story, opinion or relevant news discussion. Greetings and short casual messages normally receive one reply.
+- A library of 20 everyday shitpost situations, including age and adult-life jokes, money, school group projects, food debates, long voice notes, gaming lag, random questions and out-of-context images.
 - Conversation memory for the selected story, the user's latest message, the previous intent and recent replies.
 - English-learning feedback for common grammar patterns, informal expressions and slang, with contextual notes after each user message.
 - Brainrot and internet slang recognition, including aura, rizz, sigma, cooked, mog, fanum tax, crash out and locked in.
