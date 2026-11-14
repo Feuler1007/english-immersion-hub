@@ -390,7 +390,30 @@ const app={
    return new RegExp("(^|\\s)"+phrase+"(?=$|\\s)","i").test(raw);
   };
   return Object.keys(D.slang).filter(has).map(k=>k+" = "+D.slang[k]);
- }, feedback(s,a){const g=this.grammar(s),sl=this.slang(s),meaningful=a.normalized.split(" ").filter(x=>x.length>2&&!["the","and","but","you","are","was","this","that","with","have","what","who","how","why","when","where","from","just","like","very","really"].includes(x));if(g.length)return g[0];if(sl.length)return"Nice informal English. "+sl[0]+".";if(meaningful.length<2)return"Add a little more context: a reason, an opinion or one detail.";if(a.overlap)return"Your message connects with the headline. Good job keeping the context.";if(a.intent==="ask_explain"||a.intent==="ask_word")return"Good question. You're asking for clarification naturally.";return"Your message is understandable. Try connecting it to the headline or asking a follow-up question."},
+ }, feedback(s,a){
+  const g=this.grammar(s),sl=this.slang(s);
+  if(g.length)return "Grammar tip: "+g[0];
+  if(sl.length)return "Informal English: "+sl[0]+". This expression is casual, so it fits a group chat better than a formal email.";
+  const tips={
+   direct_question:"Natural question pattern: “What exactly happened?” Use “what exactly” when you want a clearer detail.",
+   ask_explain:"Useful follow-up: “Could you explain what happened?” It sounds natural when asking someone to clarify a story.",
+   ask_word:"Useful vocabulary question: “What does that mean in this context?” The phrase “in this context” asks for the meaning in the actual conversation.",
+   opinion:"Useful opinion pattern: “I think so because…” Add a reason after “because” to make your point clearer.",
+   reaction_agree:"Natural agreement: “Exactly, that's what I mean.” It sounds more conversational than repeating “I agree”.",
+   reaction_disagree:"Polite disagreement: “I see your point, but…” It lets you disagree without sounding unnecessarily aggressive.",
+   personal_story:"Storytelling phrase: “So here's what happened…” Use it to introduce the next part of a personal story.",
+   greeting:"Casual greeting: “What's everyone up to?” This is a natural way to start a group chat.",
+   daily_chat:"Everyday English: “I'm just chilling” means you are relaxing and not doing much.",
+   plan:"Making plans: “I'm down” means “I'm interested” or “I'm in” in informal conversation.",
+   empathy:"Showing empathy: “That sounds rough” is a natural, informal way to say something seems difficult.",
+   complaint:"Describing frustration: “I'm so done with this” is informal and stronger than simply saying “I'm annoyed”."
+  };
+  if(tips[a.intent])return tips[a.intent];
+  if(a.overlap)return "Context tip: you used vocabulary connected to the headline. Try adding “because”, “but” or “so” to explain your reasoning.";
+  const meaningful=a.raw.split(" ").filter(x=>x.length>2&&!["the","and","but","you","are","was","this","that","with","have","what","who","how","why","when","where","from","just","like","very","really"].includes(x));
+  if(meaningful.length<2)return "Try adding one detail, a reason or a follow-up question. Real group chats usually build on the previous message.";
+  return "Your message is understandable. To sound more natural, react to one specific detail and add a short reason or follow-up question.";
+ },
  reply(s){
   const a=this.analyse(s),fb=this.feedback(s,a),sl=this.slang(s),g=this.grammar(s);
   const cat=(this.state.selected&&this.state.selected.category)||"weird";
