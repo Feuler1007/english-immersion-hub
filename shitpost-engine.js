@@ -640,7 +640,7 @@ const baseRender=app.render.bind(app);
 app.render=function(){
  baseRender();
  const priv=document.getElementById("sp-private-practice");if(priv)priv.remove();
- const form=document.getElementById("sp-form");if(form){form.hidden=false;form.style.display="flex";const input=document.getElementById("sp-input");if(input){input.disabled=false;input.placeholder="Type your message in English…"}}
+ let form=document.getElementById("sp-form");if(!form){form=document.createElement("form");form.className="sp-composer";form.id="sp-form";form.innerHTML='<input id="sp-input" maxlength="500" autocomplete="off" placeholder="Type your message in English…" aria-label="Your message in English"><button class="pri" type="submit">Send ↗</button>';const foot0=document.querySelector(".sp-chat-foot");if(foot0)foot0.insertAdjacentElement("beforebegin",form);else document.querySelector(".sp-chat-panel")?.appendChild(form)}form.hidden=false;form.style.display="flex";form.onsubmit=e=>{e.preventDefault();app.send()};const input=document.getElementById("sp-input");if(input){input.disabled=false;input.placeholder="Type your message in English…"}
  const foot=document.querySelector(".sp-chat-foot");if(foot)foot.textContent="Jump into the conversation. The bots reply in the group, and your English is saved locally to improve future context.";
  const head=document.querySelector(".sp-chat-head");
  if(head&&!document.getElementById("sp-profile-open")){const b=document.createElement("button");b.id="sp-profile-open";b.className="sp-profile-btn";b.type="button";b.textContent="⚙ Your profile";b.onclick=()=>showProfile();head.appendChild(b)}
