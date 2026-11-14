@@ -1,1 +1,925 @@
-{"meta":{"name":"English Study Archive: Economics, Philosophy, Geopolitics and Law","version":"1.0","source":"User-provided acervo_ingles.zip","language":"en","support_language":"pt-BR","counts":{"books":14,"passages":8,"vocabulary":30,"legal_terms":12,"quotes":12,"phrases":12,"exercises":30}},"books":[["The Wealth of Nations","Adam Smith","Free markets, specialization and competition create national wealth.","division of labor; self-interest; free trade; invisible hand"],["The Communist Manifesto","Karl Marx and Friedrich Engels","History as a struggle between social classes; workers are called to unite.","class struggle; capitalism; labor; revolution"],["On Liberty","John Stuart Mill","Individual freedom should be limited only to prevent harm to others.","harm principle; free speech; individuality; tyranny of the majority"],["Leviathan","Thomas Hobbes","People accept a sovereign for safety because life without government risks constant conflict.","state of nature; social contract; sovereign; security"],["The Social Contract","Jean-Jacques Rousseau","Political authority is legitimate when it comes from the general will of the people.","general will; legitimacy; freedom; citizenship"],["Meditations","Marcus Aurelius","Stoic notes on self-control, duty and accepting what cannot be changed.","Stoicism; self-discipline; duty; acceptance"],["The Republic","Plato","A dialogue about justice, the ideal city and knowledge in political leadership.","justice; philosopher-king; education; ideal state"],["The Prince","Niccolo Machiavelli","A practical account of gaining and keeping political power.","realism; power; fear and respect; pragmatism"],["The Art of War","Sun Tzu","Strategy, preparation and deception can make fighting unnecessary.","strategy; deception; preparation; avoiding war"],["On War","Carl von Clausewitz","War is a political tool shaped by chance, emotion and uncertainty.","war and policy; friction; uncertainty; center of gravity"],["The Geographical Pivot of History","Halford Mackinder","Control of the Eurasian interior can create great geopolitical influence.","Heartland theory; land power; geography; great powers"],["The Federalist Papers","Hamilton, Madison and Jay","Essays defending the US Constitution and checks on political power.","separation of powers; federalism; factions; checks and balances"],["The Law","Frederic Bastiat","Law should protect life, liberty and property.","rule of law; property; plunder; limited government"],["History of the Peloponnesian War","Thucydides","The conflict between Athens and Sparta illuminates fear, honor, interest and rivalry.","power politics; fear; rivalry; alliances"]],"passages":[["Why Specialization Matters","economics","B2","Adam Smith explained that a society becomes richer when people specialize in one task. In his famous example, a small factory that makes pins can produce thousands of pins a day if each worker handles only one step. If each worker had to make a whole pin alone, the total would be tiny. Smith believed that this division of labor, together with free exchange between people, raises productivity and improves the standard of living for ordinary families."],["The Limits of Authority","philosophy","C1","John Stuart Mill asked a simple but difficult question: when may a society control an individual? He answered that the only good reason is to prevent harm to other people. A person's own good, whether physical or moral, is not enough. Mill also feared the pressure of public opinion, which he called a kind of tyranny, because it can silence unusual ideas even when the law allows them."],["Order Before Freedom","political_theory","C1","Thomas Hobbes lived through a civil war, and this shaped his view of human nature. He imagined a world with no government, which he called the state of nature, and argued that fear and competition would lead to constant conflict. To escape this danger, people agree to give up some freedom and obey a strong sovereign. For Hobbes, security is the first duty of any state, and without it other freedoms have little value."],["Politics Without Illusions","geopolitics","C1","Machiavelli wrote for rulers who needed to survive in a dangerous political world. He argued that a leader must understand reality as it is, not as it should be. This approach is often called realism. A ruler who relies only on good intentions may lose power to others who are willing to act with force or cunning. Critics say this view excuses cruelty, while supporters say it simply describes how power works."],["War Is Never Simple","geopolitics","C1","Clausewitz taught that war cannot be understood as a pure science. Information is incomplete, plans fail, and small events can change the result. He used the word friction for all the little difficulties that make real war harder than war on paper. Above all, he insisted that war serves a political purpose, so any military action should be judged by the goal it is supposed to achieve."],["Power Must Be Divided","law","C1","The authors of The Federalist Papers worried that anyone who holds too much power will eventually abuse it. Their solution was to divide government into separate branches, each able to limit the others. This system, known as checks and balances, does not assume that officials are bad people. It assumes that ambition is natural and must be controlled by the design of institutions."],["Control What You Can","philosophy","B2","Marcus Aurelius was an emperor, yet his private notes are about self-discipline, not power. He reminded himself to focus on his own thoughts and actions, because outside events are often beyond control. This idea is central to Stoicism. A calm mind, he believed, does not fight the unavoidable but responds with reason and duty."],["Geography and Power","geopolitics","C1","In 1904, Halford Mackinder argued that geography shapes the fate of nations. He believed that the vast inland area of Eurasia, which he called the pivot area or Heartland, was hard for sea powers to reach and rich in resources. A state that controlled it, he warned, could gain enormous strength. Later scholars disagreed about how true this is, but his ideas still influence debates on great-power competition."]],"vocabulary":[["scarcity","escassez","Not enough of something to meet everyone's needs.","Scarcity forces people to make choices.","resource scarcity; water scarcity"],["incentive","incentivo","Something that encourages a person to act.","Higher wages are an incentive to work harder.","tax incentive; financial incentive"],["inflation","inflação","A general rise in prices that reduces money's value.","Inflation made basic food more expensive.","rising inflation; control inflation"],["monopoly","monopólio","A market controlled by one company or group.","The company held a monopoly on electricity.","hold a monopoly; break up a monopoly"],["tariff","tarifa alfandegária","A tax on goods entering a country.","The government raised the tariff on imported steel.","import tariff; impose a tariff"],["subsidy","subsídio","Government money that supports an industry or lowers prices.","Farmers receive a subsidy to keep food prices stable.","government subsidy; farm subsidy"],["surplus","excedente; superávit","An amount greater than what is needed or used.","The country has a trade surplus with its neighbors.","trade surplus; budget surplus"],["equilibrium","equilíbrio","A state in which opposing forces are balanced.","Prices settle at the point of equilibrium.","market equilibrium; reach equilibrium"],["virtue","virtude","A quality of good moral character.","Courage was seen as a high virtue by ancient thinkers.","moral virtue; cardinal virtue"],["ethics","ética","The study of what is right and wrong.","Medical ethics protects patients' rights.","business ethics; code of ethics"],["dilemma","dilema","A difficult choice between options with costs.","She faced a dilemma between loyalty and honesty.","moral dilemma; face a dilemma"],["skeptic","cético","A person who doubts claims until evidence is provided.","A skeptic asks for proof before accepting an idea.","healthy skeptic; remain skeptical"],["rational","racional","Based on reasoning rather than emotion.","A rational person weighs the facts before deciding.","rational choice; rational thinking"],["doctrine","doutrina","A set of beliefs taught by a group or school of thought.","The doctrine of free trade shaped modern economics.","political doctrine; religious doctrine"],["sovereignty","soberania","A state's right to govern itself without outside control.","Many nations defend their sovereignty.","national sovereignty; violate sovereignty"],["alliance","aliança","A formal agreement between countries to support each other.","The two countries formed a military alliance.","form an alliance; strategic alliance"],["sanction","sanção","A penalty imposed to force a change in behavior.","The sanctions limited access to foreign banks.","economic sanctions; lift sanctions"],["hegemony","hegemonia","Dominance or leadership of one state or group.","Some analysts believe American hegemony is declining.","global hegemony; regional hegemony"],["deterrence","dissuasão","A threat of punishment used to prevent an attack.","Nuclear deterrence aims to prevent major wars.","nuclear deterrence; deterrence policy"],["treaty","tratado","A formal written agreement between countries.","The treaty ended years of conflict.","sign a treaty; peace treaty"],["diplomacy","diplomacia","Managing relations through negotiation.","Quiet diplomacy prevented a larger crisis.","economic diplomacy; diplomacy fails"],["embargo","embargo","An official ban on trade with a country.","The oil embargo caused fuel shortages.","trade embargo; lift an embargo"],["plaintiff","autor da ação","The person who brings a case against someone in court.","The plaintiff claims the company broke the contract.","the plaintiff argues; plaintiff and defendant"],["defendant","réu; demandado","The person or party accused or sued in court.","The defendant denied all the charges.","defendant pleads; defense of the defendant"],["verdict","veredicto","The final decision of a jury or judge.","The jury reached a verdict after two days.","reach a verdict; guilty verdict"],["statute","estatuto; lei","A written law passed by a legislature.","The statute sets a filing time limit.","federal statute; statute of limitations"],["liable","responsável legalmente","Legally responsible for damage, debt or an action.","The owner is liable for injuries on the property.","held liable; liable for damages"],["jurisdiction","jurisdição","The authority of a court to make decisions in an area or matter.","The case falls outside this court's jurisdiction.","legal jurisdiction; fall under jurisdiction"],["precedent","precedente","An earlier court decision that guides later similar cases.","The judge followed an important precedent.","set a precedent; legal precedent"],["testimony","depoimento; testemunho","A statement given under oath in court.","Her testimony changed the direction of the trial.","give testimony; witness testimony"]],"phrases":[["the invisible hand","a mão invisível","How individual self-interest can benefit society without central planning."],["checks and balances","freios e contrapesos","A system in which each branch of government can limit the others."],["burden of proof","ônus da prova","The duty to prove a claim in court."],["beyond a reasonable doubt","além de qualquer dúvida razoável","The standard of proof needed for a criminal conviction."],["rule of law","Estado de direito","The principle that everyone, including leaders, must obey the law."],["balance of power","equilíbrio de poder","A situation in which no single state can dominate others."],["soft power","poder brando","Influence gained through culture and values rather than force."],["zero-sum game","jogo de soma zero","A situation in which one side's gain is exactly another side's loss."],["supply and demand","oferta e demanda","The relationship between product availability and what people want."],["trade-off","escolha com compensação","A compromise in which something is given up to gain something else."],["moral hazard","risco moral","Taking greater risks because someone else bears the consequences."],["sphere of influence","esfera de influência","An area under strong political or economic influence of a country."]],"legal_terms":[["habeas corpus","ordem para apresentar o preso e revisar a legalidade da prisão","A court order that requires a person in custody to be brought before a judge, so the detention can be reviewed."],["mens rea","elemento subjetivo do crime (dolo, intenção)","The mental element of a crime, meaning the intention or knowledge of wrongdoing."],["actus reus","elemento objetivo do crime (a conduta)","The physical act or omission that makes up a crime."],["pro bono","trabalho gratuito, normalmente jurídico","Professional work, especially legal work, done for free."],["stare decisis","respeito aos precedentes","The principle that courts should follow earlier decisions."],["bona fide","de boa-fé, genuíno","Genuine, honest, without intention to deceive."],["prima facie","à primeira vista, com base na aparência inicial das provas","Accepted as true unless proven otherwise."],["ex post facto","retroativo","Applied after the fact, as in a law that punishes an act that was legal when it happened."],["de facto","de fato","Existing in reality, even if not officially recognized."],["de jure","de direito","Existing by legal right or official recognition."],["ultra vires","além dos poderes legais","An act that goes beyond the legal authority of a person or body."],["in dubio pro reo","na dúvida, a favor do réu","If there is reasonable doubt, the decision should favor the defendant."]],"usage_notes":["The archive's passages are original study texts based on the listed books, not direct excerpts.","Book summaries describe the archive's framing and are not a substitute for reading the full works.","Vocabulary entries include Brazilian Portuguese support, definitions, examples and collocations."],"quotes":[["It is not from the benevolence of the butcher, the brewer, or the baker, that we expect our dinner, but from their regard to their own interest.","People trade because each side gains something, not because anyone is being generous.","As pessoas trocam porque cada lado ganha algo, não por generosidade."],["The only purpose for which power can be rightfully exercised over any member of a civilized community, against his will, is to prevent harm to others.","Power over a person is justified only when it stops that person from harming others.","O poder sobre alguém só se justifica para impedir que essa pessoa prejudique os outros."],["The life of man, solitary, poor, nasty, brutish, and short.","Without government, life would be lonely, hard, violent and brief.","Sem governo, a vida seria solitária, difícil, violenta e breve."],["Man is born free; and everywhere he is in chains.","People are naturally free, yet societies limit that freedom everywhere.","As pessoas nascem livres, mas as sociedades limitam essa liberdade em toda parte."],["A spectre is haunting Europe, the spectre of Communism.","The authors say that the fear of communism is spreading through Europe.","Os autores dizem que o medo do comunismo se espalha pela Europa."],["All warfare is based on deception.","Success in war depends on making the enemy believe false things.","O sucesso na guerra depende de fazer o inimigo acreditar em coisas falsas."],["War is merely the continuation of policy by other means.","War is not separate from politics. It is one more tool that states use to reach goals.","A guerra não é separada da política. É mais uma ferramenta dos Estados."],["Who rules East Europe commands the Heartland; who rules the Heartland commands the World-Island; who rules the World-Island commands the World.","A famous geopolitical formula: control of key land in Eurasia leads to world influence.","Fórmula geopolítica famosa: controlar áreas-chave da Eurásia leva a influência mundial."],["The strong do what they can and the weak suffer what they must.","In relations between states, power decides outcomes more than fairness does.","Nas relações entre Estados, o poder decide mais do que a justiça."],["If men were angels, no government would be necessary.","Because people are not perfect, rules and institutions are needed.","Como as pessoas não são perfeitas, regras e instituições são necessárias."],["The state is the great fictitious entity by which everyone seeks to live at the expense of everyone else.","Bastiat warns that people may use the government to take benefits from others.","Bastiat alerta que as pessoas podem usar o governo para obter benefícios à custa dos outros."],["Justice in the ideal city means each part does its own proper work.","A short study paraphrase of an idea from The Republic, not a direct quotation.","Paráfrase de estudo de uma ideia de A República, não uma citação literal."]],"exercises":[{"id":"e001","type":"fill_in_the_blank","vocab_id":"v001","sentence":"Economists say that _____ forces people to make choices.","answer":"scarcity","hint_pt":"escassez"},{"id":"e002","type":"fill_in_the_blank","vocab_id":"v002","sentence":"Higher wages are an _____ to work harder.","answer":"incentive","hint_pt":"incentivo"},{"id":"e003","type":"fill_in_the_blank","vocab_id":"v003","sentence":"_____ made basic food more expensive last year.","answer":"inflation","hint_pt":"inflação"},{"id":"e004","type":"fill_in_the_blank","vocab_id":"v004","sentence":"The company held a _____ on electricity in the region.","answer":"monopoly","hint_pt":"monopólio"},{"id":"e005","type":"fill_in_the_blank","vocab_id":"v005","sentence":"The government raised the _____ on imported steel.","answer":"tariff","hint_pt":"tarifa alfandegária"},{"id":"e006","type":"fill_in_the_blank","vocab_id":"v006","sentence":"Farmers receive a _____ to keep food prices stable.","answer":"subsidy","hint_pt":"subsídio"},{"id":"e007","type":"fill_in_the_blank","vocab_id":"v007","sentence":"The country has a trade _____ with its neighbors.","answer":"surplus","hint_pt":"excedente; superávit"},{"id":"e008","type":"fill_in_the_blank","vocab_id":"v008","sentence":"Prices settle at the point of _____.","answer":"equilibrium","hint_pt":"equilíbrio"},{"id":"e009","type":"fill_in_the_blank","vocab_id":"v009","sentence":"Courage was seen as the highest _____ by many ancient thinkers.","answer":"virtue","hint_pt":"virtude"},{"id":"e010","type":"fill_in_the_blank","vocab_id":"v010","sentence":"Medical _____ protects the rights of patients.","answer":"ethics","hint_pt":"ética"},{"id":"e011","type":"fill_in_the_blank","vocab_id":"v011","sentence":"She faced a _____ between loyalty and honesty.","answer":"dilemma","hint_pt":"dilema"},{"id":"e012","type":"fill_in_the_blank","vocab_id":"v012","sentence":"A _____ asks for proof before accepting an idea.","answer":"skeptic","hint_pt":"cético"},{"id":"e013","type":"fill_in_the_blank","vocab_id":"v013","sentence":"A _____ person weighs the facts before deciding.","answer":"rational","hint_pt":"racional"},{"id":"e014","type":"fill_in_the_blank","vocab_id":"v014","sentence":"The _____ of free trade shaped modern economics.","answer":"doctrine","hint_pt":"doutrina"},{"id":"e015","type":"fill_in_the_blank","vocab_id":"v015","sentence":"Many nations defend their _____ over their borders.","answer":"sovereignty","hint_pt":"soberania"},{"id":"e016","type":"fill_in_the_blank","vocab_id":"v016","sentence":"The two countries formed a military _____.","answer":"alliance","hint_pt":"aliança"},{"id":"e017","type":"fill_in_the_blank","vocab_id":"v017","sentence":"The _____s limited the country's access to foreign banks.","answer":"sanction","hint_pt":"sanção"},{"id":"e018","type":"fill_in_the_blank","vocab_id":"v018","sentence":"Some analysts believe American _____ is declining.","answer":"hegemony","hint_pt":"hegemonia"},{"id":"e019","type":"fill_in_the_blank","vocab_id":"v019","sentence":"Nuclear _____ is meant to prevent major wars.","answer":"deterrence","hint_pt":"dissuasão"},{"id":"e020","type":"fill_in_the_blank","vocab_id":"v020","sentence":"The _____ ended years of conflict between the two states.","answer":"treaty","hint_pt":"tratado"},{"id":"e021","type":"fill_in_the_blank","vocab_id":"v021","sentence":"Quiet _____ prevented a larger crisis.","answer":"diplomacy","hint_pt":"diplomacia"},{"id":"e022","type":"fill_in_the_blank","vocab_id":"v022","sentence":"The oil _____ caused fuel shortages across the region.","answer":"embargo","hint_pt":"embargo"},{"id":"e023","type":"fill_in_the_blank","vocab_id":"v023","sentence":"The _____ claims that the company broke the contract.","answer":"plaintiff","hint_pt":"autor da ação"},{"id":"e024","type":"fill_in_the_blank","vocab_id":"v024","sentence":"The _____ denied all the charges.","answer":"defendant","hint_pt":"réu; demandado"},{"id":"e025","type":"fill_in_the_blank","vocab_id":"v025","sentence":"The jury reached a _____ after two days.","answer":"verdict","hint_pt":"veredicto"},{"id":"e026","type":"fill_in_the_blank","vocab_id":"v026","sentence":"The _____ sets a limit on how long a case can be filed.","answer":"statute","hint_pt":"estatuto; lei"},{"id":"e027","type":"fill_in_the_blank","vocab_id":"v027","sentence":"The owner is _____ for any injury on the property.","answer":"liable","hint_pt":"responsável legalmente"},{"id":"e028","type":"fill_in_the_blank","vocab_id":"v028","sentence":"The case falls outside the _____ of this court.","answer":"jurisdiction","hint_pt":"jurisdição"},{"id":"e029","type":"fill_in_the_blank","vocab_id":"v029","sentence":"The judge followed an important _____ from 1954.","answer":"precedent","hint_pt":"precedente"},{"id":"e030","type":"fill_in_the_blank","vocab_id":"v030","sentence":"Her _____ changed the direction of the trial.","answer":"testimony","hint_pt":"depoimento; testemunho"}]}
+{
+  "meta": {
+    "name": "English Study Archive: Economics, Philosophy, Geopolitics and Law",
+    "version": "1.0",
+    "source": "User-provided acervo_ingles.zip",
+    "language": "en",
+    "support_language": "pt-BR",
+    "counts": {
+      "books": 14,
+      "passages": 8,
+      "vocabulary": 30,
+      "legal_terms": 12,
+      "quotes": 12,
+      "phrases": 12,
+      "exercises": 30
+    }
+  },
+  "books": [
+    [
+      "The Wealth of Nations",
+      "Adam Smith",
+      "Free markets, specialization and competition create national wealth.",
+      "division of labor; self-interest; free trade; invisible hand"
+    ],
+    [
+      "The Communist Manifesto",
+      "Karl Marx and Friedrich Engels",
+      "History as a struggle between social classes; workers are called to unite.",
+      "class struggle; capitalism; labor; revolution"
+    ],
+    [
+      "On Liberty",
+      "John Stuart Mill",
+      "Individual freedom should be limited only to prevent harm to others.",
+      "harm principle; free speech; individuality; tyranny of the majority"
+    ],
+    [
+      "Leviathan",
+      "Thomas Hobbes",
+      "People accept a sovereign for safety because life without government risks constant conflict.",
+      "state of nature; social contract; sovereign; security"
+    ],
+    [
+      "The Social Contract",
+      "Jean-Jacques Rousseau",
+      "Political authority is legitimate when it comes from the general will of the people.",
+      "general will; legitimacy; freedom; citizenship"
+    ],
+    [
+      "Meditations",
+      "Marcus Aurelius",
+      "Stoic notes on self-control, duty and accepting what cannot be changed.",
+      "Stoicism; self-discipline; duty; acceptance"
+    ],
+    [
+      "The Republic",
+      "Plato",
+      "A dialogue about justice, the ideal city and knowledge in political leadership.",
+      "justice; philosopher-king; education; ideal state"
+    ],
+    [
+      "The Prince",
+      "Niccolo Machiavelli",
+      "A practical account of gaining and keeping political power.",
+      "realism; power; fear and respect; pragmatism"
+    ],
+    [
+      "The Art of War",
+      "Sun Tzu",
+      "Strategy, preparation and deception can make fighting unnecessary.",
+      "strategy; deception; preparation; avoiding war"
+    ],
+    [
+      "On War",
+      "Carl von Clausewitz",
+      "War is a political tool shaped by chance, emotion and uncertainty.",
+      "war and policy; friction; uncertainty; center of gravity"
+    ],
+    [
+      "The Geographical Pivot of History",
+      "Halford Mackinder",
+      "Control of the Eurasian interior can create great geopolitical influence.",
+      "Heartland theory; land power; geography; great powers"
+    ],
+    [
+      "The Federalist Papers",
+      "Hamilton, Madison and Jay",
+      "Essays defending the US Constitution and checks on political power.",
+      "separation of powers; federalism; factions; checks and balances"
+    ],
+    [
+      "The Law",
+      "Frederic Bastiat",
+      "Law should protect life, liberty and property.",
+      "rule of law; property; plunder; limited government"
+    ],
+    [
+      "History of the Peloponnesian War",
+      "Thucydides",
+      "The conflict between Athens and Sparta illuminates fear, honor, interest and rivalry.",
+      "power politics; fear; rivalry; alliances"
+    ]
+  ],
+  "passages": [
+    [
+      "Why Specialization Matters",
+      "economics",
+      "B2",
+      "Adam Smith explained that a society becomes richer when people specialize in one task. In his famous example, a small factory that makes pins can produce thousands of pins a day if each worker handles only one step. If each worker had to make a whole pin alone, the total would be tiny. Smith believed that this division of labor, together with free exchange between people, raises productivity and improves the standard of living for ordinary families."
+    ],
+    [
+      "The Limits of Authority",
+      "philosophy",
+      "C1",
+      "John Stuart Mill asked a simple but difficult question: when may a society control an individual? He answered that the only good reason is to prevent harm to other people. A person's own good, whether physical or moral, is not enough. Mill also feared the pressure of public opinion, which he called a kind of tyranny, because it can silence unusual ideas even when the law allows them."
+    ],
+    [
+      "Order Before Freedom",
+      "political_theory",
+      "C1",
+      "Thomas Hobbes lived through a civil war, and this shaped his view of human nature. He imagined a world with no government, which he called the state of nature, and argued that fear and competition would lead to constant conflict. To escape this danger, people agree to give up some freedom and obey a strong sovereign. For Hobbes, security is the first duty of any state, and without it other freedoms have little value."
+    ],
+    [
+      "Politics Without Illusions",
+      "geopolitics",
+      "C1",
+      "Machiavelli wrote for rulers who needed to survive in a dangerous political world. He argued that a leader must understand reality as it is, not as it should be. This approach is often called realism. A ruler who relies only on good intentions may lose power to others who are willing to act with force or cunning. Critics say this view excuses cruelty, while supporters say it simply describes how power works."
+    ],
+    [
+      "War Is Never Simple",
+      "geopolitics",
+      "C1",
+      "Clausewitz taught that war cannot be understood as a pure science. Information is incomplete, plans fail, and small events can change the result. He used the word friction for all the little difficulties that make real war harder than war on paper. Above all, he insisted that war serves a political purpose, so any military action should be judged by the goal it is supposed to achieve."
+    ],
+    [
+      "Power Must Be Divided",
+      "law",
+      "C1",
+      "The authors of The Federalist Papers worried that anyone who holds too much power will eventually abuse it. Their solution was to divide government into separate branches, each able to limit the others. This system, known as checks and balances, does not assume that officials are bad people. It assumes that ambition is natural and must be controlled by the design of institutions."
+    ],
+    [
+      "Control What You Can",
+      "philosophy",
+      "B2",
+      "Marcus Aurelius was an emperor, yet his private notes are about self-discipline, not power. He reminded himself to focus on his own thoughts and actions, because outside events are often beyond control. This idea is central to Stoicism. A calm mind, he believed, does not fight the unavoidable but responds with reason and duty."
+    ],
+    [
+      "Geography and Power",
+      "geopolitics",
+      "C1",
+      "In 1904, Halford Mackinder argued that geography shapes the fate of nations. He believed that the vast inland area of Eurasia, which he called the pivot area or Heartland, was hard for sea powers to reach and rich in resources. A state that controlled it, he warned, could gain enormous strength. Later scholars disagreed about how true this is, but his ideas still influence debates on great-power competition."
+    ]
+  ],
+  "vocabulary": [
+    [
+      "scarcity",
+      "escassez",
+      "Not enough of something to meet everyone's needs.",
+      "Scarcity forces people to make choices.",
+      "resource scarcity; water scarcity"
+    ],
+    [
+      "incentive",
+      "incentivo",
+      "Something that encourages a person to act.",
+      "Higher wages are an incentive to work harder.",
+      "tax incentive; financial incentive"
+    ],
+    [
+      "inflation",
+      "inflação",
+      "A general rise in prices that reduces money's value.",
+      "Inflation made basic food more expensive.",
+      "rising inflation; control inflation"
+    ],
+    [
+      "monopoly",
+      "monopólio",
+      "A market controlled by one company or group.",
+      "The company held a monopoly on electricity.",
+      "hold a monopoly; break up a monopoly"
+    ],
+    [
+      "tariff",
+      "tarifa alfandegária",
+      "A tax on goods entering a country.",
+      "The government raised the tariff on imported steel.",
+      "import tariff; impose a tariff"
+    ],
+    [
+      "subsidy",
+      "subsídio",
+      "Government money that supports an industry or lowers prices.",
+      "Farmers receive a subsidy to keep food prices stable.",
+      "government subsidy; farm subsidy"
+    ],
+    [
+      "surplus",
+      "excedente; superávit",
+      "An amount greater than what is needed or used.",
+      "The country has a trade surplus with its neighbors.",
+      "trade surplus; budget surplus"
+    ],
+    [
+      "equilibrium",
+      "equilíbrio",
+      "A state in which opposing forces are balanced.",
+      "Prices settle at the point of equilibrium.",
+      "market equilibrium; reach equilibrium"
+    ],
+    [
+      "virtue",
+      "virtude",
+      "A quality of good moral character.",
+      "Courage was seen as a high virtue by ancient thinkers.",
+      "moral virtue; cardinal virtue"
+    ],
+    [
+      "ethics",
+      "ética",
+      "The study of what is right and wrong.",
+      "Medical ethics protects patients' rights.",
+      "business ethics; code of ethics"
+    ],
+    [
+      "dilemma",
+      "dilema",
+      "A difficult choice between options with costs.",
+      "She faced a dilemma between loyalty and honesty.",
+      "moral dilemma; face a dilemma"
+    ],
+    [
+      "skeptic",
+      "cético",
+      "A person who doubts claims until evidence is provided.",
+      "A skeptic asks for proof before accepting an idea.",
+      "healthy skeptic; remain skeptical"
+    ],
+    [
+      "rational",
+      "racional",
+      "Based on reasoning rather than emotion.",
+      "A rational person weighs the facts before deciding.",
+      "rational choice; rational thinking"
+    ],
+    [
+      "doctrine",
+      "doutrina",
+      "A set of beliefs taught by a group or school of thought.",
+      "The doctrine of free trade shaped modern economics.",
+      "political doctrine; religious doctrine"
+    ],
+    [
+      "sovereignty",
+      "soberania",
+      "A state's right to govern itself without outside control.",
+      "Many nations defend their sovereignty.",
+      "national sovereignty; violate sovereignty"
+    ],
+    [
+      "alliance",
+      "aliança",
+      "A formal agreement between countries to support each other.",
+      "The two countries formed a military alliance.",
+      "form an alliance; strategic alliance"
+    ],
+    [
+      "sanction",
+      "sanção",
+      "A penalty imposed to force a change in behavior.",
+      "The sanctions limited access to foreign banks.",
+      "economic sanctions; lift sanctions"
+    ],
+    [
+      "hegemony",
+      "hegemonia",
+      "Dominance or leadership of one state or group.",
+      "Some analysts believe American hegemony is declining.",
+      "global hegemony; regional hegemony"
+    ],
+    [
+      "deterrence",
+      "dissuasão",
+      "A threat of punishment used to prevent an attack.",
+      "Nuclear deterrence aims to prevent major wars.",
+      "nuclear deterrence; deterrence policy"
+    ],
+    [
+      "treaty",
+      "tratado",
+      "A formal written agreement between countries.",
+      "The treaty ended years of conflict.",
+      "sign a treaty; peace treaty"
+    ],
+    [
+      "diplomacy",
+      "diplomacia",
+      "Managing relations through negotiation.",
+      "Quiet diplomacy prevented a larger crisis.",
+      "economic diplomacy; diplomacy fails"
+    ],
+    [
+      "embargo",
+      "embargo",
+      "An official ban on trade with a country.",
+      "The oil embargo caused fuel shortages.",
+      "trade embargo; lift an embargo"
+    ],
+    [
+      "plaintiff",
+      "autor da ação",
+      "The person who brings a case against someone in court.",
+      "The plaintiff claims the company broke the contract.",
+      "the plaintiff argues; plaintiff and defendant"
+    ],
+    [
+      "defendant",
+      "réu; demandado",
+      "The person or party accused or sued in court.",
+      "The defendant denied all the charges.",
+      "defendant pleads; defense of the defendant"
+    ],
+    [
+      "verdict",
+      "veredicto",
+      "The final decision of a jury or judge.",
+      "The jury reached a verdict after two days.",
+      "reach a verdict; guilty verdict"
+    ],
+    [
+      "statute",
+      "estatuto; lei",
+      "A written law passed by a legislature.",
+      "The statute sets a filing time limit.",
+      "federal statute; statute of limitations"
+    ],
+    [
+      "liable",
+      "responsável legalmente",
+      "Legally responsible for damage, debt or an action.",
+      "The owner is liable for injuries on the property.",
+      "held liable; liable for damages"
+    ],
+    [
+      "jurisdiction",
+      "jurisdição",
+      "The authority of a court to make decisions in an area or matter.",
+      "The case falls outside this court's jurisdiction.",
+      "legal jurisdiction; fall under jurisdiction"
+    ],
+    [
+      "precedent",
+      "precedente",
+      "An earlier court decision that guides later similar cases.",
+      "The judge followed an important precedent.",
+      "set a precedent; legal precedent"
+    ],
+    [
+      "testimony",
+      "depoimento; testemunho",
+      "A statement given under oath in court.",
+      "Her testimony changed the direction of the trial.",
+      "give testimony; witness testimony"
+    ]
+  ],
+  "phrases": [
+    [
+      "the invisible hand",
+      "a mão invisível",
+      "How individual self-interest can benefit society without central planning."
+    ],
+    [
+      "checks and balances",
+      "freios e contrapesos",
+      "A system in which each branch of government can limit the others."
+    ],
+    [
+      "burden of proof",
+      "ônus da prova",
+      "The duty to prove a claim in court."
+    ],
+    [
+      "beyond a reasonable doubt",
+      "além de qualquer dúvida razoável",
+      "The standard of proof needed for a criminal conviction."
+    ],
+    [
+      "rule of law",
+      "Estado de direito",
+      "The principle that everyone, including leaders, must obey the law."
+    ],
+    [
+      "balance of power",
+      "equilíbrio de poder",
+      "A situation in which no single state can dominate others."
+    ],
+    [
+      "soft power",
+      "poder brando",
+      "Influence gained through culture and values rather than force."
+    ],
+    [
+      "zero-sum game",
+      "jogo de soma zero",
+      "A situation in which one side's gain is exactly another side's loss."
+    ],
+    [
+      "supply and demand",
+      "oferta e demanda",
+      "The relationship between product availability and what people want."
+    ],
+    [
+      "trade-off",
+      "escolha com compensação",
+      "A compromise in which something is given up to gain something else."
+    ],
+    [
+      "moral hazard",
+      "risco moral",
+      "Taking greater risks because someone else bears the consequences."
+    ],
+    [
+      "sphere of influence",
+      "esfera de influência",
+      "An area under strong political or economic influence of a country."
+    ]
+  ],
+  "legal_terms": [
+    [
+      "habeas corpus",
+      "ordem para apresentar o preso e revisar a legalidade da prisão",
+      "A court order that requires a person in custody to be brought before a judge, so the detention can be reviewed."
+    ],
+    [
+      "mens rea",
+      "elemento subjetivo do crime (dolo, intenção)",
+      "The mental element of a crime, meaning the intention or knowledge of wrongdoing."
+    ],
+    [
+      "actus reus",
+      "elemento objetivo do crime (a conduta)",
+      "The physical act or omission that makes up a crime."
+    ],
+    [
+      "pro bono",
+      "trabalho gratuito, normalmente jurídico",
+      "Professional work, especially legal work, done for free."
+    ],
+    [
+      "stare decisis",
+      "respeito aos precedentes",
+      "The principle that courts should follow earlier decisions."
+    ],
+    [
+      "bona fide",
+      "de boa-fé, genuíno",
+      "Genuine, honest, without intention to deceive."
+    ],
+    [
+      "prima facie",
+      "à primeira vista, com base na aparência inicial das provas",
+      "Accepted as true unless proven otherwise."
+    ],
+    [
+      "ex post facto",
+      "retroativo",
+      "Applied after the fact, as in a law that punishes an act that was legal when it happened."
+    ],
+    [
+      "de facto",
+      "de fato",
+      "Existing in reality, even if not officially recognized."
+    ],
+    [
+      "de jure",
+      "de direito",
+      "Existing by legal right or official recognition."
+    ],
+    [
+      "ultra vires",
+      "além dos poderes legais",
+      "An act that goes beyond the legal authority of a person or body."
+    ],
+    [
+      "in dubio pro reo",
+      "na dúvida, a favor do réu",
+      "If there is reasonable doubt, the decision should favor the defendant."
+    ]
+  ],
+  "usage_notes": [
+    "The archive's passages are original study texts based on the listed books, not direct excerpts.",
+    "Book summaries describe the archive's framing and are not a substitute for reading the full works.",
+    "Vocabulary entries include Brazilian Portuguese support, definitions, examples and collocations."
+  ],
+  "quotes": [
+    [
+      "It is not from the benevolence of the butcher, the brewer, or the baker, that we expect our dinner, but from their regard to their own interest.",
+      "People trade because each side gains something, not because anyone is being generous.",
+      "As pessoas trocam porque cada lado ganha algo, não por generosidade."
+    ],
+    [
+      "The only purpose for which power can be rightfully exercised over any member of a civilized community, against his will, is to prevent harm to others.",
+      "Power over a person is justified only when it stops that person from harming others.",
+      "O poder sobre alguém só se justifica para impedir que essa pessoa prejudique os outros."
+    ],
+    [
+      "The life of man, solitary, poor, nasty, brutish, and short.",
+      "Without government, life would be lonely, hard, violent and brief.",
+      "Sem governo, a vida seria solitária, difícil, violenta e breve."
+    ],
+    [
+      "Man is born free; and everywhere he is in chains.",
+      "People are naturally free, yet societies limit that freedom everywhere.",
+      "As pessoas nascem livres, mas as sociedades limitam essa liberdade em toda parte."
+    ],
+    [
+      "A spectre is haunting Europe, the spectre of Communism.",
+      "The authors say that the fear of communism is spreading through Europe.",
+      "Os autores dizem que o medo do comunismo se espalha pela Europa."
+    ],
+    [
+      "All warfare is based on deception.",
+      "Success in war depends on making the enemy believe false things.",
+      "O sucesso na guerra depende de fazer o inimigo acreditar em coisas falsas."
+    ],
+    [
+      "War is merely the continuation of policy by other means.",
+      "War is not separate from politics. It is one more tool that states use to reach goals.",
+      "A guerra não é separada da política. É mais uma ferramenta dos Estados."
+    ],
+    [
+      "Who rules East Europe commands the Heartland; who rules the Heartland commands the World-Island; who rules the World-Island commands the World.",
+      "A famous geopolitical formula: control of key land in Eurasia leads to world influence.",
+      "Fórmula geopolítica famosa: controlar áreas-chave da Eurásia leva a influência mundial."
+    ],
+    [
+      "The strong do what they can and the weak suffer what they must.",
+      "In relations between states, power decides outcomes more than fairness does.",
+      "Nas relações entre Estados, o poder decide mais do que a justiça."
+    ],
+    [
+      "If men were angels, no government would be necessary.",
+      "Because people are not perfect, rules and institutions are needed.",
+      "Como as pessoas não são perfeitas, regras e instituições são necessárias."
+    ],
+    [
+      "The state is the great fictitious entity by which everyone seeks to live at the expense of everyone else.",
+      "Bastiat warns that people may use the government to take benefits from others.",
+      "Bastiat alerta que as pessoas podem usar o governo para obter benefícios à custa dos outros."
+    ],
+    [
+      "Justice in the ideal city means each part does its own proper work.",
+      "A short study paraphrase of an idea from The Republic, not a direct quotation.",
+      "Paráfrase de estudo de uma ideia de A República, não uma citação literal."
+    ]
+  ],
+  "exercises": [
+    {
+      "id": "e001",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v001",
+      "sentence": "Economists say that _____ forces people to make choices.",
+      "answer": "scarcity",
+      "hint_pt": "escassez"
+    },
+    {
+      "id": "e002",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v002",
+      "sentence": "Higher wages are an _____ to work harder.",
+      "answer": "incentive",
+      "hint_pt": "incentivo"
+    },
+    {
+      "id": "e003",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v003",
+      "sentence": "_____ made basic food more expensive last year.",
+      "answer": "inflation",
+      "hint_pt": "inflação"
+    },
+    {
+      "id": "e004",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v004",
+      "sentence": "The company held a _____ on electricity in the region.",
+      "answer": "monopoly",
+      "hint_pt": "monopólio"
+    },
+    {
+      "id": "e005",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v005",
+      "sentence": "The government raised the _____ on imported steel.",
+      "answer": "tariff",
+      "hint_pt": "tarifa alfandegária"
+    },
+    {
+      "id": "e006",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v006",
+      "sentence": "Farmers receive a _____ to keep food prices stable.",
+      "answer": "subsidy",
+      "hint_pt": "subsídio"
+    },
+    {
+      "id": "e007",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v007",
+      "sentence": "The country has a trade _____ with its neighbors.",
+      "answer": "surplus",
+      "hint_pt": "excedente; superávit"
+    },
+    {
+      "id": "e008",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v008",
+      "sentence": "Prices settle at the point of _____.",
+      "answer": "equilibrium",
+      "hint_pt": "equilíbrio"
+    },
+    {
+      "id": "e009",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v009",
+      "sentence": "Courage was seen as the highest _____ by many ancient thinkers.",
+      "answer": "virtue",
+      "hint_pt": "virtude"
+    },
+    {
+      "id": "e010",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v010",
+      "sentence": "Medical _____ protects the rights of patients.",
+      "answer": "ethics",
+      "hint_pt": "ética"
+    },
+    {
+      "id": "e011",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v011",
+      "sentence": "She faced a _____ between loyalty and honesty.",
+      "answer": "dilemma",
+      "hint_pt": "dilema"
+    },
+    {
+      "id": "e012",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v012",
+      "sentence": "A _____ asks for proof before accepting an idea.",
+      "answer": "skeptic",
+      "hint_pt": "cético"
+    },
+    {
+      "id": "e013",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v013",
+      "sentence": "A _____ person weighs the facts before deciding.",
+      "answer": "rational",
+      "hint_pt": "racional"
+    },
+    {
+      "id": "e014",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v014",
+      "sentence": "The _____ of free trade shaped modern economics.",
+      "answer": "doctrine",
+      "hint_pt": "doutrina"
+    },
+    {
+      "id": "e015",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v015",
+      "sentence": "Many nations defend their _____ over their borders.",
+      "answer": "sovereignty",
+      "hint_pt": "soberania"
+    },
+    {
+      "id": "e016",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v016",
+      "sentence": "The two countries formed a military _____.",
+      "answer": "alliance",
+      "hint_pt": "aliança"
+    },
+    {
+      "id": "e017",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v017",
+      "sentence": "The _____s limited the country's access to foreign banks.",
+      "answer": "sanction",
+      "hint_pt": "sanção"
+    },
+    {
+      "id": "e018",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v018",
+      "sentence": "Some analysts believe American _____ is declining.",
+      "answer": "hegemony",
+      "hint_pt": "hegemonia"
+    },
+    {
+      "id": "e019",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v019",
+      "sentence": "Nuclear _____ is meant to prevent major wars.",
+      "answer": "deterrence",
+      "hint_pt": "dissuasão"
+    },
+    {
+      "id": "e020",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v020",
+      "sentence": "The _____ ended years of conflict between the two states.",
+      "answer": "treaty",
+      "hint_pt": "tratado"
+    },
+    {
+      "id": "e021",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v021",
+      "sentence": "Quiet _____ prevented a larger crisis.",
+      "answer": "diplomacy",
+      "hint_pt": "diplomacia"
+    },
+    {
+      "id": "e022",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v022",
+      "sentence": "The oil _____ caused fuel shortages across the region.",
+      "answer": "embargo",
+      "hint_pt": "embargo"
+    },
+    {
+      "id": "e023",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v023",
+      "sentence": "The _____ claims that the company broke the contract.",
+      "answer": "plaintiff",
+      "hint_pt": "autor da ação"
+    },
+    {
+      "id": "e024",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v024",
+      "sentence": "The _____ denied all the charges.",
+      "answer": "defendant",
+      "hint_pt": "réu; demandado"
+    },
+    {
+      "id": "e025",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v025",
+      "sentence": "The jury reached a _____ after two days.",
+      "answer": "verdict",
+      "hint_pt": "veredicto"
+    },
+    {
+      "id": "e026",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v026",
+      "sentence": "The _____ sets a limit on how long a case can be filed.",
+      "answer": "statute",
+      "hint_pt": "estatuto; lei"
+    },
+    {
+      "id": "e027",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v027",
+      "sentence": "The owner is _____ for any injury on the property.",
+      "answer": "liable",
+      "hint_pt": "responsável legalmente"
+    },
+    {
+      "id": "e028",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v028",
+      "sentence": "The case falls outside the _____ of this court.",
+      "answer": "jurisdiction",
+      "hint_pt": "jurisdição"
+    },
+    {
+      "id": "e029",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v029",
+      "sentence": "The judge followed an important _____ from 1954.",
+      "answer": "precedent",
+      "hint_pt": "precedente"
+    },
+    {
+      "id": "e030",
+      "type": "fill_in_the_blank",
+      "vocab_id": "v030",
+      "sentence": "Her _____ changed the direction of the trial.",
+      "answer": "testimony",
+      "hint_pt": "depoimento; testemunho"
+    }
+  ],
+  "conversation_model": {
+    "version": "2.0",
+    "source_note": "Original framework informed by analysis of the user-provided podcast transcript. It captures general conversational mechanics without reproducing transcript dialogue or imitating any speaker.",
+    "principles": [
+      "Answer the user's actual question or react to their actual point before adding jokes or teaching notes.",
+      "Use a natural sequence: acknowledge, answer or react, add one useful reason or example, then stop or leave a natural opening.",
+      "Do not end every message with a question. Follow-up questions are occasional and purposeful.",
+      "Use backchannels sparingly and add substance after agreement.",
+      "Disagree respectfully, explain why, and recognize the reasonable part of another view.",
+      "Build on earlier details, current topics and the learner's stated interests.",
+      "Let characters briefly respond to one another, add a perspective or joke; not everyone speaks every turn.",
+      "Use vivid examples and anecdote-shaped explanations without inventing personal experiences for bots.",
+      "Vary sentence length, contractions, transitions, reactions, humor and conversational repairs.",
+      "If the answer is unknown, say so plainly, separate facts from assumptions and never bluff.",
+      "Correct English only when useful; do not turn every casual message into a grammar lesson.",
+      "Keep group conversation in English with Portuguese support for learning and interface comprehension."
+    ],
+    "turn_patterns": [
+      {
+        "id": "direct_answer",
+        "sequence": [
+          "brief acknowledgement",
+          "answer in the first sentence",
+          "one reason or example",
+          "optional caveat"
+        ],
+        "questions": "rare"
+      },
+      {
+        "id": "shared_reaction",
+        "sequence": [
+          "specific reaction",
+          "related observation",
+          "optional light joke"
+        ],
+        "questions": "rare"
+      },
+      {
+        "id": "develop_idea",
+        "sequence": [
+          "identify core point",
+          "add a new angle",
+          "concrete example"
+        ],
+        "questions": "rare"
+      },
+      {
+        "id": "friendly_disagreement",
+        "sequence": [
+          "recognize valid part",
+          "state disagreement",
+          "explain reason"
+        ],
+        "questions": "rare"
+      },
+      {
+        "id": "story_shape",
+        "sequence": [
+          "concrete situation",
+          "tension or surprise",
+          "takeaway"
+        ],
+        "questions": "none"
+      },
+      {
+        "id": "clarify",
+        "sequence": [
+          "state likely interpretation",
+          "offer plausible meanings",
+          "ask only if necessary"
+        ],
+        "questions": "necessary"
+      },
+      {
+        "id": "callback",
+        "sequence": [
+          "refer to relevant earlier detail",
+          "connect it to current point",
+          "move discussion forward"
+        ],
+        "questions": "rare"
+      },
+      {
+        "id": "natural_close",
+        "sequence": [
+          "complete thought",
+          "short reaction or punchline",
+          "do not force a question"
+        ],
+        "questions": "none"
+      }
+    ],
+    "phrase_functions": {
+      "acknowledgement": [
+        "I see what you mean.",
+        "Right, that makes sense.",
+        "Fair point.",
+        "I hadn't looked at it that way."
+      ],
+      "elaboration": [
+        "The part that matters is...",
+        "There's another side to it, though.",
+        "What makes it interesting is...",
+        "The bigger picture is a little different."
+      ],
+      "disagreement": [
+        "I get the argument, but I'm not sure I agree with the conclusion.",
+        "I see why you'd think that. I'd push back on one part, though.",
+        "That's true up to a point, but it leaves something out."
+      ],
+      "transitions": [
+        "Anyway, the funny part is...",
+        "And that's where it gets interesting.",
+        "Here's the thing.",
+        "To be fair...",
+        "The weird part is..."
+      ]
+    },
+    "quality_checks": [
+      "Does the first sentence address the user's message?",
+      "If it is a question, is it answered before any follow-up?",
+      "Does the reply add information rather than paraphrase?",
+      "Does it fit the conversation history?",
+      "Can the turn end naturally without asking the user for more?"
+    ]
+  }
+}
