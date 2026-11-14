@@ -40,18 +40,16 @@ The Worker deduplicates headlines, ranks relevant stories, filters a list of gra
 ## 4. Language engine
 
 `shitpost-engine.js` contains the local rule-based conversation engine:
-- Keyword and synonym expansion
-- Communicative intent detection
-- Informal expressions and internet slang glossary
-- Common grammar error patterns with short explanations
-- Current headline vocabulary and recent conversational intent
-- Six recurring character voices with distinct sarcastic, chaotic, wholesome and conspiracy-leaning personalities
-- 144 contextual scene seeds across technology, gaming, aviation, weird news, animals, science, internet memes, transport, food, wholesome stories, school and everyday life
-- 12 reaction styles, producing more than 1,700 contextual line combinations, plus intent-specific replies
-- Expanded Gen Z / brainrot slang recognition, including aura, rizz, sigma, cooked, mog, fanum tax, crash out and locked in
-- Recent-line memory to reduce immediate repetition, including varied opening reactions
+- Message-aware intent detection with word-boundary matching, so short words inside unrelated words do not trigger false reactions.
+- Topic matching between the user's message, the selected headline and the headline category.
+- Six recurring characters with stable roles, interests and distinct voices: Oliver (fact-checker), Jake (shitposter), Sophie (skeptic), Daniel (relatable friend), Mike (playful theory guy) and Emily (kind/empathetic member).
+- Category-aware replies for technology, games, aviation, unusual stories, animals, science, internet culture, transport, food, wholesome stories, school and everyday life.
+- Variable participation: usually one person responds; a second may join later when the message is a question, story, opinion or relevant news discussion. Greetings and short casual messages normally receive one reply.
+- Conversation memory for the selected story, the user's latest message, the previous intent and recent replies.
+- English-learning feedback for common grammar patterns, informal expressions and slang, with contextual notes after each user message.
+- Brainrot and internet slang recognition, including aura, rizz, sigma, cooked, mog, fanum tax, crash out and locked in.
 
-No generative AI service or paid token API is used. The interpreter is intentionally bounded: it recognizes known patterns and context, but it cannot understand every novel sentence like a human or an LLM.
+No generative AI service or paid token API is used. The engine is still rule-based, so it cannot understand every novel sentence like a human or an LLM. Its goal is to keep replies grounded in the user's actual message and the active story, rather than generating unrelated lines.
 
 ## Important limitations
 
