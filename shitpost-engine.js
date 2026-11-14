@@ -890,4 +890,117 @@ app.render=function(){
  }
 };
 
+
+/* Conversation architecture v2: direct answers, natural turn-taking, contextual learning. */
+function spV2Words(s){return norm(s).split(" ").filter(Boolean)}
+function spV2Knowledge(s){
+ const t=norm(s),d=STUDY_ARCHIVE||{};
+ const find=(arr)=>arr.find(x=>t.includes(norm(x[0]))||t.includes(norm(x[1])));
+ const passages=(d.passages||[]).map(x=>({x,score:spV2Words(x[0]+" "+x[1]+" "+x[3]).filter(w=>w.length>3&&t.includes(w)).length})).sort((a,b)=>b.score-a.score);
+ return {vocab:find(d.vocabulary||[]),phrase:find(d.phrases||[]),legal:find(d.legal_terms||[]),passage:passages[0]?.score>=2?passages[0].x:null};
+}
+function spV2Kind(t,s){
+ if(!/[?？]$/.test(String(s).trim())&&!/^(what|why|how|when|where|who|which|can|could|would|should|do|does|did|is|are|will|have|has)\b/.test(t))return "";
+ if(/^(what do you think|what's your opinion|what is your take|do you agree|am i wrong|should i)\b/.test(t))return "opinion";
+ if(/^(why|how come)\b/.test(t))return "why";
+ if(/^how\b/.test(t))return "how";
+ if(/^(what does|what is|what are|who is|who are|what do you mean|what's the meaning)\b/.test(t))return "definition";
+ if(/^(when|where|who|which|is|are|do|does|did|can|could|will|have|has)\b/.test(t))return "fact";
+ return "open";
+}
+function spV2Intent(t,s){
+ if(/\b(hi|hello|hey|yo|sup|what's up|good morning|good evening)\b/.test(t))return "greeting";
+ if(/\b(thanks|thank you|thx|cheers)\b/.test(t))return "thanks";
+ if(/\b(sorry|my bad|i apologize)\b/.test(t))return "apology";
+ if(/\b(sad|upset|tired|rough day|bad day|stressed|anxious|worried|exhausted)\b/.test(t))return "support";
+ if(/\b(lol|lmao|haha|bruh|meme|that's funny)\b/.test(t))return "humor";
+ if(/\b(i think|in my opinion|i believe|personally|i feel|my point is)\b/.test(t))return "opinion";
+ if(/\b(i went|i saw|i did|i had|my friend|my family|yesterday|last night|last week|one time)\b/.test(t))return "story";
+ if(/\b(i like|i love|i enjoy|i hate|i prefer|my favorite)\b/.test(t))return "preference";
+ if(spV2Kind(t,s))return "question";
+ return "statement";
+}
+function spV2Answer(kind,k){
+ if(kind==="definition"){
+  if(k.vocab)return k.vocab[0]+" means "+k.vocab[2]+" For example: "+k.vocab[3];
+  if(k.phrase)return "“"+k.phrase[0]+"” means "+k.phrase[2];
+  if(k.legal)return k.legal[0]+" means "+k.legal[2];
+  if(k.passage)return k.passage[3].slice(0,420);
+  return "I don't have a reliable definition for that exact term in our study archive, and I don't want to make one up. The context matters, especially with slang or technical language.";
+ }
+ if(kind==="why"){
+  if(k.passage)return "A useful way to understand it is through "+k.passage[0]+": "+k.passage[3].slice(0,420);
+  if(k.vocab)return "One relevant idea is "+k.vocab[0]+": "+k.vocab[2]+" That may explain part of it, although the exact cause depends on the situation.";
+  return "It is usually a combination of incentives, circumstances and decisions. I don't have enough specific evidence here to name one cause confidently, so I wouldn't pretend there's a single definitive explanation.";
+ }
+ if(kind==="how"){
+  if(k.passage)return "The basic mechanism is this: "+k.passage[3].slice(0,440);
+  return "I'd break it into three parts: understand the goal, identify what's getting in the way, and deal with the biggest constraint first. The exact steps depend on the situation.";
+ }
+ if(kind==="opinion")return k.passage?"My read is that there are two sides to it. "+k.passage[3].slice(0,330)+" The strongest argument accounts for both benefits and trade-offs.":"My take is that context matters more than the headline version. I'd look at the evidence, incentives and consequences before calling it right or wrong.";
+ if(kind==="fact"){
+  if(k.vocab)return k.vocab[0]+": "+k.vocab[2];
+  if(k.phrase)return "It means "+k.phrase[2];
+  if(k.legal)return k.legal[0]+": "+k.legal[2];
+  if(k.passage)return k.passage[3].slice(0,400);
+  return "I can't verify that from the information in this chat. I'd rather be clear about that than give you a confident-sounding guess.";
+ }
+ if(kind==="open")return k.passage?"The relevant background is "+k.passage[0]+". "+k.passage[3].slice(0,350):"I think I follow the general idea, but I don't want to answer the wrong question.";
+ return "";
+}
+function spV2Character(intent,ctx){
+ const recent=(ctx.recentResponders||[]).slice(-2);
+ const choices={greeting:[["Jake","💀"],["Emily","🐸"]],thanks:[["Emily","🐸"],["Daniel","🫠"]],apology:[["Emily","🐸"],["Daniel","🫠"]],support:[["Emily","🐸"],["Daniel","🫠"]],humor:[["Jake","💀"],["Sophie","🙄"]],opinion:[["Sophie","🙄"],["Daniel","🫠"]],story:[["Daniel","🫠"],["Emily","🐸"],["Jake","💀"]],preference:[["Emily","🐸"],["Jake","💀"],["Sophie","🙄"]],question:[["Oliver","📰"],["Daniel","🫠"],["Sophie","🙄"]],statement:[["Daniel","🫠"],["Jake","💀"],["Sophie","🙄"],["Emily","🐸"],["Mike","🛸"]]};
+ const p=choices[intent]||choices.statement;return p.find(x=>!recent.includes(x[0]))||p[0];
+}
+function spV2Reply(message,intent,kind,k,profile,ctx){
+ const pick=spPick;let reply="",second=null;
+ if(intent==="greeting"){reply=pick(["Hey! Good timing. We were just getting into a completely unnecessary debate.","Yo, welcome back. The timeline has been suspiciously quiet.","Hey! What's going on?"]);if(Math.random()<.3)second=["Emily","🐸","Ignore Jake. He's been like this all day."]}
+ else if(intent==="thanks")reply=pick(["Anytime. That's what we're here for.","No problem! Happy to help.","You're welcome. Now back to our regularly scheduled nonsense."]);
+ else if(intent==="apology")reply=pick(["You're good. No need to make it a bigger deal than it is.","It's alright. We all have those moments.","No worries. What matters is what you do next."]);
+ else if(intent==="support"){reply=pick(["That sounds genuinely exhausting. I hope you get a little breathing room today.","I'm sorry it's been that kind of day. You don't have to turn everything into a lesson right away.","Yeah, that's a lot to carry. Be a bit fair to yourself while you work through it."]);if(Math.random()<.35)second=["Daniel","🫠","Sometimes taking a proper break is the most productive thing you can do."]}
+ else if(intent==="humor"){reply=pick(["That is so stupid. I laughed anyway.","I'm not proud of how hard I laughed at that.","This group has officially lost its remaining dignity."]);if(Math.random()<.3)second=["Sophie","🙄","I hate that I found that funny."]}
+ else if(intent==="story"){reply=pick(["I can see that happening. The little detail you mentioned is what makes the story.","That's the sort of thing that seems ordinary until you look back on it.","The way you describe it makes the whole situation easy to picture."]);if(Math.random()<.25)second=["Jake","💀","There is no way I would have kept a straight face."]}
+ else if(intent==="preference")reply=pick(["Fair enough. People usually have a reason for gravitating toward what they like.","I get that. It says a little about what you value, too.","That's a solid preference. I'd probably choose that over the alternative as well."]);
+ else if(intent==="opinion"){reply=pick(["I see the point you're making. The part I'd look at more closely is the assumption behind it.","That's a fair argument. I'd add one complication, though: the outcome can change depending on the circumstances.","I mostly follow your reasoning. There's another angle worth keeping in mind, too."]);if(Math.random()<.25)second=["Sophie","🙄","I agree with the general point, but I'd be more careful about the conclusion."]}
+ else if(intent==="question"){reply=spV2Answer(kind,k);if(Math.random()<.15)second=["Sophie","🙄","That's the key distinction. The details matter more than people think."]}
+ else{reply=pick(["I get what you're saying. There's a bit more to it than people usually give it credit for.","That's an interesting way to put it. The practical side is what stands out to me.","Yeah, I can follow that. It connects to a bigger point about how people make decisions.","That's fair. I think the context changes how I'd look at it.","I hadn't considered that angle. It makes the conversation more interesting."]);if(Math.random()<.18)second=["Jake","💀","Somehow this chat has become more productive than my actual day."]}
+ const t=norm(message);
+ if(/\b(f1|formula 1|verstappen|hamilton|ferrari|red bull|mclaren|norris|leclerc)\b/.test(t)&&intent!=="question")reply="With F1, I'd separate the headline from the actual performance. Pace, tyre management, strategy and team decisions tell a much clearer story.";
+ else if(/\b(game|gaming|roblox|minecraft|playstation|xbox|steam)\b/.test(t)&&intent!=="question")reply="Gaming always finds a way to turn a simple plan into a three-hour side quest. The mechanics are one thing; the people you play with change the whole experience.";
+ if(profile.profanity==="high"&&Math.random()<.2)reply+=" "+spPick(["Honestly, that's wild as hell.","What a ridiculous situation.","That's some serious nonsense."]);
+ if(profile.profanity==="medium"&&Math.random()<.1)reply+=" "+spPick(["That's pretty damn interesting.","What a weird situation."]);
+ if(profile.profanity==="none")reply=reply.replace(/\b(damn|hell|shit|fuck)\b/gi,"");
+ if(["A1","A2"].includes(profile.level))reply=reply.replace(/\b(complication|circumstances|consequences|gravitate|assumption)\b/gi,"important detail");
+ if(["C1","C2"].includes(profile.level))reply+=" "+spPick(["The nuance is in the trade-off, not just the outcome.","That's where the distinction becomes important.","The broader context makes the argument more interesting."]);
+ return {character:spV2Character(intent,ctx),reply,second};
+}
+const previousReplyV2=app.reply.bind(app);
+app.reply=function(input){
+ const message=String(input||"").trim();if(!message)return;
+ const profile=readProfile()||{interests:[],hobbies:"",profanity:"light",level:"B1"};
+ const learned=learnText(message),analysis=this.analyse(message),grammar=this.grammar(message),slang=this.slang(message);
+ const t=norm(message),intent=spV2Intent(t,message),kind=spV2Kind(t,message),knowledge=spV2Knowledge(message);
+ this.state.context=this.state.context||{};const ctx=this.state.context;
+ ctx.lastUserMessage=message;ctx.lastIntent=intent;ctx.learnerProfile=profile;
+ ctx.recentLearnerTexts=learned.texts.slice(-18).map(x=>x.text);
+ ctx.learnedWords=Object.keys(learned.words).sort((a,b)=>learned.words[b]-learned.words[a]).slice(0,55);
+ this.msg("You","🙂",message,"mine");
+ const turn=spV2Reply(message,intent,kind,knowledge,profile,ctx);
+ this.msg(turn.character[0],turn.character[1],turn.reply);
+ spRemember(ctx,"recentBotReplies",turn.reply,16);spRemember(ctx,"recentResponders",turn.character[0],10);
+ if(turn.second&&Math.random()<.8){const extra=turn.second;window.setTimeout(()=>{this.msg(extra[0],extra[1],extra[2]);spRemember(ctx,"recentBotReplies",extra[2],16);spRemember(ctx,"recentResponders",extra[0],10);this.save()},850+Math.floor(Math.random()*750))}
+ let coach="";
+ if(knowledge.vocab){const v=knowledge.vocab;coach='<div class="sp-archive-tip"><b>📚 '+esc(v[0])+' · '+esc(v[1])+'</b><small>'+esc(v[2])+'</small><small><b>Example:</b> '+esc(v[3])+'</small><small><b>Collocations:</b> '+esc(v[4])+'</small></div>'}
+ else if(knowledge.phrase){const v=knowledge.phrase;coach='<div class="sp-archive-tip"><b>📚 '+esc(knowledge.phrase[0])+' · '+esc(knowledge.phrase[1])+'</b><small>'+esc(knowledge.phrase[2])+'</small></div>'}
+ else if(knowledge.legal){const v=knowledge.legal;coach='<div class="sp-archive-tip"><b>⚖️ '+esc(knowledge.legal[0])+' · '+esc(knowledge.legal[1])+'</b><small>'+esc(knowledge.legal[2])+'</small></div>'}
+ else if(grammar&&grammar.length)coach='<div class="sp-archive-tip"><b>Grammar · Gramática</b><small>'+esc(grammar[0])+'</small></div>';
+ else if(slang&&slang.length&&Math.random()<.3)coach='<div class="sp-archive-tip"><b>Slang · Gíria</b><small>'+esc(slang[0])+'</small></div>';
+ const fb=document.getElementById("sp-feedback");
+ if(fb)fb.innerHTML='<div class="sp-feedback-head"><b>🧠 English check · Análise do inglês</b><span>'+esc(intent.replace(/_/g," "))+' · '+esc(profile.level||"B1")+'</span></div><p>'+esc(this.feedback(message,analysis))+'</p><small class="sp-bilingual">A resposta considera o sentido da mensagem, o contexto e o vocabulário, não apenas palavras isoladas.</small>'+coach+'<small class="sp-bilingual">Mensagens salvas neste navegador: '+learned.texts.length+' · Palavras registradas: '+Object.keys(learned.words).length+'</small>';
+ ctx.lastResponder=turn.character[0];ctx.lastQuestionKind=kind;ctx.lastKnowledgeTopic=knowledge.passage?knowledge.passage[0]:knowledge.vocab?knowledge.vocab[0]:"";
+ this.save();
+};
+
+
 })();
