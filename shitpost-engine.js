@@ -723,7 +723,7 @@ app.send=function(){const i=document.getElementById("sp-input");if(!i)return;con
 
 /* 2026-11-14: conversation pacing, bilingual support and user study archive. */
 let STUDY_ARCHIVE=null;
-fetch("./assets/english-knowledge.json").then(r=>{if(!r.ok)throw new Error("archive unavailable");return r.json()}).then(d=>{STUDY_ARCHIVE=d;}).catch(()=>{STUDY_ARCHIVE=null;});
+fetch("./assets/english-knowledge.json?v=20261114").then(r=>{if(!r.ok)throw new Error("archive unavailable");return r.json()}).then(d=>{STUDY_ARCHIVE=d;}).catch(()=>{STUDY_ARCHIVE=null;});
 const spExtraStyle=document.createElement("style");
 spExtraStyle.textContent='.sp-pt-hint{display:block;margin-top:3px;font-size:10px;line-height:1.4;color:var(--mut);font-weight:400}.sp-bilingual{display:block;margin-top:4px;font-size:10px;color:var(--mut);line-height:1.45}.sp-archive-tip{border-left:2px solid var(--ac);padding:8px 10px;margin-top:8px;background:var(--card2);border-radius:0 8px 8px 0}.sp-archive-tip b{display:block;font-size:12px}.sp-archive-tip small{display:block;color:var(--mut);margin-top:3px}.sp-chat-panel .sp-composer{display:flex!important}.sp-msg.mine{align-self:flex-end;flex-direction:row-reverse}.sp-msg.mine .sp-bubble{background:color-mix(in srgb,var(--ac) 12%,var(--card));border-radius:13px 4px 13px 13px}';
 document.head.appendChild(spExtraStyle);
@@ -752,7 +752,8 @@ function archiveMatch(s){
  const vocab=(STUDY_ARCHIVE.vocabulary||[]).filter(x=>t.includes(x[0])||x[4].split("; ").some(y=>t.includes(y)));
  const phrase=(STUDY_ARCHIVE.phrases||[]).filter(x=>t.includes(x[0]));
  const passage=(STUDY_ARCHIVE.passages||[]).filter(x=>x[1]&&t.includes(x[1].replace("_"," ")));
- return {vocab:vocab[0]||null,phrase:phrase[0]||null,passage:passage[0]||null};
+ const legal=(STUDY_ARCHIVE.legal_terms||[]).filter(x=>t.includes(x[0]));
+ return {vocab:vocab[0]||null,phrase:phrase[0]||null,passage:passage[0]||null,legal:legal[0]||null};
 }
 function spNovel(pool,used){const fresh=pool.filter(x=>!used.includes(x));return fresh.length?fresh[Math.floor(Math.random()*fresh.length)]:pool[Math.floor(Math.random()*pool.length)]}
 app.reply=function(s){
@@ -828,6 +829,8 @@ app.reply=function(s){
  let coach="";
  if(archive&&archive.vocab){
   const v=archive.vocab;coach='<div class="sp-archive-tip"><b>📚 '+esc(v[0])+' · '+esc(v[1])+'</b><small>'+esc(v[2])+'</small><small><b>Example:</b> '+esc(v[3])+'</small><small><b>Collocations:</b> '+esc(v[4])+'</small></div>';
+ }else if(archive&&archive.legal){
+  const v=archive.legal;coach='<div class="sp-archive-tip"><b>⚖️ '+esc(v[0])+" · "+esc(v[1])+'</b><small>'+esc(v[2])+'</small></div>';
  }else if(archive&&archive.phrase){
   const v=archive.phrase;coach='<div class="sp-archive-tip"><b>📚 '+esc(v[0])+' · '+esc(v[1])+'</b><small>'+esc(v[2])+'</small></div>';
  }else if(g.length)coach='<div class="sp-archive-tip"><b>Grammar · Gramática</b><small>'+esc(g[0])+'</small></div>';
