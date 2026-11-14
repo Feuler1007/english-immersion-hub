@@ -625,4 +625,99 @@ app.render=function(){oldRender();const panel=document.querySelector(".sp-chat-p
 };
 const extraStyle=document.createElement("style");extraStyle.textContent='.sp-chat-panel .sp-composer{display:none!important}.sp-bot-media{margin-top:9px;max-width:340px}.sp-bot-media img{display:block;width:100%;max-height:280px;object-fit:contain;border-radius:10px;background:var(--card2);border:1px solid var(--bd)}.sp-bot-media small{display:block;color:var(--mut);font-size:9px;margin-top:4px}#sp-private-practice{padding:16px;border-top:1px solid var(--bd);background:var(--card)}.sp-practice-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.sp-practice-head h3{font-size:16px;margin:7px 0 4px}.sp-practice-head p{font-size:11px;color:var(--mut);margin:0;line-height:1.5}.sp-practice-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.sp-practice-actions small{font-size:10px;color:var(--mut)}#sp-private-input{resize:vertical;min-height:76px;font-size:12px;margin:10px 0 7px}.sp-learning-card,.sp-phrase-lab{margin-top:11px;padding:11px 12px;border-radius:11px;background:var(--card2);border:1px solid var(--bd)}.sp-learning-card b,.sp-phrase-lab b{font-size:11px}.sp-learning-card p,.sp-phrase-lab p{font-size:11px;line-height:1.5;margin:6px 0}.sp-learning-card p span{color:var(--mut)}.sp-learning-card small{font-size:9px;color:var(--mut)}.sp-memory-summary{padding:10px 16px;border-top:1px solid var(--bd)}.sp-memory-summary>b{font-size:10px}.sp-memory-summary div{display:flex;gap:5px;flex-wrap:wrap;margin:7px 0}.sp-memory-summary span{font-size:9px;padding:4px 7px;border-radius:7px;background:var(--card2);color:var(--ac)}.sp-memory-summary small{font-size:9px;color:var(--mut)}@media(max-width:600px){.sp-practice-actions{align-items:stretch}.sp-practice-actions button{width:100%}}';document.head.appendChild(extraStyle);
 
+
+/* 2026-11-13: restore direct group chat and add one-time profile preferences. */
+const PROFILE_KEY="eih_shitpost_profile_v2";
+const readProfile=()=>{try{return JSON.parse(localStorage.getItem(PROFILE_KEY)||"null")}catch(e){return null}};
+const writeProfile=p=>{try{localStorage.setItem(PROFILE_KEY,JSON.stringify(p))}catch(e){}};
+const PROFILE_TOPICS=["Gaming","Technology","Formula 1 & motorsport","Music","Movies & series","Memes & internet culture","Football & sports","Animals","Science","Travel","Food","History"];
+const PROFANITY={none:["That is a bold choice.","I respectfully disagree with this decision."],light:["Bro, what is going on?","That is ridiculous, honestly."],medium:["What the hell was that?","Bro, this is a complete mess."],high:["What the fuck was that supposed to be?","This is a chaotic mess, holy shit."]};
+const LEVELS={"A1":"Beginner","A2":"Elementary","B1":"Intermediate","B2":"Upper-intermediate","C1":"Advanced","C2":"Proficient"};
+const style=document.createElement("style");
+style.textContent='.sp-profile-btn{margin-left:auto;font-size:10px;padding:7px 10px;border-radius:9px;white-space:nowrap}.sp-msg.mine{align-self:flex-end;flex-direction:row-reverse}.sp-msg.mine .sp-bubble{background:color-mix(in srgb,var(--ac) 12%,var(--card));border-radius:13px 4px 13px 13px}.sp-chat-panel .sp-composer{display:flex!important}#sp-private-practice{display:none!important}.sp-profile-overlay{position:fixed;inset:0;z-index:1000;background:rgba(5,9,25,.8);backdrop-filter:blur(7px);display:grid;place-items:center;padding:16px;overflow:auto}.sp-profile-card{width:min(620px,100%);max-height:92dvh;overflow:auto;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:20px;padding:22px;box-shadow:0 24px 80px #0006}.sp-profile-card h2{margin:5px 0 7px}.sp-profile-card p{font-size:12px;color:var(--mut);margin:0 0 14px}.sp-profile-card label{display:block;font-size:11px;font-weight:700;margin:12px 0 5px}.sp-profile-card input,.sp-profile-card select{width:100%;margin:0}.sp-interest-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:7px}.sp-interest{display:flex!important;align-items:center;gap:8px;padding:8px 9px;border:1px solid var(--bd);border-radius:10px;background:var(--card2);font-size:11px!important;font-weight:500!important;margin:0!important}.sp-interest input{width:auto;margin:0;accent-color:var(--ac)}.sp-profile-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:18px}.sp-profile-note{padding:10px 12px;border-radius:10px;background:var(--card2);font-size:10px;color:var(--mut);line-height:1.5;margin-top:12px}.sp-level-control{display:flex;align-items:center;gap:7px;margin:9px 13px 0;font-size:10px;color:var(--mut);flex-wrap:wrap}.sp-level-control select{font-size:10px;padding:5px 8px;width:auto;max-width:180px;margin:0}@media(max-width:560px){.sp-interest-grid{grid-template-columns:1fr 1fr}.sp-profile-card{padding:17px}}';
+document.head.appendChild(style);
+const baseRender=app.render.bind(app);
+app.render=function(){
+ baseRender();
+ const priv=document.getElementById("sp-private-practice");if(priv)priv.remove();
+ const form=document.getElementById("sp-form");if(form){form.hidden=false;form.style.display="flex";const input=document.getElementById("sp-input");if(input){input.disabled=false;input.placeholder="Type your message in English…"}}
+ const foot=document.querySelector(".sp-chat-foot");if(foot)foot.textContent="Jump into the conversation. The bots reply in the group, and your English is saved locally to improve future context.";
+ const head=document.querySelector(".sp-chat-head");
+ if(head&&!document.getElementById("sp-profile-open")){const b=document.createElement("button");b.id="sp-profile-open";b.className="sp-profile-btn";b.type="button";b.textContent="⚙ Your profile";b.onclick=()=>showProfile();head.appendChild(b)}
+ const p=readProfile();if(p){app.state.context.learnerProfile=p;renderLevel(p)}else showProfile();
+ this.messages();
+};
+function renderLevel(p){
+ const panel=document.querySelector(".sp-chat-panel");if(!panel)return;
+ let row=document.getElementById("sp-level-control");if(!row){row=document.createElement("div");row.id="sp-level-control";row.className="sp-level-control";const f=document.getElementById("sp-feedback");if(f)f.insertAdjacentElement("afterend",row);else panel.appendChild(row)}
+ row.innerHTML='<span>Bot English level:</span><select id="sp-level-select">'+Object.keys(LEVELS).map(k=>'<option value="'+k+'" '+(p.level===k?'selected':'')+'>'+k+' · '+LEVELS[k]+'</option>').join("")+'</select><span>Only profile setting you can change later.</span>';
+ document.getElementById("sp-level-select").onchange=e=>{const q=readProfile()||p;q.level=e.target.value;writeProfile(q);app.state.context.learnerProfile=q;app.save();notifyProfile("Bot behavior updated to "+q.level)};
+}
+function notifyProfile(s){if(typeof toast==="function")toast(s);else{const n=document.createElement("div");n.className="toast";n.textContent=s;document.body.appendChild(n);setTimeout(()=>n.remove(),2200)}}
+function safeProfile(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function showProfile(){
+ if(document.getElementById("sp-profile-overlay"))return;
+ const saved=readProfile(),p=saved||{interests:[],hobbies:"",profanity:"light",level:"B1",gender:"prefer-not"};
+ const locked=!!saved,overlay=document.createElement("div");overlay.className="sp-profile-overlay";overlay.id="sp-profile-overlay";
+ overlay.innerHTML='<section class="sp-profile-card" role="dialog" aria-modal="true"><span class="tag">'+(locked?"YOUR GROUP PROFILE":"ONE-TIME SETUP")+'</span><h2>'+(locked?"Your conversation profile":"Let the bots get to know you")+'</h2><p>Set your interests and chat preferences once. The bots use these details to choose topics, references, humor and how they talk to you.</p><form id="sp-profile-form">'+
+ '<label for="sp-hobbies">What do you enjoy talking about?</label><input id="sp-hobbies" maxlength="180" placeholder="e.g. PC building, horror games, F1, music..." value="'+safeProfile(p.hobbies)+'" '+(locked?"disabled":"")+'>'+
+ '<label>Choose your favorite topics</label><div class="sp-interest-grid">'+PROFILE_TOPICS.map(x=>'<label class="sp-interest"><input type="checkbox" name="sp-interest" value="'+safeProfile(x)+'" '+((p.interests||[]).includes(x)?"checked":"")+' '+(locked?"disabled":"")+'> '+x+'</label>').join("")+'</div>'+
+ '<label for="sp-profanity">How much swearing is acceptable?</label><select id="sp-profanity" '+(locked?"disabled":"")+'><option value="none" '+(p.profanity==="none"?"selected":"")+'>None</option><option value="light" '+(p.profanity==="light"?"selected":"")+'>Light</option><option value="medium" '+(p.profanity==="medium"?"selected":"")+'>Medium</option><option value="high" '+(p.profanity==="high"?"selected":"")+'>High, uncensored casual language</option></select>'+
+ '<label for="sp-gender">How should the bots refer to you?</label><select id="sp-gender" '+(locked?"disabled":"")+'><option value="prefer-not" '+(p.gender==="prefer-not"?"selected":"")+'>No preference / do not specify</option><option value="man" '+(p.gender==="man"?"selected":"")+'>Man</option><option value="woman" '+(p.gender==="woman"?"selected":"")+'>Woman</option></select>'+
+ '<label for="sp-profile-level">Your English level</label><select id="sp-profile-level">'+Object.keys(LEVELS).map(k=>'<option value="'+k+'" '+(p.level===k?"selected":"")+ '>'+k+' · '+LEVELS[k]+'</option>').join("")+'</select>'+
+ '<div class="sp-profile-note">'+(locked?"Your interests, hobbies, preferred language and gender setting are locked after setup. You can still change your English level at any time.":"This setup is saved in this browser. After saving, only your English level remains editable.")+'</div><div class="sp-profile-actions">'+(locked?'<button type="button" class="btn" id="sp-profile-close">Close</button>':"")+'<button type="submit" class="btn pri">'+(locked?"Save English level":"Save profile and enter the chat")+'</button></div></form></section>';
+ document.body.appendChild(overlay);
+ if(locked)document.getElementById("sp-profile-close").onclick=()=>overlay.remove();
+ document.getElementById("sp-profile-form").onsubmit=e=>{
+  e.preventDefault();
+  if(locked){const q=readProfile();q.level=document.getElementById("sp-profile-level").value;writeProfile(q);app.state.context.learnerProfile=q;app.save();overlay.remove();renderLevel(q);notifyProfile("English level updated.");return}
+  const interests=[...overlay.querySelectorAll('input[name="sp-interest"]:checked')].map(x=>x.value);
+  const q={hobbies:document.getElementById("sp-hobbies").value.trim(),interests,profanity:document.getElementById("sp-profanity").value,gender:document.getElementById("sp-gender").value,level:document.getElementById("sp-profile-level").value,createdAt:Date.now()};
+  if(!interests.length&&!q.hobbies){notifyProfile("Choose at least one topic or add a hobby.");return}
+  writeProfile(q);app.state.context.learnerProfile=q;app.save();overlay.remove();renderLevel(q);app.messages();notifyProfile("Profile saved. The group is ready.");
+ };
+}
+const priorReply=app.reply.bind(app);
+app.reply=function(s){
+ const clean=String(s||"").trim();if(!clean)return;
+ const profile=readProfile()||{interests:[],hobbies:"",profanity:"light",level:"B1",gender:"prefer-not"};
+ const learned=learnText(clean),a=this.analyse(clean),g=this.grammar(clean),sl=this.slang(clean),low=clean.toLowerCase(),pick=x=>x[Math.floor(Math.random()*x.length)];
+ this.state.context=this.state.context||{};this.state.context.lastUserMessage=clean;this.state.context.lastIntent=a.intent;this.state.context.learnerProfile=profile;
+ this.state.context.recentLearnerTexts=learned.texts.slice(-15).map(x=>x.text);this.state.context.learnedWords=Object.keys(learned.words).sort((x,y)=>learned.words[y]-learned.words[x]).slice(0,45);
+ const interest=(profile.interests||[]).join(" ").toLowerCase()+" "+(profile.hobbies||"").toLowerCase();
+ const swear=PROFANITY[profile.profanity]||PROFANITY.light,level=profile.level||"B1";
+ this.msg("You","🙂",clean,"mine");
+ let bot=["Daniel","🫠"],reply;
+ if(/\b(hi|hello|hey|yo|sup|what's up)\b/.test(low)){bot=["Jake","💀"];reply=pick(["Yo! You finally showed up. We were one bad take away from shutting this group down.","What's up! Give us a topic before Mike starts explaining aliens again."])}
+ else if(/\b(thanks|thank you|thx)\b/.test(low)){bot=["Emily","🐸"];reply="Anytime! We accept payment in memes and good grammar."}
+ else if(/\b(why|how|what|when|where|who|explain|meaning)\b/.test(low)){bot=["Oliver","📰"];reply=pick(["Good question. Let's unpack it properly. What detail matters most to you?","Fair question. I would separate what we know from what we're guessing."])}
+ else if(/\b(lol|lmao|haha|funny|meme|💀|bruh)\b/.test(low)){bot=["Jake","💀"];reply=pick(["I'm crying. That message belongs in the group archives.","Bro, the chat is never recovering from this."])}
+ else if(/\b(sad|sorry|tired|bad day|upset|stress)\b/.test(low)){bot=["Emily","🐸"];reply="Ah, that sounds rough. Want to tell us what happened?"}
+ else if(/\b(think|opinion|agree|wrong|believe)\b/.test(low)){bot=["Sophie","🙄"];reply="That's a take. I need one more argument before I agree."}
+ else if(/\b(f1|formula 1|motorsport|verstappen|hamilton|ferrari|red bull|mclaren|norris|leclerc|russell|antonelli)\b/.test(low)||/formula 1|motorsport/.test(interest)&&Math.random()<.2){bot=["Sophie","🙄"];reply="F1 discourse again? Fine. Let's talk actual pace, strategy and race execution, not just team-radio drama."}
+ else if(/\b(game|gaming|roblox|minecraft|steam|playstation|xbox|ranked|server)\b/.test(low)||/gaming/.test(interest)&&Math.random()<.2){bot=["Jake","💀"];reply="The server is down, the teammates are missing and somehow it's still your fault."}
+ else if(/\b(money|bank|password|hacker|steal|roblox account)\b/.test(low)){bot=["Jake","💀"];reply="Bro got admin privileges and zero motivation. Incredible business model."}
+ else if(/\b(recommend|suggest|should i|which one)\b/.test(low)){bot=["Daniel","🫠"];reply="Honestly, it depends on what you're trying to achieve. What matters more: cost, quality or convenience?"}
+ else if(/^\s*(yes|yeah|yep|no|nah|exactly|maybe|i guess|true|facts)\b/.test(low)){bot=["Daniel","🫠"];reply="Fair enough. But now I need the rest of the story."}
+ else{const pool=[["Daniel","🫠","That is oddly specific, and I respect the commitment."],["Jake","💀","You cannot just drop that sentence and expect us to move on."],["Sophie","🙄","I have questions. Several of them."],["Mike","🛸","I am not saying this is connected to aliens. I am saying the timing is suspicious."],["Emily","🐸","Wait, I actually want to hear more about that."]];const x=pick(pool);bot=[x[0],x[1]];reply=x[2]}
+ if(profile.profanity!=="none"&&Math.random()<.22)reply+=" "+pick(swear);
+ if(profile.hobbies&&Math.random()<.2)reply+=" This somehow connects to your interest in "+profile.hobbies+".";
+ if(level==="A1"||level==="A2")reply+=" (In simple words: tell us a little more.)";
+ if((level==="C1"||level==="C2")&&Math.random()<.45)reply+=" The nuance here is doing a lot of heavy lifting, honestly.";
+ const repeated=Object.keys(learned.words).filter(w=>w.length>3&&learned.words[w]>1).sort((x,y)=>learned.words[y]-learned.words[x])[0];
+ if(repeated&&Math.random()<.18)reply+=" You use “"+repeated+"” quite often. Try a different collocation next time.";
+ this.msg(bot[0],bot[1],reply);
+ if(g.length)this.msg("Oliver","📰",g[0],"","English coach");
+ else if(sl.length&&Math.random()<.7)this.msg("Oliver","📰","Nice informal expression: "+sl[0]+". It fits a casual group chat.","","Slang coach");
+ else if(level==="C1"||level==="C2")this.msg("Oliver","📰",pick(["A more idiomatic alternative might be: “I see where you're coming from, but I'm not entirely sold on that.”","Try linking your point with “that being said” to make the reply more nuanced."]),"","Advanced English");
+ const fb=document.getElementById("sp-feedback");if(fb)fb.innerHTML='<div class="sp-feedback-head"><b>🧠 English check</b><span>'+esc(a.intent.replace(/_/g," "))+' · '+esc(level)+'</span></div><p>'+esc(this.feedback(clean,a))+'</p>'+(g.length?'<small>Grammar: '+esc(g[0])+'</small>':"")+(sl.length?'<small>Slang: '+esc(sl.join(" · "))+'</small>':"")+'<small>Saved locally: '+learned.texts.length+' messages · '+Object.keys(learned.words).length+' unique words</small>';
+ this.save();
+};
+app.messages=function(){
+ const h=document.getElementById("sp-messages");if(!h)return;
+ h.innerHTML=this.state.messages.map((m,i)=>{const mine=m.kind==="mine"||m.name==="You";return '<article class="sp-msg '+(mine?"mine":"")+'"><div class="sp-avatar">'+esc(m.avatar)+'</div><div class="sp-bubble"><div class="sp-msg-meta"><b>'+esc(m.name)+'</b><time>'+esc(m.time)+'</time></div><p>'+esc(m.text).replace(/\n/g,"<br>")+'</p>'+(m.media?'<div class="sp-bot-media"><img src="'+esc(m.media.src)+'" alt="'+esc(m.media.alt)+'" loading="lazy"><small>Shared by '+esc(m.name)+'</small></div>':"")+(mine?"":'<button type="button" class="sp-translate-btn" data-translate="'+i+'">'+(m.showTranslation?"Ocultar tradução":m.translation?"Mostrar tradução":"Traduzir para português")+'</button>'+(m.showTranslation&&m.translation?'<div class="sp-translation"><small>PORTUGUÊS (BRASIL)</small><p>'+esc(m.translation)+'</p></div>':"")+(m.meta?'<small>'+esc(m.meta)+'</small>':""))+'</div></article>'}).join("");
+ h.querySelectorAll("[data-translate]").forEach(b=>b.onclick=()=>this.translateMessage(Number(b.dataset.translate)));h.scrollTop=h.scrollHeight;
+};
+app.send=function(){const i=document.getElementById("sp-input");if(!i)return;const s=i.value.trim();if(!s)return;if(!readProfile()){showProfile();return}if(s.length>500){this.status("Keep it under 500 characters.");return}this.reply(s);i.value="";i.focus()};
+
 })();
