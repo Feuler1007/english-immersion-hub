@@ -875,4 +875,19 @@ showProfile=function(){
  const hob=box.querySelector("#sp-hobbies");if(hob)hob.placeholder="Ex.: montagem de PC, jogos de terror, F1, música…";
 };
 
+
+/* Final layout pass: keep the composer above English feedback and level control. */
+const renderWithFinalChatOrder=app.render.bind(app);
+app.render=function(){
+ renderWithFinalChatOrder();
+ const panel=document.querySelector(".sp-chat-panel");
+ const form=panel&&panel.querySelector("#sp-form");
+ const feedback=panel&&panel.querySelector("#sp-feedback");
+ const level=panel&&panel.querySelector("#sp-level-control");
+ if(panel&&form&&feedback){
+  panel.insertBefore(form,feedback);
+  if(level&&feedback.nextElementSibling!==level)feedback.insertAdjacentElement("afterend",level);
+ }
+};
+
 })();
