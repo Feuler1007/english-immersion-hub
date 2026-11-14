@@ -557,7 +557,7 @@ const app={
   this.save();
  },
  send(){const i=document.getElementById("sp-input");if(!i)return;const s=i.value.trim();if(!s)return;if(s.length>500){this.status("Keep it under 500 characters. The group chat is chaotic, not a legal deposition.");return}this.reply(s);i.value="";i.focus()},
- render(){const h=document.getElementById("view");if(!h)return;this.load();h.innerHTML='<section class="sp-hero"><div><span class="sp-kicker">ENGLISH IMMERSION HUB · GROUP SIMULATOR</span><h1>BREAKING NEWS 💀</h1><p>A daily dose of headlines, bad jokes and suspiciously useful English.</p><div class="sp-hero-meta"><span>● 6 recurring members</span><span>English only</span><span>Rule-based engine · no generative AI</span></div></div><div class="sp-hero-sticker">TODAY’S<br>CHAOS</div></section><div class="sp-layout"><aside class="sp-news-panel"><div class="sp-section-title"><div><h2>Today’s headlines</h2><p class="mut">Tech, games, aviation, weird stories and wholesome breaks.</p></div><button id="sp-refresh" title="Refresh news">↻</button></div><div id="sp-status" class="sp-status">Preparing the chaos…</div><div id="sp-news"></div><div class="sp-source-note">Headlines and short metadata are shown here. Full articles remain on the publishers’ websites.</div></aside><section class="sp-chat-panel"><div class="sp-chat-head"><div class="sp-group-avatar">💬</div><div><b>BREAKING NEWS 💀</b><small>Oliver, Jake, Sophie, Daniel, Mike & Emily</small></div><span class="sp-online">● 6 online</span></div><div class="sp-topic-banner"><small>DISCUSSING</small><b id="sp-topic">Choose a headline to start</b><a id="sp-source-link" target="_blank" rel="noopener noreferrer" hidden>Read original story ↗</a></div><div class="sp-messages" id="sp-messages"></div><div id="sp-feedback" class="sp-feedback"><div class="sp-feedback-head"><b>🧠 English check</b><span>Waiting</span></div><p>Write naturally. The engine checks context, meaning, common grammar patterns and informal expressions.</p></div><form class="sp-composer" id="sp-form"><input id="sp-input" maxlength="500" autocomplete="off" placeholder="Type your message in English…" aria-label="Your message in English"><button class="pri" type="submit">Send ↗</button></form><div class="sp-chat-foot">React, ask a question, disagree or make a joke. Mistakes are part of the conversation.</div></section></div><section class="sp-engine-info"><h2>Behind the scenes: the language engine</h2><div class="sp-engine-grid"><article><b>01 · Meaning first</b><p>Reads the actual message, question, opinion or story before choosing a response.</p></article><article><b>02 · News connection</b><p>Uses the selected headline only when your message is relevant. No forced topic changes.</p></article><article><b>03 · Character roles</b><p>Each member has interests, a voice and reasons to join or stay quiet.</p></article><article><b>04 · Natural pacing</b><p>One person usually replies. A second may join later when the conversation calls for it.</p></article></div><div class="sp-persona-grid">${CHAT_PERSONAS.map(p=>`<article><b>${p.avatar} ${p.name} · ${p.role}</b><p>${p.style}. Topics: ${p.categories.join(", ")}.</p></article>`).join("")}</div><p class="mut">The conversation engine uses contextual rules, not a generative AI model. Complex or unusual wording can still be misunderstood, but replies are selected from the message, active news category and each character’s role.</p></section>';document.getElementById("sp-form").onsubmit=e=>{e.preventDefault();this.send()};document.getElementById("sp-refresh").onclick=()=>this.fetchNews(true);this.messages();this.news();this.topic();this.fetchNews()}
+ render(){const h=document.getElementById("view");if(!h)return;this.load();h.innerHTML='<section class="sp-hero"><div><span class="sp-kicker">ENGLISH IMMERSION HUB · GROUP SIMULATOR</span><h1>BREAKING NEWS 💀</h1><p>A daily dose of headlines, bad jokes and suspiciously useful English.</p><div class="sp-hero-meta"><span>● 6 recurring members</span><span>English only</span><span>Rule-based engine · no generative AI</span></div></div><div class="sp-hero-sticker">TODAY’S<br>CHAOS</div></section><div class="sp-layout"><aside class="sp-news-panel"><div class="sp-section-title"><div><h2>Today’s headlines</h2><p class="mut">Tech, games, aviation, weird stories and wholesome breaks.</p></div><button id="sp-refresh" title="Refresh news">↻</button></div><div id="sp-status" class="sp-status">Preparing the chaos…</div><div id="sp-news"></div><div class="sp-source-note">Headlines and short metadata are shown here. Full articles remain on the publishers’ websites.</div></aside><section class="sp-chat-panel"><div class="sp-chat-head"><div class="sp-group-avatar">💬</div><div><b>BREAKING NEWS 💀</b><small>Oliver, Jake, Sophie, Daniel, Mike & Emily</small></div><span class="sp-online">● 6 online</span></div><div class="sp-topic-banner"><small>DISCUSSING</small><b id="sp-topic">Choose a headline to start</b><a id="sp-source-link" target="_blank" rel="noopener noreferrer" hidden>Read original story ↗</a></div><div class="sp-messages" id="sp-messages"></div><div id="sp-feedback" class="sp-feedback"><div class="sp-feedback-head"><b>🧠 English check</b><span>Waiting</span></div><p>Write naturally. The engine checks context, meaning, common grammar patterns and informal expressions.</p></div><form class="sp-composer" id="sp-form"><input id="sp-input" maxlength="500" autocomplete="off" placeholder="Type your message in English…" aria-label="Your message in English"><button class="pri" type="submit">Send ↗</button></form><div class="sp-chat-foot">React, ask a question, disagree or make a joke. Mistakes are part of the conversation.</div></section></div><section class="sp-engine-info"><h2>Behind the scenes: the language engine</h2><div class="sp-engine-grid"><article><b>01 · Meaning first</b><p>Reads the actual message, question, opinion or story before choosing a response.</p></article><article><b>02 · News connection</b><p>Uses the selected headline only when your message is relevant. No forced topic changes.</p></article><article><b>03 · Character roles</b><p>Each member has interests, a voice and reasons to join or stay quiet.</p></article><article><b>04 · Natural pacing</b><p>One person usually replies. A second may join later when the conversation calls for it.</p></article></div><div class="sp-persona-grid" id="sp-persona-grid"></div><p class="mut">The conversation engine uses contextual rules, not a generative AI model. Complex or unusual wording can still be misunderstood, but replies are selected from the message, active news category and each character’s role.</p></section>';const personaGrid=document.getElementById("sp-persona-grid");if(personaGrid)personaGrid.innerHTML=CHAT_PERSONAS.map(p=>`<article><b>${p.avatar} ${p.name} · ${p.role}</b><p>${p.style}. Topics: ${p.categories.join(", ")}.</p></article>`).join("");document.getElementById("sp-form").onsubmit=e=>{e.preventDefault();this.send()};document.getElementById("sp-refresh").onclick=()=>this.fetchNews(true);this.messages();this.news();this.topic();this.fetchNews()}
 };
 window.EnglishShitpost=app;
 
@@ -719,5 +719,134 @@ app.messages=function(){
  h.querySelectorAll("[data-translate]").forEach(b=>b.onclick=()=>this.translateMessage(Number(b.dataset.translate)));h.scrollTop=h.scrollHeight;
 };
 app.send=function(){const i=document.getElementById("sp-input");if(!i)return;const s=i.value.trim();if(!s)return;if(!readProfile()){showProfile();return}if(s.length>500){this.status("Keep it under 500 characters.");return}this.reply(s);i.value="";i.focus()};
+
+
+/* 2026-11-14: conversation pacing, bilingual support and user study archive. */
+let STUDY_ARCHIVE=null;
+fetch("./assets/english-knowledge.json").then(r=>{if(!r.ok)throw new Error("archive unavailable");return r.json()}).then(d=>{STUDY_ARCHIVE=d;}).catch(()=>{STUDY_ARCHIVE=null;});
+const spExtraStyle=document.createElement("style");
+spExtraStyle.textContent='.sp-pt-hint{display:block;margin-top:3px;font-size:10px;line-height:1.4;color:var(--mut);font-weight:400}.sp-bilingual{display:block;margin-top:4px;font-size:10px;color:var(--mut);line-height:1.45}.sp-archive-tip{border-left:2px solid var(--ac);padding:8px 10px;margin-top:8px;background:var(--card2);border-radius:0 8px 8px 0}.sp-archive-tip b{display:block;font-size:12px}.sp-archive-tip small{display:block;color:var(--mut);margin-top:3px}.sp-chat-panel .sp-composer{display:flex!important}.sp-msg.mine{align-self:flex-end;flex-direction:row-reverse}.sp-msg.mine .sp-bubble{background:color-mix(in srgb,var(--ac) 12%,var(--card));border-radius:13px 4px 13px 13px}';
+document.head.appendChild(spExtraStyle);
+function spPtHint(el,pt){if(!el||el.querySelector(":scope > .sp-pt-hint"))return;const s=document.createElement("small");s.className="sp-pt-hint";s.textContent=pt;el.appendChild(s)}
+function addPortugueseSupport(){
+ const root=document.getElementById("view");if(!root)return;
+ spPtHint(root.querySelector(".sp-hero p"),"Uma dose diária de notícias, piadas e inglês útil.");
+ spPtHint(root.querySelector(".sp-section-title h2"),"Manchetes de hoje");
+ spPtHint(root.querySelector(".sp-section-title .mut"),"Tecnologia, jogos, aviação, histórias curiosas e notícias positivas.");
+ spPtHint(root.querySelector(".sp-source-note"),"As manchetes e informações resumidas aparecem aqui. Os artigos completos continuam nos sites dos veículos.");
+ spPtHint(root.querySelector(".sp-topic-banner small"),"ASSUNTO EM DISCUSSÃO");
+ spPtHint(root.querySelector(".sp-feedback-head b"),"Análise do seu inglês");
+ spPtHint(root.querySelector(".sp-feedback p"),"Escreva naturalmente. O sistema observa contexto, significado, gramática comum e expressões informais.");
+ spPtHint(root.querySelector(".sp-chat-foot"),"Reaja, pergunte, discorde ou faça uma piada. Errar faz parte do aprendizado.");
+ const input=root.querySelector("#sp-input");if(input){input.placeholder="Type your message in English… / Digite sua mensagem em inglês…";input.setAttribute("aria-label","Type your message in English / Digite sua mensagem em inglês")}
+ const send=root.querySelector("#sp-form button");if(send){send.textContent="Send ↗ · Enviar"}
+ const kicker=root.querySelector(".sp-kicker");if(kicker)kicker.textContent="ENGLISH IMMERSION HUB · GRUPO DE CONVERSAÇÃO";
+ const heroMeta=root.querySelector(".sp-hero-meta");if(heroMeta){const spans=heroMeta.querySelectorAll("span");if(spans[1])spans[1].textContent="English with PT support · Inglês com apoio em português";if(spans[2])spans[2].textContent="Contextual rules · Respostas por contexto"}
+ const eng=root.querySelector(".sp-engine-info");if(eng){const h=eng.querySelector("h2");spPtHint(h,"Por trás do funcionamento do motor de conversação");eng.querySelectorAll(".sp-engine-grid article").forEach((a,i)=>spPtHint(a.querySelector("p"),["Lê sua mensagem antes de escolher uma resposta.","Usa a notícia selecionada somente quando ela for relevante.","Cada personagem tem interesses, personalidade e motivos para participar.","Normalmente uma pessoa responde; outra pode entrar naturalmente na conversa."][i]));}
+}
+const baseRenderBilingual=app.render.bind(app);
+app.render=function(){baseRenderBilingual();addPortugueseSupport();};
+function archiveMatch(s){
+ if(!STUDY_ARCHIVE)return null;
+ const t=norm(s);
+ const vocab=(STUDY_ARCHIVE.vocabulary||[]).filter(x=>t.includes(x[0])||x[4].split("; ").some(y=>t.includes(y)));
+ const phrase=(STUDY_ARCHIVE.phrases||[]).filter(x=>t.includes(x[0]));
+ const passage=(STUDY_ARCHIVE.passages||[]).filter(x=>x[1]&&t.includes(x[1].replace("_"," ")));
+ return {vocab:vocab[0]||null,phrase:phrase[0]||null,passage:passage[0]||null};
+}
+function spNovel(pool,used){const fresh=pool.filter(x=>!used.includes(x));return fresh.length?fresh[Math.floor(Math.random()*fresh.length)]:pool[Math.floor(Math.random()*pool.length)]}
+app.reply=function(s){
+ const clean=String(s||"").trim();if(!clean)return;
+ const profile=readProfile()||{interests:[],hobbies:"",profanity:"light",level:"B1",gender:"prefer-not"};
+ const learned=learnText(clean),a=this.analyse(clean),g=this.grammar(clean),sl=this.slang(clean),low=norm(clean),pick=x=>x[Math.floor(Math.random()*x.length)];
+ this.state.context=this.state.context||{};
+ const ctx=this.state.context;
+ ctx.lastUserMessage=clean;ctx.lastIntent=a.intent;ctx.learnerProfile=profile;
+ ctx.recentLearnerTexts=learned.texts.slice(-15).map(x=>x.text);
+ ctx.learnedWords=Object.keys(learned.words).sort((x,y)=>learned.words[y]-learned.words[x]).slice(0,45);
+ const archive=archiveMatch(clean);
+ const used=ctx.recentBotReplies||[];
+ const choose=(name,avatar,pool)=>({name,avatar,line:spNovel(pool,used)});
+ const interest=(profile.interests||[]).join(" ").toLowerCase()+" "+(profile.hobbies||"").toLowerCase();
+ const level=profile.level||"B1";
+ const swear=PROFANITY[profile.profanity]||PROFANITY.light;
+ let primary,secondary=null;
+ if(/\b(hi|hello|hey|yo|sup|what's up|good morning|good evening)\b/.test(low)){
+  primary=choose("Jake","💀",["Yo, look who finally remembered this group exists.","We're alive. Barely. Mike has been explaining a conspiracy for twenty minutes.","Welcome back. The timeline has been peaceful for approximately three seconds."]);
+  secondary={name:"Emily",avatar:"🐸",line:"Don't scare them away in the first ten seconds, Jake."};
+ }else if(/\b(thanks|thank you|thx)\b/.test(low)){
+  primary=choose("Emily","🐸",["Anytime! That's what the group is for.","You're welcome. We accept payment in memes and good grammar.","No worries. Consider the emotional support frog officially deployed."]);
+ }else if(/\b(sad|sorry|tired|bad day|upset|stress|rough day)\b/.test(low)){
+  primary=choose("Emily","🐸",["That sounds like a lot to deal with. Take it one thing at a time.","Oof, that's a rough day. I hope you get a proper break soon.","Sending you a tiny emotional support frog. No advice unless you ask for it."]);
+  secondary={name:"Daniel",avatar:"🫠",line:"Seconded. Sometimes the best plan is food, rest and ignoring the notifications for a bit."};
+ }else if(/\b(f1|formula 1|motorsport|verstappen|hamilton|ferrari|red bull|mclaren|norris|leclerc|russell|antonelli)\b/.test(low)||/formula 1|motorsport/.test(interest)&&Math.random()<.22){
+  primary=choose("Sophie","🙄",["The paddock is basically a group chat with a budget problem. The interesting part is who can actually turn pace into results.","I'm here for the strategy debate, not another ten-minute argument based on one radio message.","A proper motorsport discussion needs context: tyre life, track position and race pace."]);
+  secondary={name:"Jake",avatar:"💀",line:"And somehow every team principal still acts like the group chat leak wasn't them."};
+ }else if(/\b(game|gaming|roblox|minecraft|steam|playstation|xbox|ranked|server|update|patch)\b/.test(low)||/gaming/.test(interest)&&Math.random()<.2){
+  primary=choose("Jake","💀",["The server is down, the teammates are missing and somehow it's still your fault.","Gaming is just paying to unlock increasingly creative ways to get frustrated.","One update later and the whole lobby has become a troubleshooting department."]);
+  secondary={name:"Daniel",avatar:"🫠",line:"I swear, the tutorial is easy. It's the other players who turn it into a survival game."};
+ }else if(/\b(money|bank|password|hacker|steal|roblox account)\b/.test(low)){
+  primary=choose("Jake","💀",["Bro got admin privileges and still has no business plan. Incredible.","This sounds like the world's least organized heist.","The password is safe. The group chat's collective IQ, however, is not."]);
+  secondary={name:"Sophie",avatar:"🙄",line:"Can we please have one conversation that doesn't sound like a low-budget crime documentary?"};
+ }else if(/\b(lol|lmao|haha|funny|meme|bruh|💀)\b/.test(low)){
+  primary=choose("Jake","💀",["I'm crying. That belongs in the group archives.","The chat is never recovering from this one.","That was so stupid it somehow became brilliant."]);
+  secondary={name:"Sophie",avatar:"🙄",line:"I hate that I laughed. This is deeply inconvenient."};
+ }else if(/\b(why|how|what|when|where|who|explain|meaning|does|is it|are they)\b/.test(low)&&clean.endsWith("?")){
+  primary=choose("Oliver","📰",["The short version is that context matters more than the headline. There are usually a few moving parts behind it.","I'd separate the confirmed facts from the assumptions before drawing a conclusion.","There are two sides to that: what happened, and why people interpret it differently."]);
+  secondary={name:"Sophie",avatar:"🙄",line:"Exactly. People skip the second part and then act surprised when the explanation gets messy."};
+ }else if(/\b(think|opinion|agree|wrong|believe|take)\b/.test(low)){
+  primary=choose("Sophie","🙄",["I can see the argument. I would still challenge one assumption before calling it settled.","That's a fair take, although the strongest counterargument is worth considering too.","I'm not fully convinced, but at least there's an actual argument here."]);
+  secondary={name:"Daniel",avatar:"🫠",line:"I get both sides. The annoying part is that reality rarely picks the simple option."};
+ }else if(/\b(bored|nothing to do|any plans|what are you doing|wyd)\b/.test(low)){
+  primary=choose("Daniel","🫠",["The usual routine: pretend to be productive, open twelve tabs and forget why.","I was going to do something useful, but the group chat has clearly become the main event.","No big plans. Just trying to make the day slightly less repetitive."]);
+  secondary={name:"Jake",avatar:"💀",line:"We could start a completely unnecessary debate. That's basically our cardio."};
+ }else{
+  const quoted=clean.length>62?clean.slice(0,59).trim()+"…":clean;
+  const pool=[
+   ["Daniel","🫠",["Okay, that actually gives me a new perspective on it.","I can picture exactly how that happened. The details make it even better.","That's a surprisingly solid point. I wasn't expecting that from this chat.","Honestly, I get what you mean. There's more going on there than it first seems."]],
+   ["Jake","💀",["The way you casually dropped that into the chat is sending me.","I was not prepared for that sentence today. At all.","This group has officially entered a new chapter of its lore.","Not gonna lie, that's a pretty wild turn of events."]],
+   ["Sophie","🙄",["That's more reasonable than I expected. Don't let it happen again.","I disagree with part of it, but the main point is actually fair.","Well, that's one way to look at it. Annoyingly, it makes sense.","I'm listening. This is already more interesting than the last debate."]],
+   ["Mike","🛸",["I have a theory, but for once I'll keep it to myself. Character development.","This is exactly how a documentary starts. I'm just saying.","The coincidence department is working overtime today."]],
+   ["Emily","🐸",["I like that you brought this up. It gives the conversation somewhere to go.","That's actually interesting. I hadn't thought about it that way.","Okay, this is a much better topic than the chaos we had earlier."]]
+  ];
+  const chosen=spNovel(pool.map(x=>x[0]),(ctx.recentResponders||[]).slice(-2));
+  const row=pool.find(x=>x[0]===chosen)||pool[0];primary={name:row[0],avatar:row[1],line:spNovel(row[2],used)};
+  if(Math.random()<.27){const other=pool.find(x=>x[0]!==primary.name);secondary={name:other[0],avatar:other[1],line:pick(["I was about to say the same thing, just with fewer words.","Hold on, I see it differently. The interesting part is what happens next.","That reminds me of something we discussed earlier.","Can we appreciate how this conversation got here?"])}}
+ }
+ if(profile.profanity!=="none"&&Math.random()<.13)primary.line+=" "+pick(swear);
+ if(level==="A1"||level==="A2")primary.line=primary.line.split(".")[0]+".";
+ if(level==="C1"||level==="C2")primary.line=primary.line.replace("Honestly,","To be fair,");
+ if(archive&&archive.phrase&&Math.random()<.65)primary.line+=" That connects to “"+archive.phrase[0]+"” ("+archive.phrase[1]+").";
+ if(profile.hobbies&&Math.random()<.12)primary.line+=" By the way, your interest in "+profile.hobbies+" would make a good side topic.";
+ this.msg("You","🙂",clean,"mine");
+ this.msg(primary.name,primary.avatar,primary.line);
+ used.push(primary.line);ctx.recentBotReplies=used.slice(-12);
+ ctx.recentResponders=(ctx.recentResponders||[]).concat(primary.name).slice(-8);
+ if(secondary&&Math.random()<.72){
+  window.setTimeout(()=>{this.msg(secondary.name,secondary.avatar,secondary.line);ctx.recentBotReplies=(ctx.recentBotReplies||[]).concat(secondary.line).slice(-12);ctx.recentResponders=(ctx.recentResponders||[]).concat(secondary.name).slice(-8);this.save()},1100+Math.floor(Math.random()*900));
+ }
+ let coach="";
+ if(archive&&archive.vocab){
+  const v=archive.vocab;coach='<div class="sp-archive-tip"><b>📚 '+esc(v[0])+' · '+esc(v[1])+'</b><small>'+esc(v[2])+'</small><small><b>Example:</b> '+esc(v[3])+'</small><small><b>Collocations:</b> '+esc(v[4])+'</small></div>';
+ }else if(archive&&archive.phrase){
+  const v=archive.phrase;coach='<div class="sp-archive-tip"><b>📚 '+esc(v[0])+' · '+esc(v[1])+'</b><small>'+esc(v[2])+'</small></div>';
+ }else if(g.length)coach='<div class="sp-archive-tip"><b>Grammar · Gramática</b><small>'+esc(g[0])+'</small></div>';
+ else if(sl.length&&Math.random()<.4)coach='<div class="sp-archive-tip"><b>Slang · Gíria</b><small>'+esc(sl[0])+'</small></div>';
+ const fb=document.getElementById("sp-feedback");
+ if(fb)fb.innerHTML='<div class="sp-feedback-head"><b>🧠 English check · Análise do inglês</b><span>'+esc(a.intent.replace(/_/g," "))+' · '+esc(level)+'</span></div><p>'+esc(this.feedback(clean,a))+'</p><small class="sp-bilingual">Apoio: sua mensagem foi analisada pelo contexto, vocabulário e construção da frase.</small>'+coach+'<small class="sp-bilingual">A memória de vocabulário é salva neste navegador.</small>';
+ this.state.context.lastIntent=a.intent;this.state.context.lastResponder=primary.name;this.save();
+};
+const renderMessagesBilingual=app.messages.bind(app);
+app.messages=function(){
+ const h=document.getElementById("sp-messages");if(!h)return;
+ h.innerHTML=this.state.messages.map((m,i)=>{
+  const mine=m.kind==="mine"||m.name==="You";
+  return '<article class="sp-msg '+(mine?"mine":"")+'"><div class="sp-avatar">'+esc(m.avatar)+'</div><div class="sp-bubble"><div class="sp-msg-meta"><b>'+esc(m.name==="You"?"You · Você":m.name)+'</b><time>'+esc(m.time)+'</time></div><p>'+esc(m.text).replace(/\n/g,"<br>")+'</p>'+(m.media?'<div class="sp-bot-media"><img src="'+esc(m.media.src)+'" alt="'+esc(m.media.alt)+'" loading="lazy"><small>Shared by '+esc(m.name)+'</small></div>':"")+(mine?"":'<button type="button" class="sp-translate-btn" data-translate="'+i+'">Show translation · Mostrar tradução</button>'+(m.showTranslation&&m.translation?'<div class="sp-translation"><small>PORTUGUÊS (BRASIL)</small><p>'+esc(m.translation)+'</p></div>':"")+(m.meta?'<small>'+esc(m.meta)+'</small>':""))+'</div></article>';
+ }).join("");
+ h.querySelectorAll("[data-translate]").forEach(b=>b.onclick=()=>this.translateMessage(Number(b.dataset.translate)));
+ h.scrollTop=h.scrollHeight;
+};
+const sendOriginal=app.send.bind(app);
+app.send=function(){const i=document.getElementById("sp-input");if(!i)return;const s=i.value.trim();if(!s)return;if(!readProfile()){showProfile();return}if(s.length>500){this.status("Keep it under 500 characters. · Mantenha a mensagem abaixo de 500 caracteres.");return}this.reply(s);i.value="";i.focus()};
 
 })();
