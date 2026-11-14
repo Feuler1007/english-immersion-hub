@@ -886,7 +886,7 @@ const KEYS=[["Espaço","tocar / pausar"],["← →","voltar / avançar 5s"],["�
 const effT=()=>S.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
 const applyTheme=()=>{if(S.theme)document.documentElement.dataset.theme=S.theme};
 const setTheme=x=>{S.theme=x;applyTheme();save();shell()};applyTheme();
-const shell=()=>{const e=effT(),LI=lvInfo(),L=LI.n,pct=LI.pct,k=new Date().toISOString().slice(0,10);
+const shell=()=>{const e=effT(),LI=lvInfo(),L=LI.n,pct=LI.pct,k=today();
  $("#th").textContent=e==="dark"?"☀":"☾";document.querySelectorAll("#seg button").forEach(b=>b.classList.toggle("on",b.dataset.th===e));
  S.hist=S.hist||{};S.hist[k]=Math.max(S.hist[k]||0,S.dxp);
  const now=new Date(),dayData=[...Array(7)].map((_,n)=>{const d=new Date(now);d.setHours(12,0,0,0);d.setDate(now.getDate()-(6-n));const key=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");return{label:["dom","seg","ter","qua","qui","sex","sáb"][d.getDay()],xp:S.hist[key]||0,today:key===k}}),maxDay=Math.max(GOAL,...dayData.map(d=>d.xp)),h=new Date().getHours(),gr=h<12?"Bom dia":h<18?"Boa tarde":"Boa noite";
