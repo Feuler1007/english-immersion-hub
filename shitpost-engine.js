@@ -265,8 +265,8 @@ const app={
  state:{news:[],messages:[],category:"all",selected:null,context:{topicTerms:[],newsTitle:""},loading:false},
  endpoint(){return "https://english-immersion-news.felipechves8.workers.dev/news"},
  stamp(){return new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})},
- save(){try{localStorage.setItem("eih_shitpost_chat",JSON.stringify(this.state.messages.slice(-90)));localStorage.setItem("eih_shitpost_context",JSON.stringify(this.state.context))}catch(e){}},
- load(){try{this.state.messages=JSON.parse(localStorage.getItem("eih_shitpost_chat")||"[]");this.state.context=JSON.parse(localStorage.getItem("eih_shitpost_context")||'{"topicTerms":[]}');if(this.state.context.chatDay!==new Date().toISOString().slice(0,10)){this.state.messages=[];this.state.context={topicTerms:[]};}}catch(e){this.state.messages=[];this.state.context={topicTerms:[]};}},
+ save(){try{localStorage.setItem("eih_shitpost_chat_v2",JSON.stringify(this.state.messages.slice(-90)));localStorage.setItem("eih_shitpost_context_v2",JSON.stringify(this.state.context))}catch(e){}},
+ load(){try{this.state.messages=JSON.parse(localStorage.getItem("eih_shitpost_chat_v2")||"[]");this.state.context=JSON.parse(localStorage.getItem("eih_shitpost_context_v2")||'{"topicTerms":[]}');if(this.state.context.chatDay!==new Date().toISOString().slice(0,10)){this.state.messages=[];this.state.context={topicTerms:[]};}}catch(e){this.state.messages=[];this.state.context={topicTerms:[]};}},
  status(t){const e=document.getElementById("sp-status");if(e)e.textContent=t},
  category(a){if(a.category)return a.category;const t=(a.title+" "+(a.description||"")).toLowerCase();for(const f of D.feeds)if(f[3].some(x=>t.includes(x)))return f[0];return"weird"},
  score(a){const t=(a.title+" "+(a.description||"")).toLowerCase();let n=0;["nvidia","gpu","game","gaming","steam","playstation","xbox","nintendo","weird","bizarre","strange","unusual","airport","plane","aircraft","pilot","animal","cat","dog","puppy","kitten","cute","rescue","viral","meme","space","robot","ai","unexpected","record","squirrel","penguin","duck","fox","turtle","technology","science","odd"].forEach(k=>{if(t.includes(k))n+=2});["war","killed","death toll","murder","mass shooting","terror","graphic","fatal crash","fatal accident","victims","rape","suicide","explosion","disaster","earthquake","flood","wildfire"].forEach(k=>{if(t.includes(k))n-=10});return n},
@@ -479,7 +479,7 @@ const app={
   };
   const firstLine=makeLine(primary);
   const isTiny=s.length<24,question=["ask_explain","ask_word","direct_question","news_reaction"].includes(a.intent);
-  const wantsSecond=!isTiny&&(question||["personal_story","opinion","plan","reaction_funny","news_reaction"].includes(a.intent)||(related&&Math.random()<0.18));
+  const wantsSecond=!isTiny&&(question||["personal_story","opinion","plan","reaction_funny","news_reaction"].includes(a.intent)||(related&&a.intent!=="greeting"&&a.intent!=="thanks"&&Math.random()<0.18));
   let secondLine="";
   if(wantsSecond){
    if(a.intent==="opinion")secondLine=secondary.name==="Jake"?"I'm only here to watch this debate turn into a 40-message thread.":"I want to hear the reason behind that take too.";
