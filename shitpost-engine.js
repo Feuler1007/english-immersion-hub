@@ -479,7 +479,7 @@ const app={
   };
   const firstLine=makeLine(primary);
   const isTiny=s.length<24,question=["ask_explain","ask_word","direct_question","news_reaction"].includes(a.intent);
-  const wantsSecond=!isTiny&&(question||["personal_story","opinion","plan","reaction_funny","news_reaction"].includes(a.intent)||Math.random()<0.24);
+  const wantsSecond=!isTiny&&(question||["personal_story","opinion","plan","reaction_funny","news_reaction"].includes(a.intent)||(related&&Math.random()<0.18));
   let secondLine="";
   if(wantsSecond){
    if(a.intent==="opinion")secondLine=secondary.name==="Jake"?"I'm only here to watch this debate turn into a 40-message thread.":"I want to hear the reason behind that take too.";
