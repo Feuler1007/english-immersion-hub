@@ -360,10 +360,37 @@ const app={
  async translateMessage(index){const m=this.state.messages[index];if(!m)return;if(m.translation){m.showTranslation=!m.showTranslation;this.messages();return}if(m.translating)return;m.translationError="";m.translating=true;this.messages();try{const params=new URLSearchParams({client:"gtx",sl:"auto",tl:"pt",dt:"t",q:m.text});const response=await fetch("https://translate.googleapis.com/translate_a/single?"+params.toString());if(!response.ok)throw Error("Translation service returned "+response.status);const data=await response.json();m.translation=(data[0]||[]).map(part=>part[0]||"").join("");if(!m.translation)throw Error("No translation returned");m.showTranslation=true;this.save()}catch(error){m.translationError="Não foi possível traduzir agora. Tente novamente.";console.warn("Chat translation failed:",error)}finally{m.translating=false;this.messages()}},
  messages(){const h=document.getElementById("sp-messages");if(!h)return;h.innerHTML=this.state.messages.map((m,i)=>'<article class="sp-msg '+(m.kind==="mine"?"mine":m.kind==="news"?"news":"")+'"><div class="sp-avatar">'+esc(m.avatar)+'</div><div class="sp-bubble"><div class="sp-msg-meta"><b>'+esc(m.name)+'</b><time>'+esc(m.time)+'</time></div><p>'+esc(m.text).replace(/\n/g,"<br>")+'</p><button type="button" class="sp-translate-btn" data-translate="'+i+'" '+(m.translating?"disabled":"")+'>'+(m.translating?"Traduzindo…":m.showTranslation?"Ocultar tradução":m.translation?"Mostrar tradução":"Traduzir para português")+'</button>'+(m.showTranslation&&m.translation?'<div class="sp-translation"><small>PORTUGUÊS (BRASIL)</small><p>'+esc(m.translation).replace(/\n/g,"<br>")+'</p></div>':"")+(m.translationError?'<small class="sp-translation-error">'+esc(m.translationError)+'</small>':"")+(m.meta?'<small>'+esc(m.meta)+'</small>':"")+'</div></article>').join("");h.querySelectorAll("[data-translate]").forEach(button=>button.onclick=()=>this.translateMessage(Number(button.dataset.translate)));h.scrollTop=h.scrollHeight},
  topic(){const e=document.getElementById("sp-topic"),a=document.getElementById("sp-source-link");if(e)e.textContent=this.state.selected?this.state.selected.title:"Choose a headline to start";if(a){a.hidden=!(this.state.selected&&this.state.selected.url);if(!a.hidden)a.href=this.state.selected.url}},
- analyse(s){let n=norm(s);Object.keys(D.synonyms).forEach(group=>{if(D.synonyms[group].some(word=>n.indexOf(word)>=0))n+=" "+group});const found=[];D.intents.forEach(it=>{let score=0;it[1].forEach(t=>{if(n.includes(t))score+=t.indexOf(" ")>=0?2:1});if(score)found.push({id:it[0],score:score*it[2]})});found.sort((a,b)=>b.score-a.score);const toks=n.split(" ").filter(x=>x.length>2),overlap=toks.filter(x=>(this.state.context.topicTerms||[]).includes(x)).length;let intent=found[0]?found[0].id:"general";if(intent==="general"&&this.state.context.lastIntent&&/^(yes|no|why|how|what about that|exactly|maybe|i guess)$/.test(n))intent="followup";return{intent:intent,overlap:overlap,normalized:n,previousIntent:this.state.context.lastIntent||""}},
+ analyse(s){
+  const raw=norm(s);
+  const has=(haystack,needle)=>{
+   const phrase=norm(needle).replace(/[.*+?^\$()|[\]\\]/g,"\\$&").replace(/\s+/g,"\\s+");
+   return phrase?new RegExp("(^|\\s)"+phrase+"(?=$|\\s)","i").test(haystack):false;
+  };
+  let expanded=raw;
+  Object.keys(D.synonyms).forEach(group=>{if(D.synonyms[group].some(word=>has(raw,word)))expanded+=" "+group;});
+  const found=[];
+  D.intents.forEach(it=>{
+   let score=0;
+   it[1].forEach(term=>{if(has(raw,term))score+=norm(term).includes(" ")?2:1;});
+   if(score)found.push({id:it[0],score:score*it[2]});
+  });
+  found.sort((a,b)=>b.score-a.score);
+  const toks=raw.split(" ").filter(x=>x.length>2);
+  const overlap=toks.filter(x=>(this.state.context.topicTerms||[]).includes(x)).length;
+  let intent=found[0]?found[0].id:"general";
+  if(intent==="general"&&/[?？]/.test(s))intent="direct_question";
+  if(intent==="general"&&this.state.context.lastIntent&&/^(yes|no|why|how|what about that|exactly|maybe|i guess)$/.test(raw))intent="followup";
+  return{intent,overlap,normalized:expanded,raw,previousIntent:this.state.context.lastIntent||""};
+ },
  grammar(s){return D.grammar.filter(x=>x[0].test(s)).map(x=>x[1])},
- slang(s){const n=norm(s);return Object.keys(D.slang).filter(k=>n.indexOf(k)>=0).map(k=>k+" = "+D.slang[k])},
- feedback(s,a){const g=this.grammar(s),sl=this.slang(s),meaningful=a.normalized.split(" ").filter(x=>x.length>2&&!["the","and","but","you","are","was","this","that","with","have","what","who","how","why","when","where","from","just","like","very","really"].includes(x));if(g.length)return g[0];if(sl.length)return"Nice informal English. "+sl[0]+".";if(meaningful.length<2)return"Add a little more context: a reason, an opinion or one detail.";if(a.overlap)return"Your message connects with the headline. Good job keeping the context.";if(a.intent==="ask_explain"||a.intent==="ask_word")return"Good question. You're asking for clarification naturally.";return"Your message is understandable. Try connecting it to the headline or asking a follow-up question."},
+ slang(s){
+  const raw=norm(s);
+  const has=k=>{
+   const phrase=norm(k).replace(/[.*+?^\$()|[\]\\]/g,"\\$&").replace(/\s+/g,"\\s+");
+   return new RegExp("(^|\\s)"+phrase+"(?=$|\\s)","i").test(raw);
+  };
+  return Object.keys(D.slang).filter(has).map(k=>k+" = "+D.slang[k]);
+ }, feedback(s,a){const g=this.grammar(s),sl=this.slang(s),meaningful=a.normalized.split(" ").filter(x=>x.length>2&&!["the","and","but","you","are","was","this","that","with","have","what","who","how","why","when","where","from","just","like","very","really"].includes(x));if(g.length)return g[0];if(sl.length)return"Nice informal English. "+sl[0]+".";if(meaningful.length<2)return"Add a little more context: a reason, an opinion or one detail.";if(a.overlap)return"Your message connects with the headline. Good job keeping the context.";if(a.intent==="ask_explain"||a.intent==="ask_word")return"Good question. You're asking for clarification naturally.";return"Your message is understandable. Try connecting it to the headline or asking a follow-up question."},
  reply(s){
   const a=this.analyse(s),fb=this.feedback(s,a),sl=this.slang(s),g=this.grammar(s);
   const cat=(this.state.selected&&this.state.selected.category)||"weird";
@@ -432,7 +459,13 @@ const app={
   const firstLine=makeLine(primary);
   const isTiny=s.length<24,question=s.includes("?")||["ask_explain","ask_word","direct_question","news_reaction"].includes(a.intent);
   const wantsSecond=!isTiny&&(question||["personal_story","opinion","plan","reaction_funny","news_reaction"].includes(a.intent)||Math.random()<0.24);
-  const secondLine=wantsSecond?makeLine(secondary):"";
+  let secondLine="";
+  if(wantsSecond){
+   if(a.intent==="opinion")secondLine=secondary.name==="Jake"?"I'm only here to watch this debate turn into a 40-message thread.":"I want to hear the reason behind that take too.";
+   else if(["direct_question","ask_explain","news_reaction"].includes(a.intent))secondLine=secondary.name==="Mike"?"I have a theory, but let's wait for the actual details first.":"I was about to ask the same thing.";
+   else if(a.intent==="personal_story")secondLine=secondary.name==="Jake"?"Story time. I'm putting my phone on charge for this.":"Wait, I'm invested now. Keep going.";
+   else secondLine=related?"I was reading the same part of the story. What do you make of it?":"I'm following. What happened next?";
+  }
   const activeTitle=title;
   const el=document.getElementById("sp-feedback");
   if(el)el.innerHTML='<div class="sp-feedback-head"><b>🧠 English check</b><span>'+esc(a.intent.replace(/_/g," "))+'</span></div><p>'+esc(fb)+'</p>'+(g.length?'<small>Grammar: '+esc(g[0])+'</small>':"")+(sl.length?'<small>Slang: '+esc(sl.join(" · "))+'</small>':"")+'<small>Conversation tip: '+esc(related?"Your message connects to the selected story.":"This reply follows your message without forcing the news topic.")+'</small>';
