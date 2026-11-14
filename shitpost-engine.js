@@ -259,6 +259,32 @@ const CHAT_PERSONAS=[
  {name:"Emily",avatar:"🐸",role:"The kind one",style:"warm, funny and observant",categories:["animals","wholesome","food","daily","school"],strength:["empathy","compliment","thanks","personal_story"],voice:"She responds with empathy and notices human details."}
 ];
 
+
+/* Everyday group-chat situations based on the supplied shitpost references. */
+const CHAT_SITUATIONS=[
+ {triggers:["i'm 22","im 22","i am 22","i'm 25","im 25","i am 25","turning 30","i'm 30","im 30"],character:"Daniel",reply:"The adult expansion pack is mostly bills, tired knees and wondering what happened to 2019."},
+ {triggers:["go back to 2019","back to 2019","miss 2019"],character:"Jake",reply:"Same. I want the old internet back, not the responsibilities that came with the update."},
+ {triggers:["three hearts","3 hearts","octopus"],character:"Mike",reply:"Three hearts and still no one to share the emotional workload with. Nature is wild."},
+ {triggers:["spoon in the microwave","microwave a spoon","metal spoon in the microwave"],character:"Sophie",reply:"Technically, a spoon is still a spoon. Please stop conducting kitchen science."},
+ {triggers:["computer is slow","pc is slow","laptop is slow","my computer is slow"],character:"Daniel",reply:"How many tabs are open? Be honest. I need the actual number before we blame Windows."},
+ {triggers:["i'm broke","im broke","i am broke","no money","bank account"],character:"Sophie",reply:"Have you tried being rich? I'm out of practical suggestions."},
+ {triggers:["pineapple on pizza","pineapple pizza"],character:"Sophie",reply:"We are NOT reopening the pineapple pizza case. The group has suffered enough."},
+ {triggers:["water with gas","sparkling water","water is soda"],character:"Jake",reply:"Sparkling water is just water with a paid DLC and an attitude."},
+ {triggers:["group project","group assignment","nobody did the work"],character:"Daniel",reply:"How many people are actually doing the work? I already know it's two, and one is you."},
+ {triggers:["five minute audio","5 minute audio","long voice note","voice message is 5"],character:"Sophie",reply:"If the voice note needs chapters, send a summary. I'm not subscribing to this podcast."},
+ {triggers:["woke up at 3","woke up at 15","just woke up","woke up late","overslept"],character:"Daniel",reply:"That's not waking up early. That's entering a completely different timezone."},
+ {triggers:["i'm going to study","im going to study","i will study","starting to study"],character:"Jake",reply:"New character arc: academic comeback. Let's see if it survives the first notification."},
+ {triggers:["i'm bored","im bored","nothing to do"],character:"Jake",reply:"We could play something, start a pointless debate or stare at the wall professionally."},
+ {triggers:["need a job","looking for a job","i need work"],character:"Daniel",reply:"The job hunt side quest. Have you found anything decent, or is every listing asking for 10 years of experience?"},
+ {triggers:["one percent battery","1% battery","phone battery is dying","battery at 1"],character:"Daniel",reply:"Your phone is fighting for its life. Put it on charge before it starts writing a goodbye message."},
+ {triggers:["disappeared for days","haven't been here","havent been here","where have you been"],character:"Jake",reply:"Bro went on a side quest and forgot to tell the party."},
+ {triggers:["random photo","what is this picture","no context"],character:"Sophie",reply:"You cannot just drop an image with zero context and expect the group to investigate like detectives."},
+ {triggers:["do fish know they're wet","fish know they are wet","are fish wet"],character:"Mike",reply:"This is the kind of question that makes a person stare at the ceiling for 40 minutes."},
+ {triggers:["sleep early","going to bed early","sleep at 10"],character:"Daniel",reply:"See you in 20 minutes when you remember something embarrassing from 2017."},
+ {triggers:["lag","my game is lagging","the game is lagging"],character:"Jake",reply:"The classic lag excuse. We need the replay, the ping and three independent witnesses."},
+ {triggers:["i'm hungry","im hungry","i am hungry","what should i eat"],character:"Emily",reply:"What are you craving? We can turn this into a very serious food investigation."}
+];
+
 const norm=s=>String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[’‘]/g,"'").replace(/\b(gonna)\b/g,"going to").replace(/\b(wanna)\b/g,"want to").replace(/\b(gotta)\b/g,"got to").replace(/\b(gimme)\b/g,"give me").replace(/\b(dunno)\b/g,"do not know").replace(/[^a-z0-9'\s]/g," ").replace(/\s+/g," ").trim();
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const app={
@@ -429,14 +455,16 @@ const app={
   const eligible=CHAT_PERSONAS.filter(p=>p.categories.includes(cat));
   const pool=eligible.length?eligible:CHAT_PERSONAS;
   const preferred={ask_explain:"Oliver",ask_word:"Oliver",direct_question:"Daniel",news_reaction:"Oliver",reaction_funny:"Jake",reaction_agree:"Daniel",reaction_disagree:"Sophie",opinion:"Sophie",personal_story:"Daniel",confusion:"Daniel",empathy:"Emily",thanks:"Emily",greeting:"Jake",daily_chat:"Daniel",complaint:"Emily",plan:"Jake",brainrot_reaction:"Jake",meme_reference:"Jake",sarcasm:"Sophie",surprise:"Mike"};
-  let primary=CHAT_PERSONAS.find(p=>p.name===preferred[a.intent]);
-  if(!primary||(!primary.categories.includes(cat)&&a.intent!=="ask_explain"&&a.intent!=="ask_word"&&a.intent!=="news_reaction"))primary=pick(pool);
+  const situation=CHAT_SITUATIONS.find(item=>item.triggers.some(term=>a.raw===term||a.raw.startsWith(term+" ")||a.raw.endsWith(" "+term)||a.raw.includes(" "+term+" ")));
+  let primary=CHAT_PERSONAS.find(p=>p.name===(situation?situation.character:preferred[a.intent]));
+  if(!primary||(!primary.categories.includes(cat)&&!situation&&a.intent!=="ask_explain"&&a.intent!=="ask_word"&&a.intent!=="news_reaction"))primary=pick(pool);
   const others=pool.filter(p=>p.name!==primary.name);
   const secondary=pick(others.length?others:CHAT_PERSONAS.filter(p=>p.name!==primary.name));
   const shortHeadline=title.length>88?title.slice(0,85)+"…":title;
   const quoted=focus.length>58?focus.slice(0,55)+"…":focus;
   const makeLine=person=>{
    const n=person.name;
+   if(situation&&n===situation.character)return situation.reply;
    if(a.intent==="greeting")return n==="Jake"?"You appeared. The group chat was about to file a missing-person report.":"Hey! What are we talking about today?";
    if(a.intent==="thanks")return n==="Emily"?"Anytime! That's what the group chat is for.":"No problem. You owe us one decent meme.";
    if(a.intent==="ask_word")return sl.length?"You used “"+sl[0].split(" = ")[0]+"”. Do you want its meaning here or a more natural example?":"Which exact word or phrase in “"+quoted+"” do you want explained? The full sentence will help.";
