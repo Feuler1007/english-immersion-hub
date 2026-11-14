@@ -639,6 +639,7 @@ document.head.appendChild(style);
 const baseRender=app.render.bind(app);
 app.render=function(){
  baseRender();
+ const chatPanel=document.querySelector(".sp-chat-panel"),chatForm=document.getElementById("sp-form"),englishFeedback=document.getElementById("sp-feedback");if(chatPanel&&chatForm&&englishFeedback&&chatForm.nextElementSibling!==englishFeedback)chatPanel.insertBefore(chatForm,englishFeedback);
  const priv=document.getElementById("sp-private-practice");if(priv)priv.remove();
  let form=document.getElementById("sp-form");if(!form){form=document.createElement("form");form.className="sp-composer";form.id="sp-form";form.innerHTML='<input id="sp-input" maxlength="500" autocomplete="off" placeholder="Type your message in English…" aria-label="Your message in English"><button class="pri" type="submit">Send ↗</button>';const foot0=document.querySelector(".sp-chat-foot");if(foot0)foot0.insertAdjacentElement("beforebegin",form);else document.querySelector(".sp-chat-panel")?.appendChild(form)}form.hidden=false;form.style.display="flex";form.onsubmit=e=>{e.preventDefault();app.send()};const input=document.getElementById("sp-input");if(input){input.disabled=false;input.placeholder="Type your message in English…"}
  const foot=document.querySelector(".sp-chat-foot");if(foot)foot.textContent="Jump into the conversation. The bots reply in the group, and your English is saved locally to improve future context.";
