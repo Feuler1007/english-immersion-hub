@@ -849,4 +849,26 @@ app.messages=function(){
 const sendOriginal=app.send.bind(app);
 app.send=function(){const i=document.getElementById("sp-input");if(!i)return;const s=i.value.trim();if(!s)return;if(!readProfile()){showProfile();return}if(s.length>500){this.status("Keep it under 500 characters. · Mantenha a mensagem abaixo de 500 caracteres.");return}this.reply(s);i.value="";i.focus()};
 
+
+const showProfileEnglish=showProfile;
+showProfile=function(){
+ showProfileEnglish();
+ const box=document.getElementById("sp-profile-overlay");if(!box)return;
+ const translations={
+  "What do you enjoy talking about?":"Sobre quais assuntos você gosta de conversar?",
+  "Choose your favorite topics":"Escolha seus assuntos favoritos",
+  "How much swearing is acceptable?":"Qual nível de palavrões você aceita?",
+  "How should the bots refer to you?":"Como os bots devem se referir a você?",
+  "Your English level":"Seu nível de inglês",
+  "None":"Nenhum","Light":"Leve","Medium":"Moderado","High, uncensored casual language":"Alto, linguagem informal sem censura",
+  "No preference / do not specify":"Sem preferência / não especificar","Man":"Homem","Woman":"Mulher",
+  "Save profile and enter the chat":"Salvar perfil e entrar na conversa","Save English level":"Salvar nível de inglês","Close":"Fechar"
+ };
+ box.querySelectorAll("label").forEach(l=>{const key=l.textContent.trim();if(translations[key])spPtHint(l,translations[key])});
+ box.querySelectorAll("select option").forEach(o=>{if(translations[o.textContent.trim()])o.textContent=o.textContent+" · "+translations[o.textContent.trim()]});
+ const note=box.querySelector(".sp-profile-note");if(note)spPtHint(note,"Suas preferências ficam salvas neste navegador. Só o nível de inglês poderá ser alterado depois.");
+ const desc=box.querySelector(".sp-profile-card > p");if(desc)spPtHint(desc,"Configure seus interesses e preferências uma única vez. Os bots usarão essas informações para escolher assuntos, referências e o tom das conversas.");
+ const hob=box.querySelector("#sp-hobbies");if(hob)hob.placeholder="Ex.: montagem de PC, jogos de terror, F1, música…";
+};
+
 })();
